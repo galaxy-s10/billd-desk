@@ -1,0 +1,17 @@
+# https://editorconfig.org
+# 控制编辑器代码规范，如按下回车的时候，缩进几个空格等等。
+# 最顶层的EditorConfig文件
+root = true
+
+[*]
+charset = utf-8
+indent_style = space # 缩进样式为空格,也可以设置成:tab
+indent_size = 2 # 一个缩进2个空格
+# tab_width默认为indent_size的值，通常不需要指定。
+end_of_line = lf  # 结尾符,也可以设置成:crlf
+insert_final_newline = true # 设置为true以确保文件在保存时以换行符结尾，设置为false以确保文件不以换行符号结尾。
+trim_trailing_whitespace = true # 设置为true以删除换行符之前的任何空白字符，设置为false以确保不会。
+
+[*.md]
+insert_final_newline = false
+trim_trailing_whitespace = false

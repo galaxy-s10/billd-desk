@@ -1,0 +1,23 @@
+/**
+ * @see https://www.electron.build/configuration/configuration
+ */
+{
+  $schema: 'https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json',
+  appId: 'com.billddesk.app',
+  asar: false,
+  productName: 'billd-desk',
+  directories: {
+    output: 'electron-release/${version}',
+  },
+  files: ['dist', 'electron-dist'],
+  mac: {
+    target: ['dmg'],
+    artifactName: '${productName}-Mac-${version}-Installer.${ext}',
+  },
+  nsis: {
+    oneClick: false,
+    perMachine: false,
+    allowToChangeInstallationDirectory: true,
+    deleteAppDataOnUninstall: false,
+  },
+}
