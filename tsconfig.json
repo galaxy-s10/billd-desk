@@ -28,6 +28,7 @@
   },
 
   "include": [
+    "electron-main/**/*.ts",
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",

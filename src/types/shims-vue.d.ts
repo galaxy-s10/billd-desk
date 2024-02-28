@@ -9,7 +9,7 @@ declare module '*.vue' {
 
 declare global {
   interface Window {
-    electron: ElectronAPI;
+    electronAPI: ElectronAPI;
     $message: import('naive-ui/es/message/src/MessageProvider').MessageApiInjection;
     versions: any;
     TXLivePusher: any;

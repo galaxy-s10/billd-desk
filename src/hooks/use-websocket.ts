@@ -37,6 +37,7 @@ import {
   WsOtherJoinType,
   WsRoomLivingType,
   WsStartLiveType,
+  WsStartRemoteDesk,
   WsUpdateJoinInfoType,
 } from '@/types/websocket';
 import { createNullVideo, handleUserMedia } from '@/utils';
@@ -227,6 +228,13 @@ export const useWebsocket = () => {
           h('div', { style: { marginTop: '5px' } }, '注意，有效期：5分钟'),
         ]),
       }).catch(() => {});
+    });
+
+    // 收到startRemoteDesk
+    ws.socketIo.on(WsMsgTypeEnum.startRemoteDesk, (data: WsStartRemoteDesk) => {
+      console.log('收到startRemoteDesk', data);
+      appStore.startRemoteDesk = true;
+      appStore.remoteDesk.sender = data.data.sender;
     });
 
     // 收到srsOffer

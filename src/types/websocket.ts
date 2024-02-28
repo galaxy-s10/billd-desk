@@ -67,6 +67,12 @@ export enum WsMsgTypeEnum {
   srsAnswer = 'srsAnswer',
   srsCandidate = 'srsCandidate',
 
+  startRemoteDesk = 'startRemoteDesk',
+
+  remoteDeskOffer = 'remoteDeskOffer',
+  remoteDeskAnswer = 'remoteDeskAnswer',
+  remoteDeskCandidate = 'remoteDeskCandidate',
+
   nativeWebRtcOffer = 'nativeWebRtcOffer',
   nativeWebRtcAnswer = 'nativeWebRtcAnswer',
   nativeWebRtcCandidate = 'nativeWebRtcCandidate',
@@ -221,6 +227,12 @@ export type WsMsrBlobType = IWsFormat<{
   delay: number;
   /** 单位：毫秒 */
   max_delay: number;
+}>;
+
+export type WsStartRemoteDesk = IWsFormat<{
+  sender: string;
+  receiver: string;
+  roomId: string;
 }>;
 
 export type WsOfferType = IWsFormat<{

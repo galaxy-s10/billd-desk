@@ -38,7 +38,7 @@ export default defineConfig(({ command, mode }) => {
       vue(),
       electron({
         main: {
-          entry: 'electron/index.ts', // 主进程文件
+          entry: 'electron-main/index.ts', // 主进程文件
           vite: {
             build: {
               outDir: 'electron-dist',
@@ -50,7 +50,7 @@ export default defineConfig(({ command, mode }) => {
           },
         },
         preload: {
-          input: 'electron/preload.ts',
+          input: 'electron-main/preload.ts',
           vite: {
             build: {
               outDir: 'electron-dist',

@@ -38,6 +38,7 @@
     "socket.io-client": "^4.7.4",
     "spark-md5": "^3.0.2",
     "vconsole": "^3.15.1",
+    "vite-plugin-commonjs": "^0.10.1",
     "vue": "^3.3.4",
     "vue-i18n": "^9",
     "vue-router": "^4.2.4"

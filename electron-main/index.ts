@@ -1,11 +1,7 @@
 // const { mouse, left } = require('@nut-tree/nut-js');
 import path from 'path';
 
-// import nutjs from '@nut-tree/nut-js';
-
-// eslint-disable-next-line
-// @ts-ignore
-import { app, BrowserWindow } from 'electron';
+import { BrowserWindow, app, desktopCapturer, ipcMain } from 'electron';
 
 const nutjs = require('@nut-tree/nut-js');
 
@@ -17,15 +13,6 @@ console.log('process.versions.electron', process.versions.electron);
 console.log('process.versions.modules', process.versions.modules);
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
-// The built directory structure
-//
-// ├─┬ dist
-// │ ├─┬ electron
-// │ │ ├── main.js
-// │ │ └── preload.js
-// │ ├── index.html
-// │ ├── ...other-static-files-from-public
-// │
 process.env.DIST = path.join(__dirname, '../dist');
 process.env.VITE_PUBLIC = app.isPackaged
   ? process.env.DIST
@@ -38,7 +25,38 @@ if (!app.requestSingleInstanceLock()) {
 
 let win: BrowserWindow | null;
 
+async function getScreenStream() {
+  const inputSources = await desktopCapturer.getSources({
+    types: ['screen'],
+  });
+  const res: any[] = [];
+  Object.keys(inputSources).forEach((key) => {
+    const source = inputSources[key];
+    if (!res.length) {
+      res.push(source);
+    }
+  });
+  win?.webContents.send('getScreenStream', res[0]);
+}
+
 function createWindow() {
+  let x = 100;
+  let y = 100;
+  ipcMain.on('changeMousePosition', () => {
+    console.log('收到changeMousePosition');
+    x += 10;
+    y += 10;
+    nutjs.mouse.setPosition({ x, y });
+  });
+  ipcMain.on('getMousePosition', async () => {
+    console.log('收到getMousePosition');
+    const point = await nutjs.mouse.getPosition();
+    console.log(point);
+  });
+  ipcMain.on('getScreenStream', () => {
+    console.log('收到getScreenStream');
+    getScreenStream();
+  });
   win = new BrowserWindow({
     // @ts-ignore
     icon: path.join(process.env.VITE_PUBLIC, 'logo.svg'),
@@ -49,15 +67,7 @@ function createWindow() {
 
   // Test active push message to Renderer-process.
   win.webContents.on('did-finish-load', (event) => {
-    console.log('did-finish-load事件：', event);
-    win?.webContents.send('main-process-message', new Date().toLocaleString());
-  });
-
-  win.once('ready-to-show', () => {
-    console.log('mouse');
-    setTimeout(() => {
-      nutjs.mouse.setPosition({ x: 100, y: 100 });
-    }, 1000);
+    console.log('did-finish-load事件', event);
   });
 
   if (process.env.VITE_DEV_SERVER_URL) {

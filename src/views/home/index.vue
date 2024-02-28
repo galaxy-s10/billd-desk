@@ -1,44 +1,122 @@
 <template>
   <div>
+    <div>
+      我的id：{{ mySocketId }}，<n-button @click="copyToClipBoard(mySocketId)">
+        复制
+      </n-button>
+    </div>
     <n-button
       type="primary"
-      @click="handleCode"
+      @click="handleScreen"
     >
-      生成远程码
+      捕获屏幕
     </n-button>
-    <div v-if="code">你的远程码：{{ code }}</div>
+    <video
+      controls
+      muted
+      autoplay
+      ref="videoRef"
+    ></video>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { getRandomString } from 'billd-utils';
-// import robot from 'robotjs';
-import { onMounted, ref } from 'vue';
+import { copyToClipBoard } from 'billd-utils';
+import { computed, onMounted, ref, watch } from 'vue';
 
 import { useWebsocket } from '@/hooks/use-websocket';
-// import { ipcRenderer } from 'electron';
-// const { ipcRenderer } = require('electron');
+import { useWebRtcRemoteDesk } from '@/hooks/webrtc/remoteDesk';
+import { useAppStore } from '@/store/app';
+import { useNetworkStore } from '@/store/network';
+import { createNullVideo } from '@/utils';
 
 const { initWs } = useWebsocket();
-const code = ref('');
+const appStore = useAppStore();
+const networkStore = useNetworkStore();
+const roomId = ref('101');
+const receiverId = ref('');
+const anchorStream = ref<MediaStream>();
+
+const videoRef = ref<HTMLVideoElement>();
+
+const mySocketId = computed(() => {
+  return networkStore.wsMap.get(roomId.value)?.socketIo?.id || '-1';
+});
+
+const { updateWebRtcRemoteDeskConfig, webRtcRemoteDesk } =
+  useWebRtcRemoteDesk();
+
+watch(
+  () => appStore.startRemoteDesk,
+  (newval) => {
+    if (newval) {
+      handleScreen();
+    }
+  }
+);
+watch(
+  () => appStore.remoteDesk.sender,
+  (newval) => {
+    if (newval !== '') {
+      receiverId.value = appStore.remoteDesk.sender;
+    }
+  }
+);
 
 onMounted(() => {
   initWs({
-    roomId: '123',
+    roomId: roomId.value,
     isAnchor: false,
   });
-  // console.log(ipcRenderer);
-  console.log(window.versions);
-  console.log(window.electron);
-  window.electron.ipcRenderer.on('electron:say', (_, args) => {
-    console.log(args);
-  });
+  // setInterval(() => {
+  //   window.electronAPI.ipcRenderer.send('getMousePosition');
+  // }, 1000);
+  window.electronAPI.ipcRenderer.on(
+    'getScreenStream',
+    async (_event, source) => {
+      console.log(_event, source);
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: {
+            // @ts-ignore
+            mandatory: {
+              chromeMediaSource: 'desktop',
+              chromeMediaSourceId: source.id,
+            },
+          },
+        });
+        // videoRef.value!.srcObject = stream;
+        anchorStream.value = stream;
+        updateWebRtcRemoteDeskConfig({
+          roomId: roomId.value,
+          anchorStream: anchorStream.value,
+        });
+        webRtcRemoteDesk.newWebRtc({
+          // 因为这里是收到offer，而offer是房主发的，所以此时的data.data.sender是房主；data.data.receiver是接收者；
+          // 但是这里的nativeWebRtc的sender，得是自己，不能是data.data.sender，不要混淆
+          sender: mySocketId.value,
+          receiver: receiverId.value,
+          videoEl: createNullVideo(),
+        });
+        webRtcRemoteDesk.sendOffer({
+          sender: mySocketId.value,
+          receiver: receiverId.value,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  );
 });
-function handleCode() {
-  code.value = getRandomString(8);
-  // robot.moveMouse(100, 100);
-  window.electron.ipcRenderer.send('electron:say');
+
+function handleScreen() {
+  window.electronAPI.ipcRenderer.send('getScreenStream');
 }
+
+// function changeMousePosition() {
+//   window.electronAPI.ipcRenderer.send('changeMousePosition');
+// }
 </script>
 
 <style lang="scss" scoped></style>
