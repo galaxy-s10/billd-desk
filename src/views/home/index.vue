@@ -22,7 +22,11 @@ import { useWebsocket } from '@/hooks/use-websocket';
 import { useWebRtcRemoteDesk } from '@/hooks/webrtc/remoteDesk';
 import { useAppStore } from '@/store/app';
 import { useNetworkStore } from '@/store/network';
-import { WsMsgTypeEnum, WsRemoteDeskMoveMsgType } from '@/types/websocket';
+import {
+  RemoteDeskBehaviorEnum,
+  WsMsgTypeEnum,
+  WsRemoteDeskBehaviorType,
+} from '@/types/websocket';
 import { createNullVideo } from '@/utils';
 
 const { initWs } = useWebsocket();
@@ -33,7 +37,7 @@ const roomId = ref(num);
 const receiverId = ref('');
 const anchorStream = ref<MediaStream>();
 const ioFlag = ref(false);
-const pos = ref({ x: 0, y: 0 });
+// const pos = ref({ x: 0, y: 0 });
 
 const mySocketId = computed(() => {
   return networkStore.wsMap.get(roomId.value)?.socketIo?.id || '-1';
@@ -46,18 +50,21 @@ watch(
       if (ioFlag.value) return;
       ioFlag.value = true;
       newval.on(
-        WsMsgTypeEnum.remoteDeskMoveMsg,
-        (data: WsRemoteDeskMoveMsgType['data']) => {
-          console.log('收到remoteDeskMoveMsg---', data);
+        WsMsgTypeEnum.remoteDeskBehavior,
+        (data: WsRemoteDeskBehaviorType['data']) => {
+          console.log('收到remoteDeskBehavior---', data);
           const setting = anchorStream.value?.getVideoTracks()[0].getSettings();
           if (setting) {
-            pos.value.x += 0.95;
-            pos.value.y += 0.95;
-            console.log(setting.width || 0, (setting.width || 0) * pos.value.x);
-            changeMousePosition(
-              (setting.width || 0) * pos.value.x,
-              (setting.height || 0) * pos.value.y
-            );
+            const x = (setting.width || 0) * (data.x / 1000);
+            const y = (setting.height || 0) * (data.y / 1000);
+            console.log(x, y, '998888');
+            if (data.type === RemoteDeskBehaviorEnum.setPosition) {
+              mouseSetPosition(x, y);
+            } else if (data.type === RemoteDeskBehaviorEnum.leftClick) {
+              mouseLeftClick(x, y);
+            } else if (data.type === RemoteDeskBehaviorEnum.rightClick) {
+              mouseRightClick(x, y);
+            }
           }
         }
       );
@@ -93,7 +100,16 @@ onMounted(() => {
     isRemoteDesk: true,
   });
   window.electronAPI.ipcRenderer.on('getMousePositionRes', (_event, source) => {
-    console.log('getMousePositionRes', source.point);
+    console.log('getMousePositionRes', source);
+  });
+  window.electronAPI.ipcRenderer.on('mouseSetPositionRes', (_event, source) => {
+    console.log('mouseSetPositionRes', source);
+  });
+  window.electronAPI.ipcRenderer.on('mouseLeftClickRes', (_event, source) => {
+    console.log('mouseLeftClickRes', source);
+  });
+  window.electronAPI.ipcRenderer.on('mouseRightClickRes', (_event, source) => {
+    console.log('mouseRightClickRes', source);
   });
   window.electronAPI.ipcRenderer.on(
     'getScreenStream',
@@ -137,8 +153,14 @@ function handleScreen() {
   window.electronAPI.ipcRenderer.send('getScreenStream');
 }
 
-function changeMousePosition(x, y) {
-  window.electronAPI.ipcRenderer.send('changeMousePosition', x, y);
+function mouseSetPosition(x, y) {
+  window.electronAPI.ipcRenderer.send('mouseSetPosition', x, y);
+}
+function mouseLeftClick(x, y) {
+  window.electronAPI.ipcRenderer.send('mouseLeftClick', x, y);
+}
+function mouseRightClick(x, y) {
+  window.electronAPI.ipcRenderer.send('mouseRightClick', x, y);
 }
 function testnutjs() {
   window.electronAPI.ipcRenderer.send('testnutjs');

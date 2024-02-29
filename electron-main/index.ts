@@ -5,8 +5,6 @@ import { BrowserWindow, app, desktopCapturer, ipcMain } from 'electron';
 
 const nutjs = require('@nut-tree/nut-js');
 
-// let nutjs;
-
 // 该版本electron所对应的node版本
 console.log('process.version', process.version);
 // electron 版本
@@ -51,9 +49,50 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
-  ipcMain.on('changeMousePosition', (_event, x, y) => {
-    console.log('收到changeMousePosition', x, y);
-    nutjs.mouse.setPosition({ x, y });
+  ipcMain.on('mouseSetPosition', async (_event, x, y) => {
+    console.log('收到mouseSetPosition', x, y);
+    try {
+      await nutjs.mouse.setPosition({ x, y });
+      win?.webContents.send('mouseSetPositionRes', {
+        isErr: false,
+        msg: { x, y },
+      });
+    } catch (error) {
+      win?.webContents.send('mouseSetPositionRes', {
+        isErr: true,
+        msg: JSON.stringify(error),
+      });
+    }
+  });
+  ipcMain.on('mouseLeftClick', async (_event, x, y) => {
+    console.log('收到mouseLeftClick', x, y);
+    try {
+      await nutjs.mouse.click(nutjs.Button.LEFT);
+      win?.webContents.send('mouseLeftClickRes', {
+        isErr: false,
+        msg: { x, y },
+      });
+    } catch (error) {
+      win?.webContents.send('mouseLeftClickRes', {
+        isErr: true,
+        msg: JSON.stringify(error),
+      });
+    }
+  });
+  ipcMain.on('mouseRightClick', async (_event, x, y) => {
+    console.log('收到mouseRightClick', x, y);
+    try {
+      await nutjs.mouse.click(nutjs.Button.RIGHT);
+      win?.webContents.send('mouseRightClickRes', {
+        isErr: false,
+        msg: { x, y },
+      });
+    } catch (error) {
+      win?.webContents.send('mouseRightClickRes', {
+        isErr: true,
+        msg: JSON.stringify(error),
+      });
+    }
   });
   ipcMain.on('testnutjs', async (_event, x, y) => {
     console.log('收到testnutjs', x, y);

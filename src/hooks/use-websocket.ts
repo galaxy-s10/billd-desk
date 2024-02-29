@@ -39,7 +39,7 @@ import {
   WsMsgTypeEnum,
   WsOfferType,
   WsOtherJoinType,
-  WsRemoteDeskMoveMsgType,
+  WsRemoteDeskBehaviorType,
   WsRoomLivingType,
   WsStartLiveType,
   WsStartRemoteDesk,
@@ -523,11 +523,11 @@ export const useWebsocket = () => {
       }
     );
 
-    // 收到remoteDeskMoveMsg
+    // 收到remoteDeskBehavior
     ws.socketIo.on(
-      WsMsgTypeEnum.remoteDeskMoveMsg,
-      (data: WsRemoteDeskMoveMsgType['data']) => {
-        console.log('收到remoteDeskMoveMsg', data);
+      WsMsgTypeEnum.remoteDeskBehavior,
+      (data: WsRemoteDeskBehaviorType['data']) => {
+        console.log('收到remoteDeskBehavior', data);
       }
     );
 
