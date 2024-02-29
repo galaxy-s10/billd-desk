@@ -10,7 +10,9 @@
   "author": "shuisheng <2274751790@qq.com>",
   "main": "electron-dist/index.js",
   "scripts": {
-    "build": "vite build && electron-builder",
+    "build": "vite build && electron-builder --mac",
+    "build2": "vite build && electron-builder --win",
+    "build3": "vite build && electron-builder --mac --win",
     "build-old": "vue-tsc && vite build",
     "build:beta": "vite build",
     "build:prod": "vite build",
@@ -25,6 +27,7 @@
     "@kangc/v-md-editor": "^2.3.17",
     "@nut-tree/nut-js": "^4.0.0",
     "@vicons/ionicons5": "^0.12.0",
+    "@vitejs/plugin-legacy": "^5.3.1",
     "axios": "^1.4.0",
     "billd-deploy": "^1.0.22",
     "billd-html-webpack-plugin": "^1.0.6",

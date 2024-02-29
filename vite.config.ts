@@ -1,10 +1,10 @@
+import legacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue';
 import BilldHtmlWebpackPlugin from 'billd-html-webpack-plugin';
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
 import Components from 'unplugin-vue-components/vite';
 import { defineConfig } from 'vite';
 import checker from 'vite-plugin-checker';
-import renderer from 'vite-plugin-electron-renderer';
 import electron from 'vite-plugin-electron/simple';
 
 const outputStaticUrl = 'dist';
@@ -15,7 +15,7 @@ const path = require('path');
 export default defineConfig(({ command, mode }) => {
   const isProduction = mode === 'production';
   return {
-    base: '/',
+    base: './',
     css: {
       preprocessorOptions: {
         scss: {
@@ -35,6 +35,7 @@ export default defineConfig(({ command, mode }) => {
       outDir: 'dist',
     },
     plugins: [
+      isProduction && legacy(),
       vue(),
       electron({
         main: {
@@ -42,10 +43,6 @@ export default defineConfig(({ command, mode }) => {
           vite: {
             build: {
               outDir: 'electron-dist',
-              // rollupOptions: {
-              //   // Here are some C/C++ modules them can't be built properly.
-              //   external: ['serialport', 'sqlite3'],
-              // },
             },
           },
         },
@@ -54,22 +51,15 @@ export default defineConfig(({ command, mode }) => {
           vite: {
             build: {
               outDir: 'electron-dist',
-              // rollupOptions: {
-              //   // Here are some C/C++ modules them can't be built properly.
-              //   external: ['serialport', 'sqlite3'],
-              // },
             },
           },
         },
       }),
-      renderer({
-        resolve: {
-          // C/C++ modules must be pre-bundle
-          serialport: { type: 'cjs' },
-          // `esm` modules only if Vite does not pre-bundle them correctly
-          got: { type: 'esm' },
-        },
-      }),
+      // renderer({
+      //   resolve: {
+      //     '@nut-tree/nut-js': { type: 'cjs' },
+      //   },
+      // }),
       checker({
         // typescript: true,
         vueTsc: true,

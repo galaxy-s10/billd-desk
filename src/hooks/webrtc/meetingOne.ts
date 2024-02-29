@@ -93,6 +93,7 @@ export const useWebRtcMeetingOne = () => {
         }
       } catch (error) {
         console.error('meetingOne的sendOffer错误');
+        console.log(error);
       }
     },
     /**
@@ -144,6 +145,7 @@ export const useWebRtcMeetingOne = () => {
         }
       } catch (error) {
         console.error('meetingOne的sendAnswer错误');
+        console.log(error);
       }
     },
   };

@@ -1,9 +1,11 @@
-// const { mouse, left } = require('@nut-tree/nut-js');
 import path from 'path';
 
+// import { mouse } from '@nut-tree/nut-js';
 import { BrowserWindow, app, desktopCapturer, ipcMain } from 'electron';
 
 const nutjs = require('@nut-tree/nut-js');
+
+// let nutjs;
 
 // 该版本electron所对应的node版本
 console.log('process.version', process.version);
@@ -40,39 +42,54 @@ async function getScreenStream() {
 }
 
 function createWindow() {
-  let x = 100;
-  let y = 100;
-  ipcMain.on('changeMousePosition', () => {
-    console.log('收到changeMousePosition');
-    x += 10;
-    y += 10;
+  win = new BrowserWindow({
+    // @ts-ignore
+    icon: path.join(process.env.VITE_PUBLIC, 'logo.svg'),
+    webPreferences: {
+      devTools: true,
+      nodeIntegration: true, // 在网页中集成Node
+      preload: path.join(__dirname, 'preload.js'),
+    },
+  });
+  ipcMain.on('changeMousePosition', (_event, x, y) => {
+    console.log('收到changeMousePosition', x, y);
     nutjs.mouse.setPosition({ x, y });
+  });
+  ipcMain.on('testnutjs', async (_event, x, y) => {
+    console.log('收到testnutjs', x, y);
+    win?.webContents.openDevTools();
+    try {
+      await nutjs.mouse.setPosition({ x: 30, y: 30 });
+      win?.webContents.send('ddd', { msg: 'ok' });
+    } catch (error) {
+      console.error(error);
+      win?.webContents.send('ddd', { msg: JSON.stringify(error) });
+    }
   });
   ipcMain.on('getMousePosition', async () => {
     console.log('收到getMousePosition');
     const point = await nutjs.mouse.getPosition();
     console.log(point);
+    win?.webContents.send('getMousePositionRes', {
+      point,
+    });
   });
   ipcMain.on('getScreenStream', () => {
     console.log('收到getScreenStream');
     getScreenStream();
   });
-  win = new BrowserWindow({
-    // @ts-ignore
-    icon: path.join(process.env.VITE_PUBLIC, 'logo.svg'),
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-    },
-  });
 
   // Test active push message to Renderer-process.
   win.webContents.on('did-finish-load', (event) => {
     console.log('did-finish-load事件', event);
+    // import('@nut-tree/nut-js').then((res) => {
+    //   console.log(res, 777);
+    // });
   });
-
+  win.webContents.openDevTools();
   if (process.env.VITE_DEV_SERVER_URL) {
     win.loadURL(process.env.VITE_DEV_SERVER_URL);
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
   } else {
     // @ts-ignore
     win.loadFile(path.join(process.env.DIST, 'index.html'));

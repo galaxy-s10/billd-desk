@@ -7,7 +7,7 @@ import { useNetworkStore } from '@/store/network';
 import { WsAnswerType, WsMsgTypeEnum, WsOfferType } from '@/types/websocket';
 import { WebRTCClass } from '@/utils/network/webRTC';
 
-export const useWebRtcRemoteDesk = () => {
+export const useWebRtcMeetingPk = () => {
   const appStore = useAppStore();
   const networkStore = useNetworkStore();
 
@@ -19,7 +19,7 @@ export const useWebRtcRemoteDesk = () => {
   const anchorStream = ref<MediaStream>();
   const userStream = ref<MediaStream>();
 
-  function updateWebRtcRemoteDeskConfig(data: {
+  function updateWebRtcMeetingPkConfig(data: {
     roomId;
     anchorStream;
     userStream?;
@@ -29,7 +29,7 @@ export const useWebRtcRemoteDesk = () => {
     userStream.value = data.userStream;
   }
 
-  const webRtcRemoteDesk = {
+  const webRtcMeetingPk = {
     newWebRtc: (data: {
       sender: string;
       receiver: string;
@@ -56,7 +56,7 @@ export const useWebRtcRemoteDesk = () => {
       sender: string;
       receiver: string;
     }) => {
-      console.log('remoteDesk的sendOffer', {
+      console.log('meetingOne的sendOffer', {
         sender,
         receiver,
       });
@@ -67,13 +67,13 @@ export const useWebRtcRemoteDesk = () => {
         if (rtc) {
           anchorStream.value?.getTracks().forEach((track) => {
             if (anchorStream.value) {
-              console.log('remoteDesk的sendOffer插入track', track.kind, track);
+              console.log('meetingOne的sendOffer插入track', track.kind, track);
               rtc.peerConnection?.addTrack(track, anchorStream.value);
             }
           });
           const offerSdp = await rtc.createOffer();
           if (!offerSdp) {
-            console.error('remoteDesk的offerSdp为空');
+            console.error('meetingOne的offerSdp为空');
             return;
           }
           await rtc.setLocalDescription(offerSdp!);
@@ -81,10 +81,8 @@ export const useWebRtcRemoteDesk = () => {
             requestId: getRandomString(8),
             msgType: WsMsgTypeEnum.nativeWebRtcOffer,
             data: {
-              isRemoteDesk: true,
               live_room: appStore.liveRoomInfo!,
-              // @ts-ignore
-              live_room_id: roomId.value,
+              live_room_id: appStore.liveRoomInfo!.id!,
               sender,
               receiver,
               sdp: offerSdp,
@@ -94,7 +92,7 @@ export const useWebRtcRemoteDesk = () => {
           console.error('rtc不存在');
         }
       } catch (error) {
-        console.error('remoteDesk的sendOffer错误');
+        console.error('meetingOne的sendOffer错误');
         console.log(error);
       }
     },
@@ -110,7 +108,7 @@ export const useWebRtcRemoteDesk = () => {
       sender: string;
       receiver: string;
     }) => {
-      console.log('remoteDesk的sendAnswer', {
+      console.log('meetingOne的sendAnswer', {
         sender,
         receiver,
       });
@@ -122,13 +120,13 @@ export const useWebRtcRemoteDesk = () => {
           await rtc.setRemoteDescription(sdp);
           userStream.value?.getTracks().forEach((track) => {
             if (userStream.value) {
-              console.log('remoteDesk的sendAnswer插入track');
+              console.log('meetingOne的sendAnswer插入track');
               rtc.peerConnection?.addTrack(track, userStream.value);
             }
           });
           const answerSdp = await rtc.createAnswer();
           if (!answerSdp) {
-            console.error('remoteDesk的answerSdp为空');
+            console.error('meetingOne的answerSdp为空');
             return;
           }
           await rtc.setLocalDescription(answerSdp);
@@ -146,11 +144,11 @@ export const useWebRtcRemoteDesk = () => {
           console.error('rtc不存在');
         }
       } catch (error) {
-        console.error('remoteDesk的sendAnswer错误');
+        console.error('meetingOne的sendAnswer错误');
         console.log(error);
       }
     },
   };
 
-  return { updateWebRtcRemoteDeskConfig, webRtcRemoteDesk };
+  return { updateWebRtcMeetingPkConfig, webRtcMeetingPk };
 };

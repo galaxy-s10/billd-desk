@@ -7,7 +7,8 @@ import { useNetworkStore } from '@/store/network';
 import { WsAnswerType, WsMsgTypeEnum, WsOfferType } from '@/types/websocket';
 import { WebRTCClass } from '@/utils/network/webRTC';
 
-export const useWebRtcRemoteDesk = () => {
+// TODO
+export const useWebRtcManyToManyMeeting = () => {
   const appStore = useAppStore();
   const networkStore = useNetworkStore();
 
@@ -16,20 +17,20 @@ export const useWebRtcRemoteDesk = () => {
   const currentMaxFramerate = ref(maxFramerate.value[2].value);
   const currentResolutionRatio = ref(resolutionRatio.value[3].value);
   const roomId = ref('');
-  const anchorStream = ref<MediaStream>();
-  const userStream = ref<MediaStream>();
+  const meetingMyStream = ref<MediaStream>();
+  const meetingAnchorStream = ref<MediaStream>();
 
-  function updateWebRtcRemoteDeskConfig(data: {
+  function updateWebRtcManyToManyMeetingConfig(data: {
     roomId;
-    anchorStream;
-    userStream?;
+    meetingMyStream;
+    meetingAnchorStream?;
   }) {
     roomId.value = data.roomId;
-    anchorStream.value = data.anchorStream;
-    userStream.value = data.userStream;
+    meetingMyStream.value = data.meetingMyStream;
+    meetingAnchorStream.value = data.meetingAnchorStream;
   }
 
-  const webRtcRemoteDesk = {
+  const webRtcManyToManyMeeting = {
     newWebRtc: (data: {
       sender: string;
       receiver: string;
@@ -56,7 +57,7 @@ export const useWebRtcRemoteDesk = () => {
       sender: string;
       receiver: string;
     }) => {
-      console.log('remoteDesk的sendOffer', {
+      console.log('开始webRtcManyToManyMeeting的sendOffer', {
         sender,
         receiver,
       });
@@ -65,15 +66,19 @@ export const useWebRtcRemoteDesk = () => {
         if (!ws) return;
         const rtc = networkStore.rtcMap.get(receiver);
         if (rtc) {
-          anchorStream.value?.getTracks().forEach((track) => {
-            if (anchorStream.value) {
-              console.log('remoteDesk的sendOffer插入track', track.kind, track);
-              rtc.peerConnection?.addTrack(track, anchorStream.value);
+          meetingMyStream.value?.getTracks().forEach((track) => {
+            if (meetingMyStream.value) {
+              console.log(
+                'webRtcManyToManyMeeting的meetingMyStream插入track',
+                track.kind,
+                track
+              );
+              rtc.peerConnection?.addTrack(track, meetingMyStream.value);
             }
           });
           const offerSdp = await rtc.createOffer();
           if (!offerSdp) {
-            console.error('remoteDesk的offerSdp为空');
+            console.error('webRtcManyToManyMeeting的offerSdp为空');
             return;
           }
           await rtc.setLocalDescription(offerSdp!);
@@ -81,10 +86,8 @@ export const useWebRtcRemoteDesk = () => {
             requestId: getRandomString(8),
             msgType: WsMsgTypeEnum.nativeWebRtcOffer,
             data: {
-              isRemoteDesk: true,
               live_room: appStore.liveRoomInfo!,
-              // @ts-ignore
-              live_room_id: roomId.value,
+              live_room_id: appStore.liveRoomInfo!.id!,
               sender,
               receiver,
               sdp: offerSdp,
@@ -94,7 +97,7 @@ export const useWebRtcRemoteDesk = () => {
           console.error('rtc不存在');
         }
       } catch (error) {
-        console.error('remoteDesk的sendOffer错误');
+        console.error('webRtcManyToManyMeeting的sendOffer错误');
         console.log(error);
       }
     },
@@ -110,7 +113,7 @@ export const useWebRtcRemoteDesk = () => {
       sender: string;
       receiver: string;
     }) => {
-      console.log('remoteDesk的sendAnswer', {
+      console.log('开始webRtcManyToManyMeeting的sendAnswer', {
         sender,
         receiver,
       });
@@ -120,15 +123,19 @@ export const useWebRtcRemoteDesk = () => {
         const rtc = networkStore.rtcMap.get(receiver);
         if (rtc) {
           await rtc.setRemoteDescription(sdp);
-          userStream.value?.getTracks().forEach((track) => {
-            if (userStream.value) {
-              console.log('remoteDesk的sendAnswer插入track');
-              rtc.peerConnection?.addTrack(track, userStream.value);
+          meetingAnchorStream.value?.getTracks().forEach((track) => {
+            if (meetingAnchorStream.value) {
+              console.log(
+                'webRtcManyToManyMeeting的meetingAnchorStream插入track',
+                track.kind,
+                track
+              );
+              rtc.peerConnection?.addTrack(track, meetingAnchorStream.value);
             }
           });
           const answerSdp = await rtc.createAnswer();
           if (!answerSdp) {
-            console.error('remoteDesk的answerSdp为空');
+            console.error('webRtcManyToManyMeeting的answerSdp为空');
             return;
           }
           await rtc.setLocalDescription(answerSdp);
@@ -146,11 +153,11 @@ export const useWebRtcRemoteDesk = () => {
           console.error('rtc不存在');
         }
       } catch (error) {
-        console.error('remoteDesk的sendAnswer错误');
+        console.error('webRtcManyToManyMeeting的sendAnswer错误');
         console.log(error);
       }
     },
   };
 
-  return { updateWebRtcRemoteDeskConfig, webRtcRemoteDesk };
+  return { updateWebRtcManyToManyMeetingConfig, webRtcManyToManyMeeting };
 };

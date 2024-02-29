@@ -68,6 +68,7 @@ export enum WsMsgTypeEnum {
   srsCandidate = 'srsCandidate',
 
   startRemoteDesk = 'startRemoteDesk',
+  remoteDeskMoveMsg = 'remoteDeskMoveMsg',
 
   remoteDeskOffer = 'remoteDeskOffer',
   remoteDeskAnswer = 'remoteDeskAnswer',
@@ -125,6 +126,12 @@ export type WsRoomLivingType = IWsFormat<{
 /** 直播间没在直播 */
 export type WsRoomNoLiveType = IWsFormat<{
   live_room: ILiveRoom;
+}>;
+
+export type WsRemoteDeskMoveMsgType = IWsFormat<{
+  roomId: string;
+  sender: string;
+  receiver: string;
 }>;
 
 export interface IDanmu {
@@ -202,6 +209,7 @@ export type WsJoinType = IWsFormat<{
   live_room?: ILiveRoom;
   anchor_info?: IUser;
   user_info?: IUser;
+  isRemoteDesk?: boolean;
   socket_list?: string[];
 }>;
 
@@ -241,6 +249,7 @@ export type WsOfferType = IWsFormat<{
   sender: string;
   receiver: string;
   live_room_id: number;
+  isRemoteDesk?: boolean;
 }>;
 
 export type WsAnswerType = IWsFormat<{

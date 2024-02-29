@@ -6,9 +6,9 @@ import { mobileRouterName } from '@/router';
 import { ILiveRoom } from '@/types/ILiveRoom';
 
 export type AppRootState = {
-  startRemoteDesk: boolean;
   remoteDesk: {
     sender: string;
+    startRemoteDesk: boolean;
   };
   playing: boolean;
   videoRatio: number;
@@ -70,8 +70,8 @@ export type AppRootState = {
 export const useAppStore = defineStore('app', {
   state: (): AppRootState => {
     return {
-      startRemoteDesk: false,
       remoteDesk: {
+        startRemoteDesk: false,
         sender: '',
       },
       playing: false,

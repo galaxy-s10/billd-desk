@@ -1,22 +1,16 @@
 <template>
   <div>
+    <h1>当前是受控方</h1>
     <div>
-      我的id：{{ mySocketId }}，<n-button @click="copyToClipBoard(mySocketId)">
-        复制
-      </n-button>
+      <div>
+        房间id：{{ roomId }}，我的id：{{ mySocketId }}，<n-button
+          @click="copyToClipBoard(mySocketId)"
+        >
+          复制
+        </n-button>
+        <n-button @click="testnutjs">nutjs</n-button>
+      </div>
     </div>
-    <n-button
-      type="primary"
-      @click="handleScreen"
-    >
-      捕获屏幕
-    </n-button>
-    <video
-      controls
-      muted
-      autoplay
-      ref="videoRef"
-    ></video>
   </div>
 </template>
 
@@ -28,32 +22,61 @@ import { useWebsocket } from '@/hooks/use-websocket';
 import { useWebRtcRemoteDesk } from '@/hooks/webrtc/remoteDesk';
 import { useAppStore } from '@/store/app';
 import { useNetworkStore } from '@/store/network';
+import { WsMsgTypeEnum, WsRemoteDeskMoveMsgType } from '@/types/websocket';
 import { createNullVideo } from '@/utils';
 
 const { initWs } = useWebsocket();
 const appStore = useAppStore();
 const networkStore = useNetworkStore();
-const roomId = ref('101');
+const num = '123456';
+const roomId = ref(num);
 const receiverId = ref('');
 const anchorStream = ref<MediaStream>();
-
-const videoRef = ref<HTMLVideoElement>();
+const ioFlag = ref(false);
+const pos = ref({ x: 0, y: 0 });
 
 const mySocketId = computed(() => {
   return networkStore.wsMap.get(roomId.value)?.socketIo?.id || '-1';
 });
 
+watch(
+  () => networkStore.wsMap.get(roomId.value)?.socketIo,
+  (newval) => {
+    if (newval) {
+      if (ioFlag.value) return;
+      ioFlag.value = true;
+      newval.on(
+        WsMsgTypeEnum.remoteDeskMoveMsg,
+        (data: WsRemoteDeskMoveMsgType['data']) => {
+          console.log('收到remoteDeskMoveMsg---', data);
+          const setting = anchorStream.value?.getVideoTracks()[0].getSettings();
+          if (setting) {
+            pos.value.x += 0.95;
+            pos.value.y += 0.95;
+            console.log(setting.width || 0, (setting.width || 0) * pos.value.x);
+            changeMousePosition(
+              (setting.width || 0) * pos.value.x,
+              (setting.height || 0) * pos.value.y
+            );
+          }
+        }
+      );
+    }
+  }
+);
+
 const { updateWebRtcRemoteDeskConfig, webRtcRemoteDesk } =
   useWebRtcRemoteDesk();
 
 watch(
-  () => appStore.startRemoteDesk,
+  () => appStore.remoteDesk.startRemoteDesk,
   (newval) => {
     if (newval) {
       handleScreen();
     }
   }
 );
+
 watch(
   () => appStore.remoteDesk.sender,
   (newval) => {
@@ -67,10 +90,11 @@ onMounted(() => {
   initWs({
     roomId: roomId.value,
     isAnchor: false,
+    isRemoteDesk: true,
   });
-  // setInterval(() => {
-  //   window.electronAPI.ipcRenderer.send('getMousePosition');
-  // }, 1000);
+  window.electronAPI.ipcRenderer.on('getMousePositionRes', (_event, source) => {
+    console.log('getMousePositionRes', source.point);
+  });
   window.electronAPI.ipcRenderer.on(
     'getScreenStream',
     async (_event, source) => {
@@ -86,7 +110,6 @@ onMounted(() => {
             },
           },
         });
-        // videoRef.value!.srcObject = stream;
         anchorStream.value = stream;
         updateWebRtcRemoteDeskConfig({
           roomId: roomId.value,
@@ -114,9 +137,12 @@ function handleScreen() {
   window.electronAPI.ipcRenderer.send('getScreenStream');
 }
 
-// function changeMousePosition() {
-//   window.electronAPI.ipcRenderer.send('changeMousePosition');
-// }
+function changeMousePosition(x, y) {
+  window.electronAPI.ipcRenderer.send('changeMousePosition', x, y);
+}
+function testnutjs() {
+  window.electronAPI.ipcRenderer.send('testnutjs');
+}
 </script>
 
 <style lang="scss" scoped></style>

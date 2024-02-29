@@ -4,7 +4,7 @@
 {
   $schema: 'https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json',
   appId: 'com.billddesk.app',
-  asar: false,
+  // asar: false,
   productName: 'billd-desk',
   directories: {
     output: 'electron-release/${version}',
@@ -13,6 +13,17 @@
   mac: {
     target: ['dmg'],
     artifactName: '${productName}-Mac-${version}-Installer.${ext}',
+  },
+  win: {
+    artifactName: '${productName}-Win-${version}-Installer.${ext}',
+    // target: 'nsis',
+    target: [
+      {
+        // portable、nsis
+        target: 'portable',
+        arch: ['x64'],
+      },
+    ],
   },
   nsis: {
     oneClick: false,
