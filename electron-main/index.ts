@@ -64,6 +64,36 @@ function createWindow() {
       });
     }
   });
+  ipcMain.on('mouseDrag', async (_event, x, y) => {
+    console.log('收到mouseDrag', x, y);
+    try {
+      await nutjs.mouse.drag({ x, y });
+      win?.webContents.send('mouseDragRes', {
+        isErr: false,
+        msg: { x, y },
+      });
+    } catch (error) {
+      win?.webContents.send('mouseDragRes', {
+        isErr: true,
+        msg: JSON.stringify(error),
+      });
+    }
+  });
+  ipcMain.on('mouseDoubleClick', async (_event, x, y) => {
+    console.log('收到mouseDoubleClick', x, y);
+    try {
+      await nutjs.mouse.doubleClick(nutjs.Button.LEFT);
+      win?.webContents.send('mouseDoubleClickRes', {
+        isErr: false,
+        msg: { x, y },
+      });
+    } catch (error) {
+      win?.webContents.send('mouseDoubleClickRes', {
+        isErr: true,
+        msg: JSON.stringify(error),
+      });
+    }
+  });
   ipcMain.on('mouseLeftClick', async (_event, x, y) => {
     console.log('收到mouseLeftClick', x, y);
     try {

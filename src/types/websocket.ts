@@ -130,7 +130,13 @@ export type WsRoomNoLiveType = IWsFormat<{
 
 export enum RemoteDeskBehaviorEnum {
   move,
+  drag,
+  pressButtonLeft,
+  pressButtonRight,
+  releaseButtonLeft,
+  releaseButtonRight,
   setPosition,
+  doubleClick,
   leftClick,
   rightClick,
   scrollDown,

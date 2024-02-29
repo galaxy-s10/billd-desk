@@ -72,6 +72,8 @@ export class WebRTCClass {
   videoEl: HTMLVideoElement;
 
   peerConnection: RTCPeerConnection | null = null;
+  dataChannel: RTCDataChannel | null = null;
+  cbDataChannel: RTCDataChannel | null = null;
 
   /** 最大码率 */
   maxBitrate = -1;
@@ -567,6 +569,32 @@ export class WebRTCClass {
       this.peerConnection = new RTCPeerConnection({
         iceServers,
       });
+      this.peerConnection.ondatachannel = (event) => {
+        this.cbDataChannel = event.channel;
+        this.update();
+      };
+      this.dataChannel = this.peerConnection.createDataChannel(
+        'MessageChannel',
+        {
+          // maxRetransmits，用户代理应尝试重新传输在不可靠模式下第一次失败的消息的最大次数。虽然该值是 16 位无符号数，但每个用户代理都可以将其限制为它认为合适的任何最大值。
+          maxRetransmits: 3,
+          // ordered，表示通过 RTCDataChannel 的信息的到达顺序需要和发送顺序一致 (true), 或者到达顺序不需要和发送顺序一致 (false). 默认：true
+          ordered: false,
+          protocol: 'udp',
+        }
+      );
+      this.dataChannel.onopen = () => {
+        this.prettierLog({
+          msg: 'dataChannel连接成功！',
+          type: 'success',
+        });
+      };
+      this.dataChannel.onerror = () => {
+        this.prettierLog({
+          msg: 'dataChannel连接失败！',
+          type: 'error',
+        });
+      };
       this.handleStreamEvent();
       this.handleConnectionEvent();
       this.update();
