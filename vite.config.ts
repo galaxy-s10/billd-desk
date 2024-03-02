@@ -1,4 +1,3 @@
-import legacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue';
 import BilldHtmlWebpackPlugin from 'billd-html-webpack-plugin';
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
@@ -35,7 +34,8 @@ export default defineConfig(({ command, mode }) => {
       outDir: 'dist',
     },
     plugins: [
-      isProduction && legacy(),
+      // legacy(),
+      // isProduction && legacy(),
       vue(),
       electron({
         main: {
