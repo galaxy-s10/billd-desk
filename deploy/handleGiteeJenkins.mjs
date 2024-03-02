@@ -7,9 +7,8 @@ import trash from 'trash';
 
 const allFile = [];
 const ignore = ['.DS_Store', '.git', 'node_modules', 'dist'];
-const localDir =
-  '/Users/huangshuisheng/Desktop/hss/galaxy-s10/billd-live-admin';
-const giteeDir = '/Users/huangshuisheng/Desktop/hss/jenkins/billd-live-admin';
+const localDir = '/Users/huangshuisheng/Desktop/hss/galaxy-s10/billd-desk';
+const giteeDir = '/Users/huangshuisheng/Desktop/hss/jenkins/billd-desk';
 
 const dir = fs.readdirSync(localDir).filter((item) => {
   if (ignore.includes(item)) {

@@ -143,6 +143,8 @@ export enum RemoteDeskBehaviorEnum {
   scrollUp,
   scrollLeft,
   scrollRight,
+
+  keyboardType,
 }
 
 export type WsRemoteDeskBehaviorType = IWsFormat<{
@@ -152,6 +154,7 @@ export type WsRemoteDeskBehaviorType = IWsFormat<{
   type: RemoteDeskBehaviorEnum;
   x: number;
   y: number;
+  keyboardtype: string | number;
 }>;
 
 export interface IDanmu {

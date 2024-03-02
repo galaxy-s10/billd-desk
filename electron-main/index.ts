@@ -1,53 +1,85 @@
 import path from 'path';
 
-// import { mouse } from '@nut-tree/nut-js';
-import { BrowserWindow, app, desktopCapturer, ipcMain } from 'electron';
+import { BrowserWindow, app, desktopCapturer, ipcMain, screen } from 'electron';
 
-const nutjs = require('@nut-tree/nut-js');
+import { nutjsTs } from './types';
+
+const nutjs: nutjsTs = require('@nut-tree/nut-js');
 
 // 该版本electron所对应的node版本
 console.log('process.version', process.version);
-// electron 版本
+// electron版本
 console.log('process.versions.electron', process.versions.electron);
-// abi
+// abi版本
 console.log('process.versions.modules', process.versions.modules);
 
+// https://www.electronjs.org/zh/docs/latest/tutorial/security#%E9%9A%94%E7%A6%BB%E4%B8%8D%E5%8F%97%E4%BF%A1%E4%BB%BB%E7%9A%84%E5%86%85%E5%AE%B9
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+
 process.env.DIST = path.join(__dirname, '../dist');
 process.env.VITE_PUBLIC = app.isPackaged
   ? process.env.DIST
   : path.join(process.env.DIST, '../public');
 
-if (!app.requestSingleInstanceLock()) {
-  app.quit();
-  process.exit(0);
-}
+// if (!app.requestSingleInstanceLock()) {
+//   app.quit();
+//   process.exit(0);
+// }
 
 let win: BrowserWindow | null;
 
-async function getScreenStream() {
-  const inputSources = await desktopCapturer.getSources({
-    types: ['screen'],
-  });
-  const res: any[] = [];
-  Object.keys(inputSources).forEach((key) => {
-    const source = inputSources[key];
-    if (!res.length) {
-      res.push(source);
-    }
-  });
-  win?.webContents.send('getScreenStream', res[0]);
-}
-
 function createWindow() {
   win = new BrowserWindow({
-    // @ts-ignore
-    icon: path.join(process.env.VITE_PUBLIC, 'logo.svg'),
+    width: 800,
+    height: 600,
+    autoHideMenuBar: true,
     webPreferences: {
       devTools: true,
-      nodeIntegration: true, // 在网页中集成Node
+      // nodeIntegration: true, // 在网页中集成Node
       preload: path.join(__dirname, 'preload.js'),
     },
+  });
+  ipcMain.on('disabledWinDrag', () => {
+    console.log('收到disabledWinDrag');
+    try {
+      win?.webContents.send('disabledWinDragRes', { msg: 'ok' });
+    } catch (error) {
+      console.error(error);
+      win?.webContents.send('disabledWinDragRes', {
+        msg: JSON.stringify(error),
+      });
+    }
+  });
+  ipcMain.on('handleDebug', () => {
+    console.log('收到handleDebug');
+    try {
+      win?.webContents.openDevTools();
+      win?.webContents.send('handleDebugRes', { msg: 'ok' });
+    } catch (error) {
+      console.error(error);
+      win?.webContents.send('handleDebugRes', { msg: JSON.stringify(error) });
+    }
+  });
+  ipcMain.on('handleMoveScreenRightBottom', () => {
+    console.log('收到handleMoveScreenRightBottom');
+    try {
+      const { width, height, y } = screen.getPrimaryDisplay().workArea;
+      // 窗口的高度和宽度
+      const bounds = win?.getBounds();
+      const windowWidth = bounds?.width || 300;
+      const windowHeight = bounds?.height || 300;
+      // const [windowWidth, windowHeight] = win?.getContentSize() || [300, 300];
+      // 计算新位置
+      const newX = width - windowWidth; // 屏幕左下角的 X 坐标是 0
+      const newY = height - windowHeight; // 需要减去窗口本身的高度
+      // 移动窗口
+      win?.setPosition(newX, newY + y);
+    } catch (error) {
+      console.error(error);
+      win?.webContents.send('handleMoveScreenRightBottomRes', {
+        msg: JSON.stringify(error),
+      });
+    }
   });
   ipcMain.on('mouseSetPosition', async (_event, x, y) => {
     console.log('收到mouseSetPosition', x, y);
@@ -64,16 +96,76 @@ function createWindow() {
       });
     }
   });
+  ipcMain.on('mouseMove', async (_event, x, y) => {
+    console.log('收到mouseMove', x, y);
+    try {
+      await nutjs.mouse.move([{ x, y }]);
+      win?.webContents.send('mouseMoveRes', {
+        isErr: false,
+        msg: { x, y },
+      });
+    } catch (error) {
+      win?.webContents.send('mouseMoveRes', {
+        isErr: true,
+        msg: JSON.stringify(error),
+      });
+    }
+  });
   ipcMain.on('mouseDrag', async (_event, x, y) => {
     console.log('收到mouseDrag', x, y);
     try {
-      await nutjs.mouse.drag({ x, y });
+      await nutjs.mouse.drag([{ x, y }]);
       win?.webContents.send('mouseDragRes', {
         isErr: false,
         msg: { x, y },
       });
     } catch (error) {
       win?.webContents.send('mouseDragRes', {
+        isErr: true,
+        msg: JSON.stringify(error),
+      });
+    }
+  });
+  ipcMain.on('keyboardType', async (_event, key) => {
+    console.log('收到keyboardType', key);
+    try {
+      await nutjs.keyboard.type(key);
+      win?.webContents.send('keyboardTypeRes', {
+        isErr: false,
+        msg: { key },
+      });
+    } catch (error) {
+      win?.webContents.send('keyboardTypeRes', {
+        isErr: true,
+        msg: JSON.stringify(error),
+      });
+    }
+  });
+  ipcMain.on('mousePressButtonLeft', async (_event, x, y) => {
+    console.log('收到mousePressButtonLeft', x, y);
+    try {
+      await nutjs.mouse.pressButton(nutjs.Button.LEFT);
+      win?.webContents.send('mousePressButtonLeftRes', {
+        isErr: false,
+        msg: { x, y },
+      });
+    } catch (error) {
+      win?.webContents.send('mousePressButtonLeftRes', {
+        isErr: true,
+        msg: JSON.stringify(error),
+      });
+    }
+  });
+  ipcMain.on('mouseReleaseButtonLeft', async (_event, x, y) => {
+    console.log('收到mouseReleaseButtonLeft', x, y);
+    try {
+      await nutjs.mouse.releaseButton(nutjs.Button.LEFT);
+      win?.webContents.send('mouseReleaseButtonLeftRes', {
+        isErr: false,
+        msg: { x, y },
+      });
+    } catch (error) {
+      win?.webContents.send('mouseReleaseButtonLeftRes', {
         isErr: true,
         msg: JSON.stringify(error),
       });
@@ -124,17 +216,6 @@ function createWindow() {
       });
     }
   });
-  ipcMain.on('testnutjs', async (_event, x, y) => {
-    console.log('收到testnutjs', x, y);
-    win?.webContents.openDevTools();
-    try {
-      await nutjs.mouse.setPosition({ x: 30, y: 30 });
-      win?.webContents.send('ddd', { msg: 'ok' });
-    } catch (error) {
-      console.error(error);
-      win?.webContents.send('ddd', { msg: JSON.stringify(error) });
-    }
-  });
   ipcMain.on('getMousePosition', async () => {
     console.log('收到getMousePosition');
     const point = await nutjs.mouse.getPosition();
@@ -143,25 +224,26 @@ function createWindow() {
       point,
     });
   });
-  ipcMain.on('getScreenStream', () => {
+  ipcMain.on('getScreenStream', async () => {
     console.log('收到getScreenStream');
-    getScreenStream();
+    const inputSources = await desktopCapturer.getSources({
+      types: ['screen'],
+    });
+    const res: any[] = [];
+    Object.keys(inputSources).forEach((key) => {
+      const source = inputSources[key];
+      if (!res.length) {
+        res.push(source);
+      }
+    });
+    win?.webContents.send('getScreenStream', res[0]);
   });
 
-  // Test active push message to Renderer-process.
-  win.webContents.on('did-finish-load', (event) => {
-    console.log('did-finish-load事件', event);
-    // import('@nut-tree/nut-js').then((res) => {
-    //   console.log(res, 777);
-    // });
-  });
-  win.webContents.openDevTools();
   if (process.env.VITE_DEV_SERVER_URL) {
-    win.loadURL(process.env.VITE_DEV_SERVER_URL);
-    // win.webContents.openDevTools();
+    win.loadURL(process.env.VITE_DEV_SERVER_URL as string);
+    win.webContents.openDevTools();
   } else {
-    // @ts-ignore
-    win.loadFile(path.join(process.env.DIST, 'index.html'));
+    win.loadFile(path.join(process.env.DIST as string, 'index.html'));
   }
 }
 

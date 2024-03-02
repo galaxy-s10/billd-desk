@@ -164,32 +164,6 @@ export class WebRTCClass {
       });
       return res;
     }
-    // return new Promise<number>((resolve) => {
-    // this.peerConnection?.getSenders().forEach((sender) => {
-    //   if (sender.track?.kind === 'video') {
-    //     const parameters = { ...sender.getParameters() };
-    //     if (parameters.encodings[0]) {
-    //       if (parameters.encodings[0].maxFramerate === maxFramerate) {
-    //         console.log('最大帧率不变，不设置');
-    //         resolve(1);
-    //         return;
-    //       }
-    //       parameters.encodings[0].maxFramerate = maxFramerate;
-    //       sender
-    //         .setParameters(parameters)
-    //         .then(() => {
-    //           console.log('设置最大帧率成功', maxFramerate);
-    //           this.maxFramerate = maxFramerate;
-    //           resolve(1);
-    //         })
-    //         .catch((error) => {
-    //           console.error('设置最大帧率失败', maxFramerate, error);
-    //           resolve(0);
-    //         });
-    //     }
-    //   }
-    // });
-    // });
   };
 
   /** 设置最大码率 */
@@ -447,6 +421,7 @@ export class WebRTCClass {
             msg: 'webrtc连接成功！',
             type: 'success',
           });
+          appStore.remoteDesk.isRemoteing = true;
           console.log('sender', this.sender, 'receiver', this.receiver);
           this.update();
         }
@@ -463,6 +438,7 @@ export class WebRTCClass {
             msg: 'iceConnectionState:failed',
             type: 'error',
           });
+          this.close();
         }
         if (iceConnectionState === 'disconnected') {
           // 测试不再活跃，这可能是一个暂时的状态，可以自我恢复。
@@ -470,6 +446,7 @@ export class WebRTCClass {
             msg: 'iceConnectionState:disconnected',
             type: 'error',
           });
+          this.close();
         }
         if (iceConnectionState === 'closed') {
           // ICE 代理关闭，不再应答任何请求。
@@ -516,6 +493,7 @@ export class WebRTCClass {
             msg: 'connectionState:disconnected',
             type: 'error',
           });
+          this.close();
         }
         if (connectionState === 'closed') {
           // 表示 RTCPeerConnection 已关闭。
@@ -530,6 +508,7 @@ export class WebRTCClass {
             msg: 'connectionState:failed',
             type: 'error',
           });
+          this.close();
         }
       }
     );
@@ -544,6 +523,29 @@ export class WebRTCClass {
         type: 'warn',
       });
     });
+  };
+
+  dataChannelSend = <T extends unknown>({
+    // 写成<T extends unknown>而不是<T>是为了避免eslint将箭头函数的<T>后面的内容识别成jsx语法
+    msgType,
+    requestId,
+    data,
+  }: {
+    msgType: WsMsgTypeEnum;
+    requestId: string;
+    data?: T;
+  }) => {
+    if (this.dataChannel?.readyState !== 'open') {
+      console.error('dataChannel未连接成功，不发送消息！', msgType, data);
+      return;
+    }
+    this.dataChannel.send(
+      JSON.stringify({
+        msgType,
+        requestId,
+        data,
+      })
+    );
   };
 
   /** 创建对等连接 */
@@ -561,7 +563,7 @@ export class WebRTCClass {
             //   urls: 'stun:stun.l.google.com:19302',
             // },
             {
-              urls: `turn:live.${prodDomain}:3478`,
+              urls: `turn:hk.${prodDomain}`,
               username: 'hss',
               credential: '123456',
             },
@@ -611,7 +613,11 @@ export class WebRTCClass {
       this.localStream = null;
       this.peerConnection?.close();
       this.peerConnection = null;
+      this.dataChannel = null;
       this.videoEl.remove();
+      const appStore = useAppStore();
+      appStore.remoteDesk.isClose = true;
+      appStore.remoteDesk.isRemoteing = false;
     } catch (error) {
       this.prettierLog({ msg: '手动关闭webrtc连接失败', type: 'error' });
       console.error(error);

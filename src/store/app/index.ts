@@ -9,6 +9,8 @@ export type AppRootState = {
   remoteDesk: {
     sender: string;
     startRemoteDesk: boolean;
+    isRemoteing?: boolean;
+    isClose?: boolean;
   };
   playing: boolean;
   videoRatio: number;
@@ -73,6 +75,8 @@ export const useAppStore = defineStore('app', {
       remoteDesk: {
         startRemoteDesk: false,
         sender: '',
+        isRemoteing: false,
+        isClose: undefined,
       },
       playing: false,
       videoRatio: 16 / 9,

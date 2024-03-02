@@ -16,19 +16,28 @@
   },
   win: {
     artifactName: '${productName}-Win-${version}-Installer.${ext}',
-    // target: 'nsis',
+    // highestAvailable，可用的最高权限
+    // requireAdministrator，管理员权限
+    requestedExecutionLevel: 'highestAvailable',
     target: [
       {
         // portable、nsis
-        target: 'portable',
+        target: 'nsis',
         arch: ['x64'],
       },
     ],
   },
+  // https://www.electron.build/generated/nsisoptions
   nsis: {
+    // oneClick，是否创建一键安装程序或辅助安装程序
     oneClick: false,
+    // perMachine，是否显示辅助安装程序的安装模式安装程序页面（按计算机或按用户选择）。或者是否始终为所有用户（每台计算机）安装。
     perMachine: false,
+    // allowToChangeInstallationDirectory，仅辅助安装程序。是否允许用户更改安装目录。
     allowToChangeInstallationDirectory: true,
+    // removeDefaultUninstallWelcomePage，仅辅助安装程序。删除默认卸载欢迎页面。
+    removeDefaultUninstallWelcomePage: false,
+    // deleteAppDataOnUninstall，仅限一键安装程序。卸载时是否删除应用程序数据。
     deleteAppDataOnUninstall: false,
   },
 }
