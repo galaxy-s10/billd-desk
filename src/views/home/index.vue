@@ -155,7 +155,6 @@ watch(
         if (setting) {
           const x = (setting.width || 0) * (data.x / 1000);
           const y = (setting.height || 0) * (data.y / 1000);
-          console.log(x, y, data.type, '998888');
           if (data.type === RemoteDeskBehaviorEnum.setPosition) {
             mouseSetPosition(x, y);
           } else if (data.type === RemoteDeskBehaviorEnum.move) {
