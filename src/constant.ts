@@ -20,15 +20,15 @@ export const appBuildInfo =
   // @ts-ignore
   process.env.BilldHtmlWebpackPlugin as BilldHtmlWebpackPluginLog;
 
-// export const WEBSOCKET_URL =
-//   process.env.NODE_ENV === 'development'
-//     ? `ws://192.168.1.102:4300` // `ws://localhost:4300`
-//     : `ws://192.168.1.102:4300`;
-
 export const WEBSOCKET_URL =
   process.env.NODE_ENV === 'development'
-    ? `ws://localhost:4300` // `ws://localhost:4300`
-    : `wss://srs-pull.${prodDomain}`;
+    ? `ws://192.168.1.102:4300` // `ws://localhost:4300`
+    : `ws://192.168.1.102:4300`;
+
+// export const WEBSOCKET_URL =
+//   process.env.NODE_ENV === 'development'
+//     ? `ws://localhost:4300` // `ws://localhost:4300`
+//     : `wss://srs-pull.${prodDomain}`;
 
 export const AXIOS_BASEURL =
   process.env.NODE_ENV === 'development'

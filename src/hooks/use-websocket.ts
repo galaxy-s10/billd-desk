@@ -348,7 +348,7 @@ export const useWebsocket = () => {
         console.log('收到nativeWebRtcOffer', data);
         if (data.isRemoteDesk) {
           if (data.receiver === mySocketId.value) {
-            console.warn('是发给我的nativeWebRtcOffer');
+            console.warn('是发给我的nativeWebRtcOffer-isRemoteDesk');
             if (networkStore.rtcMap.get(data.sender)) {
               return;
             }
@@ -371,11 +371,10 @@ export const useWebsocket = () => {
               sdp: data.sdp,
             });
           } else {
-            console.error('不是发给我的nativeWebRtcOffer');
+            console.error('不是发给我的nativeWebRtcOffer-isRemoteDesk');
           }
           return;
         }
-        console.log('kkkkkkkkkkk');
         if (
           data.live_room.type === LiveRoomTypeEnum.pk ||
           data.live_room.type === LiveRoomTypeEnum.tencent_css_pk

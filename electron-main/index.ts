@@ -225,18 +225,30 @@ function createWindow() {
     });
   });
   ipcMain.on('getScreenStream', async () => {
-    console.log('收到getScreenStream');
-    const inputSources = await desktopCapturer.getSources({
-      types: ['screen'],
-    });
-    const res: any[] = [];
-    Object.keys(inputSources).forEach((key) => {
-      const source = inputSources[key];
-      if (!res.length) {
-        res.push(source);
-      }
-    });
-    win?.webContents.send('getScreenStream', res[0]);
+    try {
+      console.log('收到getScreenStream');
+      const inputSources = await desktopCapturer.getSources({
+        types: ['screen'],
+      });
+      const res: any[] = [];
+      Object.keys(inputSources).forEach((key) => {
+        const source = inputSources[key];
+        if (!res.length) {
+          res.push(source);
+        }
+      });
+      win?.webContents.send('getScreenStreamRes', {
+        isErr: false,
+        msg: 'ok',
+        stream: res[0],
+      });
+    } catch (error) {
+      console.log(error);
+      win?.webContents.send('getScreenStreamRes', {
+        isErr: true,
+        msg: JSON.stringify(error),
+      });
+    }
   });
 
   if (process.env.VITE_DEV_SERVER_URL) {

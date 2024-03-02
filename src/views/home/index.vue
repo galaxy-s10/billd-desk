@@ -97,9 +97,13 @@ onMounted(() => {
     console.log('mouseRightClickRes', source);
   });
   window.electronAPI.ipcRenderer.on(
-    'getScreenStream',
+    'getScreenStreamRes',
     async (_event, source) => {
-      console.log(_event, source);
+      console.log('收到getScreenStreamRes', source);
+      if (source.isErr) {
+        window.$message.error(source.msg);
+        return;
+      }
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           audio: false,
@@ -107,7 +111,7 @@ onMounted(() => {
             // @ts-ignore
             mandatory: {
               chromeMediaSource: 'desktop',
-              chromeMediaSourceId: source.id,
+              chromeMediaSourceId: source.stream.id,
             },
           },
         });
@@ -135,7 +139,7 @@ onMounted(() => {
 });
 
 function handleClose() {
-  networkStore.rtcMap.get(receiverId.value)?.close();
+  networkStore.removeRtc(receiverId.value);
 }
 
 watch(
