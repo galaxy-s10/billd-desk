@@ -1,5 +1,6 @@
 /**
- * @see https://www.electron.build/configuration/configuration
+ * https://www.electron.build/configuration/configuration
+ * https://github.com/electron-vite/electron-vite-vue/blob/main/electron-builder.json5
  */
 {
   $schema: 'https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json',
@@ -13,6 +14,10 @@
   mac: {
     target: ['dmg'],
     artifactName: '${productName}-Mac-${version}-Installer.${ext}',
+  },
+  linux: {
+    artifactName: '${productName}-Linux-${version}-Installer.${ext}',
+    target: [{ target: 'AppImage', arch: ['x64', 'arm64'] }],
   },
   win: {
     artifactName: '${productName}-Win-${version}-Installer.${ext}',

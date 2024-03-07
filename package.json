@@ -14,6 +14,7 @@
     "build-old": "vue-tsc && vite build",
     "build:beta": "vite build",
     "build:mac": "vite build && electron-builder --mac",
+    "build:linux": "vite build && electron-builder --linux",
     "build:prod": "vite build",
     "build:win": "vite build && electron-builder --win",
     "copy": "ts-node ./deploy/handleGiteeJenkins.mjs",
