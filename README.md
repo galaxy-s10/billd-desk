@@ -39,6 +39,37 @@ billd 远程桌面控制，目前实现了类似ToDesk、向日葵等远程桌�
 - [ ] 客户端发起远程控制
 - [ ] 文件传输
 
+## 本地启动
+
+- 安装依赖（建议使用 node 版本：v18.19.0）
+
+```bash
+pnpm i
+```
+
+> 更新 billd 相关依赖：
+
+```bash
+pnpm i billd-utils@latest billd-scss@latest billd-html-webpack-plugin@latest
+```
+
+- 运行
+
+```bash
+npm run dev
+```
+
+- 打包
+
+```bash
+npm run build
+```
+
+## 兼容性
+
+- Windows
+- macOS
+
 ## 常见问题
 
 ### rebuild

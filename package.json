@@ -10,19 +10,13 @@
   "author": "shuisheng <2274751790@qq.com>",
   "main": "electron-dist/index.js",
   "scripts": {
-    "build": "vite build && electron-builder --mac --win",
+    "build": "vite build && electron-builder --mac --win --linux",
     "build-old": "vue-tsc && vite build",
-    "build:beta": "vite build",
-    "build:mac": "vite build && electron-builder --mac",
     "build:linux": "vite build && electron-builder --linux",
-    "build:prod": "vite build",
+    "build:mac": "vite build && electron-builder --mac",
     "build:win": "vite build && electron-builder --win",
-    "copy": "ts-node ./deploy/handleGiteeJenkins.mjs",
-    "deploy:beta": "node ./deploy/index.js --beta",
-    "deploy:prod": "node ./deploy/index.js --prod",
     "dev": "vite",
-    "preview": "vite preview",
-    "release": ""
+    "preview": "vite preview"
   },
   "dependencies": {
     "@kangc/v-md-editor": "^2.3.17",

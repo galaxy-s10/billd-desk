@@ -13,14 +13,15 @@
   files: ['dist', 'electron-dist'],
   mac: {
     target: ['dmg'],
-    artifactName: '${productName}-Mac-${version}-Installer.${ext}',
+    artifactName: '${productName}-mac-${platform}-${version}-${arch}-Installer.${ext}',
   },
   linux: {
-    artifactName: '${productName}-Linux-${version}-Installer.${ext}',
+    artifactName: '${productName}-linux-${platform}-${version}-${arch}-Installer.${ext}',
+    // amd是x64
     target: [{ target: 'AppImage', arch: ['x64', 'arm64'] }],
   },
   win: {
-    artifactName: '${productName}-Win-${version}-Installer.${ext}',
+    artifactName: '${productName}-win-${platform}-${version}-${arch}-Installer.${ext}',
     // highestAvailable，可用的最高权限
     // requireAdministrator，管理员权限
     requestedExecutionLevel: 'highestAvailable',
