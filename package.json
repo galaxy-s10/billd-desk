@@ -24,7 +24,6 @@
     "@vicons/ionicons5": "^0.12.0",
     "@vitejs/plugin-legacy": "^5.3.1",
     "axios": "^1.4.0",
-    "billd-deploy": "^1.0.22",
     "billd-html-webpack-plugin": "^1.0.6",
     "billd-scss": "^0.0.8",
     "billd-utils": "^0.0.22",
