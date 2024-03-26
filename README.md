@@ -13,7 +13,7 @@
 </h1>
 
 <p align="center">
- 基于Electron + WebRTC搭建的远程桌面
+ 基于Electron + Vite4 + Vue3 + WebRTC搭建的远程桌面
 </p>
 
 ## 简介
