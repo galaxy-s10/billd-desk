@@ -41,6 +41,8 @@ export const routerName = {
   group: 'group',
   profile: 'profile',
 
+  webrtc: 'webrtc',
+
   pull: 'pull',
   push: 'push',
   ...mobileRouterName,
@@ -52,6 +54,11 @@ export const defaultRoutes: RouteRecordRaw[] = [
     name: routerName.home,
     path: '/',
     component: () => import('@/views/home/index.vue'),
+  },
+  {
+    name: routerName.webrtc,
+    path: '/webrtc',
+    component: () => import('@/views/webrtc/index.vue'),
   },
 ];
 

@@ -11,6 +11,9 @@ dependencies:
   '@nut-tree/nut-js':
     specifier: ^4.0.0
     version: 4.0.0
+  '@nut-tree/shared':
+    specifier: ^4.0.1
+    version: 4.0.1
   '@vicons/ionicons5':
     specifier: ^0.12.0
     version: 0.12.0
@@ -2610,6 +2613,15 @@ packages:
 
   /@nut-tree/shared@4.0.0:
     resolution: {integrity: sha512-j4glIMLv9muPUdtc6CROABoHj+0jQxBpWHsdHBkSV0oZNujiSPgqe0Z9BwbVPv3NAEeIxtL8gsAERKzEygZKxQ==}
+    dependencies:
+      jimp: 0.22.10
+      node-abort-controller: 3.1.1
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
+  /@nut-tree/shared@4.0.1:
+    resolution: {integrity: sha512-dxB5WcX4KDXyGi9JsgqZvxOAfF2OKuBnZGCWdn6xYyCy3Kbv6Q2qIGUncKOj+sAYU4tW1m5JKVnyswAhx8XMow==}
     dependencies:
       jimp: 0.22.10
       node-abort-controller: 3.1.1

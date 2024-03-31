@@ -21,6 +21,7 @@
   "dependencies": {
     "@kangc/v-md-editor": "^2.3.17",
     "@nut-tree/nut-js": "^4.0.0",
+    "@nut-tree/shared": "^4.0.1",
     "@vicons/ionicons5": "^0.12.0",
     "@vitejs/plugin-legacy": "^5.3.1",
     "axios": "^1.4.0",

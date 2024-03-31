@@ -70,7 +70,7 @@ export const useWebsocket = () => {
   const { updateWebRtcMeetingOneConfig, webRtcMeetingOne } =
     useWebRtcMeetingOne();
 
-  const connectStatus = ref();
+  const connectStatus = ref<WsConnectStatusEnum>();
   const loopHeartbeatTimer = ref();
   const loopGetLiveUserTimer = ref();
   const liveUserList = ref<ILiveUser[]>([]);
@@ -825,6 +825,7 @@ export const useWebsocket = () => {
     initWs,
     handleStartLive,
     handleSendGetLiveUser,
+    connectStatus,
     mySocketId,
     canvasVideoStream,
     lastCoverImg,

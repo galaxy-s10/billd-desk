@@ -1,4 +1,5 @@
 import path from 'path';
+import { platform } from 'process';
 
 import { BrowserWindow, app, desktopCapturer, ipcMain, screen } from 'electron';
 
@@ -21,12 +22,25 @@ process.env.VITE_PUBLIC = app.isPackaged
   ? process.env.DIST
   : path.join(process.env.DIST, '../public');
 
-// if (!app.requestSingleInstanceLock()) {
-//   app.quit();
-//   process.exit(0);
-// }
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
+  process.exit(0);
+}
 
 let win: BrowserWindow | null;
+const childWindowMap = new Map<number, BrowserWindow>();
+
+function handleUrlQuery(obj: Record<string, string>) {
+  let res = '';
+  Object.keys(obj).forEach((item) => {
+    res += `${item}=${obj[item]}&`;
+  });
+  if (res.length > 0) {
+    return `?${res.slice(0, -1)}`;
+  } else {
+    return res;
+  }
+}
 
 function createWindow() {
   win = new BrowserWindow({
@@ -50,14 +64,22 @@ function createWindow() {
       });
     }
   });
-  ipcMain.on('handleDebug', () => {
-    console.log('收到handleDebug');
+  ipcMain.on('handleOpenDevTools', (_event, windowId) => {
+    console.log('收到handleOpenDevTools');
     try {
-      win?.webContents.openDevTools();
-      win?.webContents.send('handleDebugRes', { msg: 'ok' });
+      if (windowId) {
+        const childWindow = childWindowMap.get(Number(windowId));
+        childWindow?.webContents.openDevTools();
+        childWindow?.webContents.send('handleOpenDevToolsRes', { msg: 'ok' });
+      } else {
+        win?.webContents.openDevTools();
+        win?.webContents.send('handleOpenDevToolsRes', { msg: 'ok' });
+      }
     } catch (error) {
       console.error(error);
-      win?.webContents.send('handleDebugRes', { msg: JSON.stringify(error) });
+      win?.webContents.send('handleOpenDevToolsRes', {
+        msg: JSON.stringify(error),
+      });
     }
   });
   ipcMain.on('handleMoveScreenRightBottom', () => {
@@ -248,6 +270,86 @@ function createWindow() {
         isErr: true,
         msg: JSON.stringify(error),
       });
+    }
+  });
+
+  ipcMain.on('getMainWindowId', (_event, data) => {
+    console.log('electron收到getMainWindowId', data);
+    win?.webContents.send('getMainWindowIdRes', { id: win.id });
+  });
+
+  ipcMain.on('getWindowId', (_event, data) => {
+    console.log('electron收到getWindowId', data);
+  });
+
+  ipcMain.on('childWindowInit', (_event, data) => {
+    console.log('electron收到childWindowInit', data);
+    const childWindow = childWindowMap.get(Number(data.data.id));
+    childWindow?.webContents.send('childWindowInitRes', {});
+  });
+
+  ipcMain.on('createWindow', (_event, data) => {
+    try {
+      console.log('electron收到createWindow', data);
+      const childWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        autoHideMenuBar: true,
+        x: 100,
+        y: 100,
+        webPreferences: {
+          devTools: true,
+          // nodeIntegration: true, // 在网页中集成Node
+          preload: path.join(__dirname, 'preload.js'),
+        },
+      });
+      childWindowMap.set(Number(childWindow.id), childWindow);
+      let url = '';
+      const params = `${
+        (data.data.route ? data.data.route : '') as string
+      }${handleUrlQuery({
+        windowId: `${childWindow.id}`,
+        ...data.data.query,
+      })}`;
+      if (platform === 'darwin') {
+        console.log('运行在 macOS 上');
+      } else if (platform === 'linux') {
+        console.log('运行在 Linux 上');
+      } else if (platform === 'win32') {
+        console.log('运行在 Windows 上');
+      } else {
+        console.log(`未知的操作系统: ${platform}`);
+      }
+      if (process.env.VITE_DEV_SERVER_URL) {
+        url = `${process.env.VITE_DEV_SERVER_URL as string}#/${params}`;
+        childWindow.loadURL(url);
+        childWindow.webContents.openDevTools();
+      } else {
+        url = `${path.join(
+          process.env.DIST as string,
+          'index.html'
+        )}#/${params}`;
+        childWindow.loadFile(
+          `${path.join(process.env.DIST as string, 'index.html')}`,
+          {
+            hash: data.data.route
+              ? `${data.data.route as string}${handleUrlQuery({
+                  windowId: `${childWindow.id}`,
+                  ...data.data.query,
+                })}`
+              : undefined,
+          }
+        );
+      }
+      win?.webContents.send('createWindowRes', {
+        id: childWindow.id,
+        url,
+        platform,
+        VITE_DEV_SERVER_URL: process.env.VITE_DEV_SERVER_URL,
+      });
+    } catch (error) {
+      console.log('createWindow失败');
+      console.log(error);
     }
   });
 
