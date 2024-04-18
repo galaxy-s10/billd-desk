@@ -1,25 +1,28 @@
 <template>
   <div>
-    <h1 v-if="NODE_ENV === 'development'">
-      我的id：{{ mySocketId }}，<n-button @click="copyToClipBoard(mySocketId)">
-        复制
-      </n-button>
-    </h1>
     <div>
       <n-input-group>
-        <n-input-group-label>被控id</n-input-group-label>
+        <n-input-group-label>我的设备</n-input-group-label>
+        <n-input
+          v-model:value="mySocketId"
+          :style="{ width: '200px' }"
+          disabled
+        />
+        <n-button @click="handleCopy">复制</n-button>
+      </n-input-group>
+      <n-input-group>
+        <n-input-group-label>被控设备</n-input-group-label>
         <n-input
           :style="{ width: '200px' }"
-          placeholder="请输入被控id"
+          placeholder="请输入被控设备"
           v-model:value="receiverId"
         />
-
         <n-button
           type="error"
           @click="handleClose"
           v-if="appStore.remoteDesk.isRemoteing"
         >
-          结束控制
+          结束远程
         </n-button>
         <n-button
           v-else
@@ -58,7 +61,6 @@ import {
   WsRemoteDeskBehaviorType,
   WsStartRemoteDesk,
 } from '@/types/websocket';
-import { NODE_ENV } from 'script/constant';
 
 const num = '123456';
 const appStore = useAppStore();
@@ -101,6 +103,11 @@ watch(
     }
   }
 );
+
+function handleCopy() {
+  copyToClipBoard(mySocketId.value);
+  window.$message.success('复制成功！');
+}
 
 function handleKeyDown(e: KeyboardEvent) {
   // console.log(e.key, e.code);

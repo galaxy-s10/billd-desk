@@ -19,16 +19,12 @@ import { onMounted } from 'vue';
 
 import { THEME_COLOR, appBuildInfo } from '@/constant';
 import { useCheckUpdate } from '@/hooks/use-common';
-import { loginMessage } from '@/hooks/use-login';
 import { usePiniaCacheStore } from '@/store/cache';
-import { useUserStore } from '@/store/user';
 import { getHostnameUrl } from '@/utils';
 import { getLastBuildDate, setLastBuildDate } from '@/utils/localStorage/app';
-import { getToken } from '@/utils/localStorage/user';
 
 const { checkUpdate } = useCheckUpdate();
 const cacheStore = usePiniaCacheStore();
-const userStore = useUserStore();
 
 const themeOverrides: GlobalThemeOverrides = {
   common: {
@@ -42,13 +38,8 @@ onMounted(() => {
     htmlUrl: getHostnameUrl(),
   });
   handleUpdate();
-  loginMessage();
   cacheStore.setMuted(true);
   cacheStore.setVolume(0);
-  const token = getToken();
-  if (token) {
-    userStore.getUserInfo();
-  }
 
   // 启用vconsole
   // import('vconsole')
