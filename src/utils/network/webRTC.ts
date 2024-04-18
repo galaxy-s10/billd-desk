@@ -584,7 +584,7 @@ export class WebRTCClass {
         iceServers,
       });
       if (!this.isSRS) {
-        // this.handleDataChannel();
+        this.handleDataChannel();
       }
       this.handleStreamEvent();
       this.handleConnectionEvent();
