@@ -24,7 +24,7 @@ class TerminalPrintPlugin {
       );
       console.log(
         `- 欢迎PR:   ${chalk.cyan(
-          `billd-live目前只有作者一人开发，难免有不足的地方，欢迎提PR或Issue`
+          `billd-desk目前只有作者一人开发，难免有不足的地方，欢迎提PR或Issue`
         )}`
       );
       console.log();

@@ -9,11 +9,11 @@ export const webpackBarEnable = false; // 是否开启WebpackBar（开发环境�
 export const analyzerEnable = false; // 是否开启Webpack包分析
 export const gzipEnable = false; // 是否开启http压缩
 export const windicssEnable = false; // 是否开启windicss
-export const htmlWebpackPluginTitle = 'billd-live'; // htmlWebpackPlugin的标题
+export const htmlWebpackPluginTitle = 'billd-desk'; // htmlWebpackPlugin的标题
 
 export const outputStaticUrl = (isProduction: boolean) => {
   if (isProduction) {
-    return 'https://resource.hsslive.cn/billd-live/client/dist/';
+    return 'https://resource.hsslive.cn/billd-desk/dist/';
   }
   return '/';
 };

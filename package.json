@@ -20,9 +20,9 @@
     "prettier": "prettier --write .",
     "release": "standard-version",
     "start": "cross-env webpack serve --config ./script/config/webpack.common.ts --env development",
-    "start:beta": "cross-env VUE_APP_RELEASE_PROJECT_ENV=beta VUE_APP_RELEASE_PROJECT_NAME=billd-live webpack serve --config ./script/config/webpack.common.ts --env development",
-    "start:preview": "cross-env VUE_APP_RELEASE_PROJECT_ENV=preview VUE_APP_RELEASE_PROJECT_NAME=billd-live webpack serve --config ./script/config/webpack.common.ts --env development",
-    "start:prod": "cross-env VUE_APP_RELEASE_PROJECT_ENV=prod VUE_APP_RELEASE_PROJECT_NAME=billd-live webpack serve --config ./script/config/webpack.common.ts --env production",
+    "start:beta": "cross-env VUE_APP_RELEASE_PROJECT_ENV=beta VUE_APP_RELEASE_PROJECT_NAME=billd-desk webpack serve --config ./script/config/webpack.common.ts --env development",
+    "start:preview": "cross-env VUE_APP_RELEASE_PROJECT_ENV=preview VUE_APP_RELEASE_PROJECT_NAME=billd-desk webpack serve --config ./script/config/webpack.common.ts --env development",
+    "start:prod": "cross-env VUE_APP_RELEASE_PROJECT_ENV=prod VUE_APP_RELEASE_PROJECT_NAME=billd-desk webpack serve --config ./script/config/webpack.common.ts --env production",
     "start:stats": "cross-env WEBPACK_ANALYZER_SWITCH=true webpack serve --config ./script/config/webpack.common.ts --env development",
     "typecheck": "tsc -p ./tsconfig.json --noEmit"
   },
