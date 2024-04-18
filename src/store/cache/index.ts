@@ -16,7 +16,7 @@ export const usePiniaCacheStore = defineStore(`${lsKeyPrefix}pinia-cache`, {
   state: (): PiniaCacheRootState => {
     return {
       muted: true,
-      volume: 70,
+      volume: 80,
       'resource-list': [],
     };
   },

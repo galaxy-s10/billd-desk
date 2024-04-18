@@ -1,0 +1,62 @@
+// constant.scss放的是一些sass变量
+// 用法：.header{color: $theme-color1;}
+// 编译结果：.header{color: #0984e3;}
+
+// :root 这个 CSS 伪类匹配文档树的根元素。对于 HTML 来说，:root 表示 <html> 元素，除了优先级更高之外，与 html 选择器相同。
+:root {
+  --dark-primary-color: 'red'; //CSS 自定义属性（变量）
+  --light-primary-color: blue; //CSS 自定义属性（变量）
+}
+
+$layout-head-h: 60px;
+
+$video-ratio: calc(16 / 9);
+$w-1500: 1500px;
+$w-1475: 1475px;
+$w-1450: 1450px;
+$w-1400: 1400px;
+$w-1375: 1375px;
+$w-1350: 1350px;
+$w-1300: 1300px;
+$w-1275: 1275px;
+$w-1250: 1250px;
+$w-1200: 1200px;
+$w-1150: 1150px;
+$w-1100: 1100px;
+$w-1000: 1000px;
+$w-960: 960px;
+$w-900: 900px;
+
+$w-350: 350px;
+$w-300: 300px;
+$w-250: 250px;
+$w-200: 200px;
+
+$theme-color-gold: #ffd700;
+// $theme-color-papayawhip: white;
+$theme-color-papayawhip: papayawhip;
+$header-height: 60px;
+
+// 自定义滚动条:https://developer.mozilla.org/zh-CN/docs/Web/CSS/::-webkit-scrollbar
+%customScrollbar {
+  // 整个滚动条
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 0px;
+    background: rgba(0, 0, 0, 0);
+    border-radius: 0px;
+  }
+
+  // 滚动条轨道
+  &::-webkit-scrollbar-track {
+    box-shadow: rgba(0, 0, 0, 0);
+    border-radius: 0px;
+    background: rgba(0, 0, 0, 0);
+  }
+
+  // 滚动条上的滚动滑块
+  &::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background: #e0e0e0;
+  }
+}

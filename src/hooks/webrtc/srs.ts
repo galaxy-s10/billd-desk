@@ -37,7 +37,7 @@ export const useWebRtcSrs = () => {
         maxBitrate: currentMaxBitrate.value,
         maxFramerate: currentMaxFramerate.value,
         resolutionRatio: currentResolutionRatio.value,
-        isSRS: false,
+        isSRS: true,
         roomId: roomId.value,
         videoEl: data.videoEl,
         sender: data.sender,
@@ -113,7 +113,6 @@ export const useWebRtcSrs = () => {
         }
       } catch (error) {
         console.error('webRtcSrs的sendOffer错误');
-        console.log(error);
       }
     },
   };

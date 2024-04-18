@@ -1,11 +1,11 @@
 import common from '@/locales/zh/common';
-import dashboard from '@/locales/zh/dashboard';
-import live from '@/locales/zh/live';
-import router from '@/locales/zh/router';
+import home from '@/locales/zh/home';
+import layout from '@/locales/zh/layout';
+import rank from '@/locales/zh/rank';
 
 export default {
   ...common,
-  ...dashboard,
-  ...router,
-  ...live,
+  ...layout,
+  ...home,
+  ...rank,
 };

@@ -1,0 +1,11 @@
+{
+  "url": "http://localhost:5001/livestream/roomId___4.flv?usertoken=32b617a7b7c8dd97947e9bdc945d4c65&userid=101&randomid=GJH6evlJ",
+  "hasRedirect": false,
+  "speed": 73.154296875,
+  "loaderType": "fetch-stream-loader",
+  "currentSegmentIndex": 0,
+  "totalSegmentCount": 1,
+  "playerType": "MSEPlayer",
+  "decodedFrames": 4458,
+  "droppedFrames": 2
+}

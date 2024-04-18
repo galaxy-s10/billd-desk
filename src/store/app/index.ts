@@ -86,7 +86,7 @@ export const useAppStore = defineStore('app', {
       videoControlsValue: {
         pipMode: false,
       },
-      normalVolume: 70,
+      normalVolume: 80,
       navList: [
         { routeName: mobileRouterName.h5, name: '频道' },
         { routeName: mobileRouterName.h5Rank, name: '排行' },

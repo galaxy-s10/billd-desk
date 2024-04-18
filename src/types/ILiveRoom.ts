@@ -31,6 +31,12 @@ export enum LiveRoomTypeEnum {
   tencent_css,
   /** 主播使用腾讯云css推流打pk */
   tencent_css_pk,
+  /** 转推b站 */
+  forward_bilibili,
+  /** 转推斗鱼 */
+  forward_huya,
+  /** 转推所有 */
+  forward_all,
 }
 
 /** 拉流是否需要鉴权 */
@@ -234,6 +240,12 @@ export interface ILiveRoom {
   push_obs_stream_key?: string;
   push_webrtc_url?: string;
   push_srt_url?: string;
+  forward_bilibili_url?: string;
+  forward_douyu_url?: string;
+  forward_huya_url?: string;
+  forward_douyin_url?: string;
+  forward_kuaishou_url?: string;
+  forward_xiaohongshu_url?: string;
   /** 直播间备注 */
   remark?: string;
 

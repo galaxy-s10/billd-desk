@@ -79,6 +79,7 @@ export enum WsMsgTypeEnum {
   nativeWebRtcCandidate = 'nativeWebRtcCandidate',
 
   msrBlob = 'msrBlob',
+  batchSendOffer = 'batchSendOffer',
 }
 
 export interface IWsFormat<T> {
@@ -264,6 +265,11 @@ export type WsStartRemoteDesk = IWsFormat<{
   sender: string;
   receiver: string;
   roomId: string;
+}>;
+
+export type WsBatchSendOffer = IWsFormat<{
+  roomId: string;
+  socket_list?: string[];
 }>;
 
 export type WsOfferType = IWsFormat<{

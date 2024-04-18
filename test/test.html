@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta
+      name="renderer"
+      content="webkit"
+    />
+    <meta
+      http-equiv="X-UA-Compatible"
+      content="IE=Edge"
+    />
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <meta
+      name="description"
+      content=""
+    />
+    <meta
+      name="author"
+      content="ThemeBucket"
+    />
+    <link
+      rel="shortcut icon"
+      href="#"
+      type="image/png"
+    />
+
+    <title>管理后台登陆</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/common/js/bootstrap/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/common/fonts/css/font-awesome.min.css"
+    />
+    <link
+      href="/assets/backend/css/style.css?v=2"
+      rel="stylesheet"
+    />
+    <link
+      href="/assets/backend/css/style-responsive.css"
+      rel="stylesheet"
+    />
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="/common/js/html5shiv.js"></script>
+      <script src="/common/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body class="login-body">
+    <div class="container">
+      <form
+        class="form-signin"
+        action="/admin/auth/login"
+        method="POST"
+      >
+        <div class="form-signin-heading text-center">
+          <img
+            style="max-height: 45px"
+            src="/assets/backend/images/logo.png?v=4"
+            alt=""
+          />
+        </div>
+        <div class="login-wrap">
+          <input
+            type="hidden"
+            name="_token"
+            value="k32pH8wdW5qsnnUo6nMYAk9eQWI9tq29OCw7e30b"
+          />
+          <input
+            type="hidden"
+            name="back"
+            value="https://vip.cneiie9.com/admin/user/ajaxuserlist?page=1"
+          />
+          <input
+            type="text"
+            name="login"
+            class="form-control"
+            placeholder="用户名"
+            value=""
+            autofocus
+          />
+          <input
+            type="password"
+            name="password"
+            class="form-control"
+            placeholder="密码"
+          />
+
+          <button
+            class="btn btn-lg btn-login btn-block"
+            type="submit"
+          >
+            <i class="fa fa-check"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

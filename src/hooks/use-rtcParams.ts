@@ -1,32 +1,41 @@
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
+import { DEFAULT_AUTH_INFO } from '@/constant';
 import { MediaTypeEnum } from '@/interface';
+import { useUserStore } from '@/store/user';
 
 export const useRTCParams = () => {
+  const userStore = useUserStore();
   const maxBitrate = ref([
     {
       label: '1',
       value: 1,
+      disabled: false,
     },
     {
       label: '10',
       value: 10,
+      disabled: false,
     },
     {
       label: '1000',
       value: 1000,
+      disabled: false,
     },
     {
       label: '2000',
       value: 2000,
+      disabled: false,
     },
     {
       label: '3000',
       value: 3000,
+      disabled: false,
     },
     {
       label: '4000',
       value: 4000,
+      disabled: true,
     },
     {
       label: '5000',
@@ -53,18 +62,22 @@ export const useRTCParams = () => {
     {
       label: '1帧',
       value: 1,
+      disabled: false,
     },
     {
       label: '10帧',
       value: 10,
+      disabled: false,
     },
     {
       label: '20帧',
       value: 20,
+      disabled: false,
     },
     {
       label: '30帧',
       value: 30,
+      disabled: false,
     },
     {
       label: '60帧',
@@ -81,25 +94,60 @@ export const useRTCParams = () => {
     {
       label: '360P',
       value: 360,
+      disabled: false,
     },
     {
       label: '540P',
       value: 540,
+      disabled: false,
     },
     {
       label: '720P',
       value: 720,
+      disabled: false,
     },
     {
       label: '1080P',
       value: 1080,
+      disabled: false,
     },
     {
       label: '1440P',
       value: 1440,
       disabled: true,
     },
+    {
+      label: '2160P',
+      value: 2160,
+      disabled: true,
+    },
   ]);
+  watch(
+    () => userStore.userInfo,
+    (newval) => {
+      if (newval) {
+        if (
+          userStore.userInfo?.auths?.find(
+            (v) => v.auth_value === DEFAULT_AUTH_INFO.LIVE_PULL_SVIP.auth_value
+          )
+        ) {
+          maxBitrate.value = maxBitrate.value.map((item) => {
+            item.disabled = false;
+            return item;
+          });
+          maxFramerate.value = maxFramerate.value.map((item) => {
+            item.disabled = false;
+            return item;
+          });
+          resolutionRatio.value = resolutionRatio.value.map((item) => {
+            item.disabled = false;
+            return item;
+          });
+        }
+      }
+    },
+    { immediate: true }
+  );
   const allMediaTypeList: Record<string, { type: MediaTypeEnum; txt: string }> =
     {
       [MediaTypeEnum.camera]: {

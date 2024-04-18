@@ -20,11 +20,6 @@ export const appBuildInfo =
   // @ts-ignore
   process.env.BilldHtmlWebpackPlugin as BilldHtmlWebpackPluginLog;
 
-// export const WEBSOCKET_URL =
-//   process.env.NODE_ENV === 'development'
-//     ? `ws://192.168.1.102:4300` // `ws://localhost:4300`
-//     : `ws://192.168.1.102:4300`;
-
 export const WEBSOCKET_URL =
   process.env.NODE_ENV === 'development'
     ? `ws://localhost:4300` // `ws://localhost:4300`
@@ -62,9 +57,47 @@ export const QINIU_RESOURCE = {
 export const COMMON_URL = {
   apifox: `https://apifox.com/apidoc/shared-c7556b54-17b2-494e-a039-572d83f103ed/`,
   admin: `https://live-admin.${prodDomain}`,
-  mobileApk: `${QINIU_RESOURCE.url}/billd-live/image/app-release.apk`,
   bilibiliCollectiondetail: `https://space.bilibili.com/381307133/channel/collectiondetail?sid=1458070&ctype=0`,
   payCoursesArticle: `https://www.${prodDomain}/article/151`,
+  download: {
+    live: {
+      flutter: {
+        android: `${QINIU_RESOURCE.url}/billd-live/download/billd-live-v0.0.4.apk`,
+        github: 'https://github.com/galaxy-s10/billd-live-flutter',
+      },
+      reactNative: {
+        android: '',
+        github: 'https://github.com/galaxy-s10/billd-live-react-native',
+      },
+      kotlin: {
+        android: '',
+        github: 'https://github.com/galaxy-s10/billd-live-kotlin',
+      },
+      electron: {
+        github: 'https://github.com/galaxy-s10/billd-live-electron',
+        windows: ``,
+        macOS: ``,
+      },
+    },
+    remoteDesktop: {
+      electron: {
+        windows: `${QINIU_RESOURCE.url}/test/billd-desk-Win-0.0.1-Installer.exe`,
+        github: 'https://github.com/galaxy-s10/billd-desk',
+        macOS: `${QINIU_RESOURCE.url}/test/billd-desk-Mac-0.0.1-Installer.dmg`,
+      },
+      flutter: {
+        android: ``,
+        github: 'https://github.com/galaxy-s10/billd-desk-flutter',
+      },
+    },
+  },
+  release: {
+    flutter: 'https://github.com/galaxy-s10/billd-live-flutter',
+    kotlin: 'https://github.com/galaxy-s10/billd-live-kotlin',
+    reactNative: 'https://github.com/galaxy-s10/billd-live-react-native',
+    electron: 'https://github.com/galaxy-s10/billd-live-electron',
+    desk: 'https://github.com/galaxy-s10/billd-desk',
+  },
 };
 
 export const DEFAULT_AUTH_INFO = {

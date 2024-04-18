@@ -454,6 +454,15 @@ export const createVideo = ({
   videoEl.oncontextmenu = (e) => {
     e.preventDefault();
   };
+  setTimeout(() => {
+    if (autoplay) {
+      try {
+        videoEl.play();
+      } catch (error) {
+        console.log('play失败', error);
+      }
+    }
+  }, 0);
   if (appendChild) {
     if (!show) {
       videoEl.style.width = `1px`;
