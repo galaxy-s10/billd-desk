@@ -156,6 +156,7 @@ export type WsRemoteDeskBehaviorType = IWsFormat<{
   x: number;
   y: number;
   keyboardtype: string | number;
+  amount: number;
 }>;
 
 export interface IDanmu {

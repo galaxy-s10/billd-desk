@@ -1,6 +1,12 @@
 <template>
   <div>
     <div>
+      <!-- <div v-if="NODE_ENV === 'development'"> -->
+      <div>wss：{{ WEBSOCKET_URL }}</div>
+      <div>axios：{{ AXIOS_BASEURL }}</div>
+    </div>
+    <div>github:{{ PROJECT_GITHUB }}</div>
+    <div>
       <n-input-group>
         <n-input-group-label>我的设备</n-input-group-label>
         <n-input
@@ -51,6 +57,7 @@ import { Key } from '@nut-tree/shared';
 import { copyToClipBoard, getRandomString } from 'billd-utils';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 
+import { AXIOS_BASEURL, PROJECT_GITHUB, WEBSOCKET_URL } from '@/constant';
 import { usePull } from '@/hooks/use-pull';
 import { useTip } from '@/hooks/use-tip';
 import { useAppStore } from '@/store/app';
@@ -79,6 +86,7 @@ const mySocketId = computed(() => {
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown);
+  remoteVideoRef.value?.removeEventListener('wheel', handleMouseWheel);
   handleClose();
 });
 
@@ -86,9 +94,88 @@ onMounted(() => {
   initPull({
     isRemoteDesk: true,
   });
+  remoteVideoRef.value?.addEventListener('wheel', handleMouseWheel);
   videoWrapRef.value = remoteVideoRef.value;
   window.addEventListener('keydown', handleKeyDown);
 });
+
+function handleMouseWheel(e: WheelEvent) {
+  if (!appStore.remoteDesk.isRemoteing) {
+    return;
+  }
+  // console.log('handleMouseWheel', e);
+  e.preventDefault();
+  if (e.deltaY > 0) {
+    networkStore.rtcMap
+      .get(receiverId.value)
+      ?.dataChannelSend<WsRemoteDeskBehaviorType['data']>({
+        requestId: getRandomString(8),
+        msgType: WsMsgTypeEnum.remoteDeskBehavior,
+        data: {
+          roomId: roomId.value,
+          sender: mySocketId.value,
+          receiver: receiverId.value,
+          type: RemoteDeskBehaviorEnum.scrollDown,
+          keyboardtype: 0,
+          x: 0,
+          y: 0,
+          amount: Math.abs(e.deltaY),
+        },
+      });
+  } else if (e.deltaY < 0) {
+    networkStore.rtcMap
+      .get(receiverId.value)
+      ?.dataChannelSend<WsRemoteDeskBehaviorType['data']>({
+        requestId: getRandomString(8),
+        msgType: WsMsgTypeEnum.remoteDeskBehavior,
+        data: {
+          roomId: roomId.value,
+          sender: mySocketId.value,
+          receiver: receiverId.value,
+          type: RemoteDeskBehaviorEnum.scrollUp,
+          keyboardtype: 0,
+          x: 0,
+          y: 0,
+          amount: Math.abs(e.deltaY),
+        },
+      });
+  }
+  if (e.deltaX > 0) {
+    networkStore.rtcMap
+      .get(receiverId.value)
+      ?.dataChannelSend<WsRemoteDeskBehaviorType['data']>({
+        requestId: getRandomString(8),
+        msgType: WsMsgTypeEnum.remoteDeskBehavior,
+        data: {
+          roomId: roomId.value,
+          sender: mySocketId.value,
+          receiver: receiverId.value,
+          type: RemoteDeskBehaviorEnum.scrollRight,
+          keyboardtype: 0,
+          x: 0,
+          y: 0,
+          amount: Math.abs(e.deltaX),
+        },
+      });
+  } else if (e.deltaX < 0) {
+    networkStore.rtcMap
+      .get(receiverId.value)
+      ?.dataChannelSend<WsRemoteDeskBehaviorType['data']>({
+        requestId: getRandomString(8),
+        msgType: WsMsgTypeEnum.remoteDeskBehavior,
+        data: {
+          roomId: roomId.value,
+          sender: mySocketId.value,
+          receiver: receiverId.value,
+          type: RemoteDeskBehaviorEnum.scrollLeft,
+          keyboardtype: 0,
+          x: 0,
+          y: 0,
+          amount: Math.abs(e.deltaX),
+        },
+      });
+  }
+}
 
 watch(
   () => appStore.remoteDesk.isClose,
@@ -174,11 +261,15 @@ function handleKeyDown(e: KeyboardEvent) {
         keyboardtype: keyMap[e.code] || e.key,
         x: 0,
         y: 0,
+        amount: 0,
       },
     });
 }
 
 function handleDoublelclick() {
+  if (!appStore.remoteDesk.isRemoteing) {
+    return;
+  }
   networkStore.rtcMap
     .get(receiverId.value)
     ?.dataChannelSend<WsRemoteDeskBehaviorType['data']>({
@@ -192,11 +283,15 @@ function handleDoublelclick() {
         keyboardtype: 0,
         x: 0,
         y: 0,
+        amount: 0,
       },
     });
 }
 
 function handleContextmenu() {
+  if (!appStore.remoteDesk.isRemoteing) {
+    return;
+  }
   networkStore.rtcMap
     .get(receiverId.value)
     ?.dataChannelSend<WsRemoteDeskBehaviorType['data']>({
@@ -210,11 +305,15 @@ function handleContextmenu() {
         keyboardtype: 0,
         x: 0,
         y: 0,
+        amount: 0,
       },
     });
 }
 
 function handleMouseDown(event: MouseEvent) {
+  if (!appStore.remoteDesk.isRemoteing) {
+    return;
+  }
   isDown.value = true;
   clickTimer = setTimeout(function () {
     console.log('长按');
@@ -249,11 +348,15 @@ function handleMouseDown(event: MouseEvent) {
           : RemoteDeskBehaviorEnum.pressButtonLeft,
         x,
         y,
+        amount: 0,
       },
     });
 }
 
 function handleMouseMove(event: MouseEvent) {
+  if (!appStore.remoteDesk.isRemoteing) {
+    return;
+  }
   // 获取点击相对于视窗的位置
   const clickX = event.clientX;
   const clickY = event.clientY;
@@ -280,11 +383,15 @@ function handleMouseMove(event: MouseEvent) {
         keyboardtype: 0,
         x,
         y,
+        amount: 0,
       },
     });
 }
 
 function handleMouseUp(event: MouseEvent) {
+  if (!appStore.remoteDesk.isRemoteing) {
+    return;
+  }
   if (clickTimer) {
     clearTimeout(clickTimer);
   }
@@ -317,6 +424,7 @@ function handleMouseUp(event: MouseEvent) {
           : RemoteDeskBehaviorEnum.releaseButtonLeft,
         x,
         y,
+        amount: 0,
       },
     });
   isLongClick = false;

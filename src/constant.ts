@@ -15,18 +15,19 @@ export const WECHAT_REDIRECT_URI = `https://live.${prodDomain}/oauth/wechat_logi
 export const QRCODE_LOGIN_URI = `https://live.${prodDomain}/qrcodeLogin`;
 
 export const AUTHOR_GITHUB = `https://github.com/galaxy-s10`;
+export const PROJECT_GITHUB = `https://github.com/galaxy-s10/billd-desk`;
 
 export const appBuildInfo =
   // @ts-ignore
   process.env.BilldHtmlWebpackPlugin as BilldHtmlWebpackPluginLog;
 
 export const WEBSOCKET_URL =
-  process.env.NODE_ENV === 'development'
+  process.env.NODE_ENV !== 'development'
     ? `ws://localhost:4300` // `ws://localhost:4300`
     : `wss://srs-pull.${prodDomain}`;
 
 export const AXIOS_BASEURL =
-  process.env.NODE_ENV === 'development'
+  process.env.NODE_ENV !== 'development'
     ? `/api`
     : `https://live-api.${prodDomain}`;
 
@@ -51,52 +52,6 @@ export const QINIU_RESOURCE = {
     'billd-live/image/': 'billd-live/image/',
     'billd-live/msg-image/': 'billd-live/msg-image/',
     'billd-live/live-preview/': 'billd-live/live-preview/',
-  },
-};
-
-export const COMMON_URL = {
-  apifox: `https://apifox.com/apidoc/shared-c7556b54-17b2-494e-a039-572d83f103ed/`,
-  admin: `https://live-admin.${prodDomain}`,
-  bilibiliCollectiondetail: `https://space.bilibili.com/381307133/channel/collectiondetail?sid=1458070&ctype=0`,
-  payCoursesArticle: `https://www.${prodDomain}/article/151`,
-  download: {
-    live: {
-      flutter: {
-        android: `${QINIU_RESOURCE.url}/billd-live/download/billd-live-v0.0.4.apk`,
-        github: 'https://github.com/galaxy-s10/billd-live-flutter',
-      },
-      reactNative: {
-        android: '',
-        github: 'https://github.com/galaxy-s10/billd-live-react-native',
-      },
-      kotlin: {
-        android: '',
-        github: 'https://github.com/galaxy-s10/billd-live-kotlin',
-      },
-      electron: {
-        github: 'https://github.com/galaxy-s10/billd-live-electron',
-        windows: ``,
-        macOS: ``,
-      },
-    },
-    remoteDesktop: {
-      electron: {
-        windows: `${QINIU_RESOURCE.url}/test/billd-desk-Win-0.0.1-Installer.exe`,
-        github: 'https://github.com/galaxy-s10/billd-desk',
-        macOS: `${QINIU_RESOURCE.url}/test/billd-desk-Mac-0.0.1-Installer.dmg`,
-      },
-      flutter: {
-        android: ``,
-        github: 'https://github.com/galaxy-s10/billd-desk-flutter',
-      },
-    },
-  },
-  release: {
-    flutter: 'https://github.com/galaxy-s10/billd-live-flutter',
-    kotlin: 'https://github.com/galaxy-s10/billd-live-kotlin',
-    reactNative: 'https://github.com/galaxy-s10/billd-live-react-native',
-    electron: 'https://github.com/galaxy-s10/billd-live-electron',
-    desk: 'https://github.com/galaxy-s10/billd-desk',
   },
 };
 

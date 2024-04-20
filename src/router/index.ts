@@ -42,7 +42,7 @@ export const routerName = {
   // download: 'download',
   // downloadLive: 'downloadLive',
   notFound: 'notFound',
-  remoteDesktop: 'remoteDesktop',
+  desk: 'desk',
 
   ...mobileRouterName,
 };
@@ -51,7 +51,7 @@ export const routerName = {
 export const defaultRoutes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('@/views/remoteDesktop/index.vue'),
+    component: () => import('@/views/desk/index.vue'),
   },
 ];
 
