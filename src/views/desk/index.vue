@@ -379,7 +379,7 @@ function handleMouseMove(event: MouseEvent) {
         roomId: roomId.value,
         sender: mySocketId.value,
         receiver: receiverId.value,
-        type: RemoteDeskBehaviorEnum.move,
+        type: RemoteDeskBehaviorEnum.mouseMove,
         keyboardtype: 0,
         x,
         y,
@@ -432,6 +432,7 @@ function handleMouseUp(event: MouseEvent) {
 
 function handleClose() {
   networkStore.removeRtc(receiverId.value);
+  appStore.remoteDesk.isClose = true;
 }
 
 function handleRemote() {

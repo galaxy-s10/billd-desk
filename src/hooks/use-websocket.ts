@@ -315,7 +315,7 @@ export const useWebsocket = () => {
     // websocket连接断开
     ws.socketIo.on(WsConnectStatusEnum.disconnect, (err) => {
       prettierReceiveWsMsg(WsConnectStatusEnum.disconnect, ws);
-      console.log('websocket连接断开', err);
+      console.error('websocket连接断开', err);
       if (!ws) return;
       ws.status = WsConnectStatusEnum.disconnect;
       ws.update();

@@ -602,7 +602,7 @@ export class WebRTCClass {
       // maxRetransmits，用户代理应尝试重新传输在不可靠模式下第一次失败的消息的最大次数。虽然该值是 16 位无符号数，但每个用户代理都可以将其限制为它认为合适的任何最大值。
       maxRetransmits: 3,
       // ordered，表示通过 RTCDataChannel 的信息的到达顺序需要和发送顺序一致 (true), 或者到达顺序不需要和发送顺序一致 (false). 默认：true
-      ordered: false,
+      ordered: true,
       protocol: 'udp',
     });
     this.dataChannel.onopen = () => {
@@ -616,6 +616,7 @@ export class WebRTCClass {
         msg: 'dataChannel连接失败！',
         type: 'error',
       });
+      this.close();
     };
   };
 
