@@ -421,6 +421,7 @@ export class WebRTCClass {
             msg: 'webrtc连接成功！',
             type: 'success',
           });
+          appStore.remoteDesk.isClose = false;
           appStore.remoteDesk.isRemoteing = true;
           console.log('sender', this.sender, 'receiver', this.receiver);
           this.update();

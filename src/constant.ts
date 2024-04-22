@@ -22,7 +22,7 @@ export const appBuildInfo =
   process.env.BilldHtmlWebpackPlugin as BilldHtmlWebpackPluginLog;
 
 export const WEBSOCKET_URL =
-  process.env.NODE_ENV === 'development'
+  process.env.NODE_ENV !== 'development'
     ? `ws://localhost:4300` // `ws://localhost:4300`
     : `wss://srs-pull.${prodDomain}`;
 

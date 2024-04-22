@@ -37,6 +37,7 @@ export function usePull(roomId: string) {
   const isRemoteDesk = ref(false);
   const videoElArr = ref<HTMLVideoElement[]>([]);
   const remoteVideo = ref<HTMLElement[]>([]);
+  const remoteVideoMap = ref(new Map());
   const {
     mySocketId,
     initWs,
@@ -63,6 +64,7 @@ export function usePull(roomId: string) {
     stopDrawingArr.value = [];
     remoteVideo.value.forEach((el) => el.remove());
     remoteVideo.value = [];
+    remoteVideoMap.value.clear();
     if (isRemoteDesk.value && videoWrapRef.value) {
       videoWrapRef.value.removeAttribute('style');
     }
@@ -180,8 +182,11 @@ export function usePull(roomId: string) {
                 videoResolution.value = `${w}x${h}`;
               },
             });
-            remoteVideo.value.push(item.videoEl);
-            videoElArr.value.push(item.videoEl);
+            if (!remoteVideoMap.value.has(item.videoEl.id)) {
+              remoteVideoMap.value.set(item.videoEl.id, 1);
+              remoteVideo.value.push(item.videoEl);
+              videoElArr.value.push(item.videoEl);
+            }
           }
         });
         nextTick(() => {
@@ -200,7 +205,6 @@ export function usePull(roomId: string) {
       immediate: true,
     }
   );
-
   watch(
     () => remoteVideo.value,
     (newval) => {
@@ -443,7 +447,6 @@ export function usePull(roomId: string) {
     const instance = networkStore.wsMap.get(roomId);
     if (!instance) return;
     const requestId = getRandomString(8);
-    console.log(danmuMsgType.value, 2221);
     const messageData: WsMessageType['data'] = {
       socket_id: '',
       msg: danmuStr.value,
