@@ -38,3 +38,7 @@ export function useTip(data: {
     };
   });
 }
+
+export function closeUseTip() {
+  instance.show = false;
+}

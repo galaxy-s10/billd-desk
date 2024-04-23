@@ -621,6 +621,23 @@ export class WebRTCClass {
     };
   };
 
+  setVideoTrackContentHints(stream, hint) {
+    const tracks = stream.getVideoTracks();
+    console.log('setVideoTrackContentHints', tracks);
+    tracks.forEach((track) => {
+      if ('contentHint' in track) {
+        track.contentHint = hint;
+        console.log('setVideoTrackContentHints', hint);
+        if (track.contentHint !== hint) {
+          // eslint-disable-next-line
+          console.error(`Invalid video track contentHint: "${hint}"`);
+        }
+      } else {
+        console.error('MediaStreamTrack contentHint attribute not supported');
+      }
+    });
+  }
+
   /** 手动关闭webrtc连接 */
   close = () => {
     try {

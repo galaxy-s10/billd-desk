@@ -59,7 +59,7 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 
 import { AXIOS_BASEURL, PROJECT_GITHUB, WEBSOCKET_URL } from '@/constant';
 import { usePull } from '@/hooks/use-pull';
-import { useTip } from '@/hooks/use-tip';
+import { closeUseTip, useTip } from '@/hooks/use-tip';
 import { useAppStore } from '@/store/app';
 import { useNetworkStore } from '@/store/network';
 import {
@@ -187,6 +187,8 @@ watch(
         hiddenCancel: true,
         hiddenClose: true,
       }).catch();
+    } else {
+      closeUseTip();
     }
   }
 );
