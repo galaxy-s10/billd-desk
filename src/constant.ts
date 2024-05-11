@@ -16,13 +16,14 @@ export const QRCODE_LOGIN_URI = `https://live.${prodDomain}/qrcodeLogin`;
 
 export const AUTHOR_GITHUB = `https://github.com/galaxy-s10`;
 export const PROJECT_GITHUB = `https://github.com/galaxy-s10/billd-desk`;
+export const DOWNLOAD_DESK_URL = `https://live.hsslive.cn/download/desk`;
 
 export const appBuildInfo =
   // @ts-ignore
   process.env.BilldHtmlWebpackPlugin as BilldHtmlWebpackPluginLog;
 
 export const WEBSOCKET_URL =
-  process.env.NODE_ENV !== 'development'
+  process.env.NODE_ENV === 'development'
     ? `ws://localhost:4300` // `ws://localhost:4300`
     : `wss://srs-pull.${prodDomain}`;
 

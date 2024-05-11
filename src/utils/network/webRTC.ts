@@ -6,64 +6,6 @@ import { AppRootState, useAppStore } from '@/store/app';
 import { useNetworkStore } from '@/store/network';
 import { WsCandidateType, WsMsgTypeEnum } from '@/types/websocket';
 
-/** 设置分辨率 */
-export async function handleResolutionRatio(data: {
-  frameRate: number;
-  height: number;
-  stream: MediaStream;
-}): Promise<number> {
-  const { frameRate, height, stream } = data;
-  const queue: Promise<any>[] = [];
-  console.log('开始设置分辨率', height);
-  stream.getTracks().forEach((track) => {
-    if (track.kind === 'video') {
-      queue.push(
-        track.applyConstraints({
-          height: { ideal: height },
-          frameRate: { ideal: frameRate },
-        })
-      );
-    }
-  });
-  try {
-    await Promise.all(queue);
-    console.log('设置分辨率成功');
-    return 1;
-  } catch (error) {
-    console.error('设置分辨率失败', height, error);
-    return 0;
-  }
-}
-
-/** 设置帧率 */
-export async function handleMaxFramerate(data: {
-  frameRate: number;
-  height: number;
-  stream: MediaStream;
-}): Promise<number> {
-  const { frameRate, height, stream } = data;
-  const queue: Promise<any>[] = [];
-  console.log('开始设置帧率', frameRate);
-  stream.getTracks().forEach((track) => {
-    if (track.kind === 'video') {
-      queue.push(
-        track.applyConstraints({
-          height: { ideal: height },
-          frameRate: { ideal: frameRate },
-        })
-      );
-    }
-  });
-  try {
-    await Promise.all(queue);
-    console.log('设置帧率成功');
-    return 1;
-  } catch (error) {
-    console.error('设置帧率失败', frameRate, error);
-    return 0;
-  }
-}
-
 export class WebRTCClass {
   roomId = '-1';
   sender = '';
@@ -85,6 +27,12 @@ export class WebRTCClass {
   localStream?: MediaStream | null;
 
   isSRS: boolean;
+
+  loss = -1;
+
+  rtt = -1;
+
+  loopGetStatsTimer: any = null;
 
   constructor(data: {
     roomId: string;
@@ -115,6 +63,7 @@ export class WebRTCClass {
     this.isSRS = data.isSRS;
     console.warn('new webrtc参数:', data);
     this.createPeerConnection();
+    this.loopGetStats();
   }
 
   prettierLog = (data: {
@@ -142,28 +91,49 @@ export class WebRTCClass {
     }
   };
 
-  /** 设置分辨率 */
-  setResolutionRatio = async (height: number) => {
-    if (this.localStream) {
-      const res = await handleResolutionRatio({
-        frameRate: this.maxFramerate,
-        stream: this.localStream,
-        height,
-      });
-      return res;
-    }
-  };
-
-  /** 设置最大帧率 */
-  setMaxFramerate = async (maxFramerate: number) => {
-    if (this.localStream) {
-      const res = await handleMaxFramerate({
-        frameRate: maxFramerate,
-        stream: this.localStream,
-        height: this.resolutionRatio,
-      });
-      return res;
-    }
+  loopGetStats = () => {
+    this.loopGetStatsTimer = setInterval(async () => {
+      if (!this.peerConnection) return;
+      try {
+        const res = await this.peerConnection.getStats();
+        // 总丢包率（音频丢包和视频丢包）
+        let loss = 0;
+        let rtt = 0;
+        res.forEach((report: RTCInboundRtpStreamStats) => {
+          // @ts-ignore
+          const currentRoundTripTime = report?.currentRoundTripTime;
+          const packetsLost = report?.packetsLost;
+          const packetsReceived = report.packetsReceived;
+          if (currentRoundTripTime !== undefined) {
+            rtt = currentRoundTripTime * 1000;
+          }
+          if (report.type === 'inbound-rtp' && report.kind === 'audio') {
+            if (packetsReceived !== undefined && packetsLost !== undefined) {
+              if (packetsLost === 0 || packetsReceived === 0) {
+                loss += 0;
+              } else {
+                loss += packetsLost / packetsReceived;
+              }
+            }
+          }
+          if (report.type === 'inbound-rtp' && report.kind === 'video') {
+            if (packetsReceived !== undefined && packetsLost !== undefined) {
+              if (packetsLost === 0 || packetsReceived === 0) {
+                loss += 0;
+              } else {
+                loss += packetsLost / packetsReceived;
+              }
+            }
+          }
+        });
+        this.loss = loss;
+        this.rtt = rtt;
+        this.update();
+      } catch (error) {
+        console.error('getStats错误');
+        console.log(error);
+      }
+    }, 1000);
   };
 
   /** 设置最大码率 */
@@ -481,12 +451,6 @@ export class WebRTCClass {
           if (this.maxBitrate !== -1) {
             this.setMaxBitrate(this.maxBitrate);
           }
-          if (this.maxFramerate !== -1) {
-            this.setMaxFramerate(this.maxFramerate);
-          }
-          if (this.resolutionRatio !== -1) {
-            this.setResolutionRatio(this.resolutionRatio);
-          }
         }
         if (connectionState === 'disconnected') {
           // 表示至少有一个 ICE 连接处于 disconnected 状态，并且没有连接处于 failed、connecting 或 checking 状态。
@@ -642,6 +606,7 @@ export class WebRTCClass {
   close = () => {
     try {
       this.prettierLog({ msg: '手动关闭webrtc连接', type: 'warn' });
+      clearInterval(this.loopGetStatsTimer);
       this.localStream?.getTracks().forEach((track) => {
         track.stop();
       });

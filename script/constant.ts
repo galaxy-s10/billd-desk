@@ -13,7 +13,7 @@ export const htmlWebpackPluginTitle = 'billd-desk'; // htmlWebpackPlugin的标�
 
 export const outputStaticUrl = (isProduction: boolean) => {
   if (isProduction) {
-    return 'https://resource.hsslive.cn/billd-desk/dist/';
+    return 'https://resource.hsslive.cn/billd-desk/dist/dist/';
   }
   return '/';
 };

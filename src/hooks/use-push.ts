@@ -18,8 +18,7 @@ import {
   WsMsrBlobType,
   WsRoomNoLiveType,
 } from '@/types/websocket';
-import { createVideo, generateBase64 } from '@/utils';
-import { handleMaxFramerate } from '@/utils/network/webRTC';
+import { createVideo, generateBase64, handlConstraints } from '@/utils';
 
 import { commentAuthTip, loginTip } from './use-login';
 import { useTip } from './use-tip';
@@ -79,13 +78,31 @@ export function usePush() {
 
   watch(
     () => currentResolutionRatio.value,
-    (newVal) => {
-      networkStore.rtcMap.forEach(async (rtc) => {
-        const res = await rtc.setResolutionRatio(newVal);
-        if (res === 1) {
-          window.$message.success('切换分辨率成功！');
-        } else {
-          window.$message.success('切换分辨率失败！');
+    (newval) => {
+      console.log('分辨率变了', newval);
+      networkStore.rtcMap.forEach((rtc) => {
+        if (canvasVideoStream.value) {
+          handlConstraints({
+            frameRate: rtc.maxFramerate,
+            height: newval,
+            stream: canvasVideoStream.value,
+          });
+        }
+      });
+    }
+  );
+
+  watch(
+    () => currentMaxFramerate.value,
+    (newval) => {
+      console.log('帧率变了', newval);
+      networkStore.rtcMap.forEach((rtc) => {
+        if (canvasVideoStream.value) {
+          handlConstraints({
+            frameRate: newval,
+            height: rtc.resolutionRatio,
+            stream: canvasVideoStream.value,
+          });
         }
       });
     }
@@ -220,12 +237,13 @@ export function usePush() {
         }
       }
     }
-
-    handleMaxFramerate({
-      stream: canvasVideoStream.value!,
-      height: currentResolutionRatio.value,
-      frameRate: currentMaxFramerate.value,
-    });
+    if (canvasVideoStream.value) {
+      handlConstraints({
+        stream: canvasVideoStream.value,
+        height: currentResolutionRatio.value,
+        frameRate: currentMaxFramerate.value,
+      });
+    }
     handleStartLive({
       name: roomName.value,
       type,

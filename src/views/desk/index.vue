@@ -2,10 +2,16 @@
   <div>
     <div>
       <!-- <div v-if="NODE_ENV === 'development'"> -->
+      <div>version：-</div>
       <div>wss：{{ WEBSOCKET_URL }}</div>
       <div>axios：{{ AXIOS_BASEURL }}</div>
+      <div @click="openToTarget(PROJECT_GITHUB)">
+        github：<span class="link">{{ PROJECT_GITHUB }}</span>
+      </div>
+      <div @click="openToTarget(DOWNLOAD_DESK_URL)">
+        客户端下载：<span class="link">{{ DOWNLOAD_DESK_URL }}</span>
+      </div>
     </div>
-    <div>github:{{ PROJECT_GITHUB }}</div>
     <div>
       <n-input-group>
         <n-input-group-label>我的设备</n-input-group-label>
@@ -39,7 +45,19 @@
         </n-button>
       </n-input-group>
     </div>
-
+    <div class="info">
+      <span class="item">
+        分辨率：<span v-if="videoSettings?.width">
+          {{ videoSettings?.width || '-' }}x{{ videoSettings?.height || '-' }}
+        </span>
+        <span v-else>-</span>
+      </span>
+      <span class="item">
+        帧率：{{ videoSettings?.frameRate?.toFixed(2) || '-' }}
+      </span>
+      <span class="item">延迟：{{ rtcRtt || '-' }}</span>
+      <span class="item">丢包：{{ rtcLoss || '-' }}</span>
+    </div>
     <div
       class="wrap"
       ref="remoteVideoRef"
@@ -54,10 +72,15 @@
 
 <script lang="ts" setup>
 import { Key } from '@nut-tree/shared';
-import { copyToClipBoard, getRandomString } from 'billd-utils';
+import { copyToClipBoard, getRandomString, openToTarget } from 'billd-utils';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 
-import { AXIOS_BASEURL, PROJECT_GITHUB, WEBSOCKET_URL } from '@/constant';
+import {
+  AXIOS_BASEURL,
+  DOWNLOAD_DESK_URL,
+  PROJECT_GITHUB,
+  WEBSOCKET_URL,
+} from '@/constant';
 import { usePull } from '@/hooks/use-pull';
 import { closeUseTip, useTip } from '@/hooks/use-tip';
 import { useAppStore } from '@/store/app';
@@ -78,10 +101,28 @@ const roomId = ref(num);
 const receiverId = ref('');
 const remoteVideoRef = ref<HTMLDivElement>();
 const isDown = ref(false);
+const loopGetSettingsTimer = ref();
+const videoSettings = ref<MediaTrackSettings>();
 let clickTimer;
 let isLongClick = false;
 const mySocketId = computed(() => {
   return networkStore.wsMap.get(roomId.value)?.socketIo?.id || '-1';
+});
+
+const rtcRtt = computed(() => {
+  const arr: string[] = [];
+  networkStore.rtcMap.forEach((rtc) => {
+    arr.push(`${rtc.rtt}ms`);
+  });
+  return arr.join();
+});
+
+const rtcLoss = computed(() => {
+  const arr: string[] = [];
+  networkStore.rtcMap.forEach((rtc) => {
+    arr.push(`${Number(rtc.loss.toFixed(2))}%`);
+  });
+  return arr.join();
 });
 
 onUnmounted(() => {
@@ -97,7 +138,19 @@ onMounted(() => {
   remoteVideoRef.value?.addEventListener('wheel', handleMouseWheel);
   videoWrapRef.value = remoteVideoRef.value;
   window.addEventListener('keydown', handleKeyDown);
+  loopGetSettings();
 });
+
+function loopGetSettings() {
+  loopGetSettingsTimer.value = setInterval(() => {
+    networkStore.rtcMap
+      .get(receiverId.value)
+      ?.localStream?.getVideoTracks()
+      .forEach((item) => {
+        videoSettings.value = item.getSettings();
+      });
+  }, 1000);
+}
 
 function handleMouseWheel(e: WheelEvent) {
   if (!appStore.remoteDesk.isRemoteing) {
@@ -435,6 +488,7 @@ function handleMouseUp(event: MouseEvent) {
 function handleClose() {
   networkStore.removeRtc(receiverId.value);
   appStore.remoteDesk.isClose = true;
+  clearInterval(loopGetSettingsTimer.value);
 }
 
 function handleRemote() {
@@ -451,6 +505,15 @@ function handleRemote() {
 </script>
 
 <style lang="scss" scoped>
+.info {
+  .item {
+    margin-right: 10px;
+  }
+}
+.link {
+  cursor: pointer;
+  color: $theme-color-gold;
+}
 .wrap {
   line-height: 0;
   cursor: none;
