@@ -489,6 +489,7 @@ function handleClose() {
   networkStore.removeRtc(receiverId.value);
   appStore.remoteDesk.isClose = true;
   clearInterval(loopGetSettingsTimer.value);
+  videoSettings.value = undefined;
 }
 
 function handleRemote() {
