@@ -516,6 +516,14 @@ export class WebRTCClass {
       console.error('dataChannel未连接成功，不发送消息！', msgType, data);
       return;
     }
+    console.warn(
+      'dataChannel发送消息',
+      JSON.stringify({
+        msgType,
+        requestId,
+        data,
+      })
+    );
     this.dataChannel.send(
       JSON.stringify({
         msgType,

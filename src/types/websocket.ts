@@ -80,6 +80,12 @@ export enum WsMsgTypeEnum {
 
   msrBlob = 'msrBlob',
   batchSendOffer = 'batchSendOffer',
+
+  changeMaxBitrate = 'changeMaxBitrate',
+  changeMaxFramerate = 'changeMaxFramerate',
+  changeResolutionRatio = 'changeResolutionRatio',
+  changeVideoContentHint = 'changeVideoContentHint',
+  changeAudioContentHint = 'changeAudioContentHint',
 }
 
 export interface IWsFormat<T> {
@@ -96,19 +102,44 @@ export interface IWsFormat<T> {
   data: T;
 }
 
+export type WsChangeMaxBitrateType = IWsFormat<{
+  live_room_id: number;
+  val: number;
+}>;
+
+export type WsChangeMaxFramerateType = IWsFormat<{
+  live_room_id: number;
+  val: number;
+}>;
+
+export type WsChangeResolutionRatioType = IWsFormat<{
+  live_room_id: number;
+  val: number;
+}>;
+
+export type WsChangeVideoContentHintType = IWsFormat<{
+  live_room_id: number;
+  val: string;
+}>;
+
+export type WsChangeAudioContentHintType = IWsFormat<{
+  live_room_id: number;
+  val: string;
+}>;
+
 export type WsUpdateJoinInfoType = IWsFormat<{
   live_room_id: number;
   track?: { audio: number; video: number };
 }>;
 
 /** 直播pk秘钥 */
-export type WSLivePkKeyType = IWsFormat<{
+export type WsLivePkKeyType = IWsFormat<{
   live_room_id: number;
   key: string;
 }>;
 
 /** 获取在线用户 */
-export type WSGetRoomAllUserType = IWsFormat<{
+export type WsGetRoomAllUserType = IWsFormat<{
   liveUser: ILiveUser[];
 }>;
 
@@ -266,6 +297,11 @@ export type WsStartRemoteDesk = IWsFormat<{
   sender: string;
   receiver: string;
   roomId: string;
+  maxBitrate: number;
+  maxFramerate: number;
+  resolutionRatio: number;
+  audioContentHint: string;
+  videoContentHint: string;
 }>;
 
 export type WsBatchSendOffer = IWsFormat<{

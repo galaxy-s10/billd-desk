@@ -571,8 +571,8 @@ export function videoFullBox(data: {
       maxWidth: wrapSize.width,
       minWidth: wrapSize.width,
     });
-    videoEl.style.width = `${res.width as number}px`;
-    videoEl.style.height = `${res.height as number}px`;
+    videoEl.style.width = `${Number(res.width.toFixed()) as number}px`;
+    videoEl.style.height = `${Number(res.height.toFixed()) as number}px`;
     videoEl.setAttribute('resolution-width', width);
     videoEl.setAttribute('resolution-height', height);
   }
@@ -617,8 +617,8 @@ export function videoToCanvas(data: {
       maxWidth: wrapSize.width,
       minWidth: wrapSize.width,
     });
-    canvas.style.width = `${res.width as number}px`;
-    canvas.style.height = `${res.height as number}px`;
+    canvas.style.width = `${Number(res.width.toFixed()) as number}px`;
+    canvas.style.height = `${Number(res.height.toFixed()) as number}px`;
   }
   setVideoSize({ width: w, height: h });
   data.videoResize?.({ w, h });

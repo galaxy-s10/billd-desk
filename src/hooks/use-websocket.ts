@@ -23,13 +23,13 @@ import { LiveRoomTypeEnum } from '@/types/ILiveRoom';
 import { IUser } from '@/types/IUser';
 import {
   IDanmu,
-  WSGetRoomAllUserType,
   WsAnswerType,
   WsBatchSendOffer,
   WsCandidateType,
   WsConnectStatusEnum,
   WsDisableSpeakingType,
   WsGetLiveUserType,
+  WsGetRoomAllUserType,
   WsHeartbeatType,
   WsJoinType,
   WsLeavedType,
@@ -322,7 +322,7 @@ export const useWebsocket = () => {
     });
 
     // 收到livePkKey
-    // ws.socketIo.on(WsMsgTypeEnum.livePkKey, (data: WSLivePkKeyType['data']) => {
+    // ws.socketIo.on(WsMsgTypeEnum.livePkKey, (data: WsLivePkKeyType['data']) => {
     //   console.log('收到livePkKey', data);
     //   const url = router.resolve({
     //     name: routerName.pull,
@@ -582,7 +582,7 @@ export const useWebsocket = () => {
     // 当前所有在线用户
     ws.socketIo.on(
       WsMsgTypeEnum.liveUser,
-      (data: WSGetRoomAllUserType['data']) => {
+      (data: WsGetRoomAllUserType['data']) => {
         prettierReceiveWsMsg(WsMsgTypeEnum.liveUser, data);
         liveUserList.value = data.liveUser;
       }

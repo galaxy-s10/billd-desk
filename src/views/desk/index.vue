@@ -5,11 +5,73 @@
       <div>version：-</div>
       <div>wss：{{ WEBSOCKET_URL }}</div>
       <div>axios：{{ AXIOS_BASEURL }}</div>
-      <div @click="openToTarget(PROJECT_GITHUB)">
-        github：<span class="link">{{ PROJECT_GITHUB }}</span>
+      <div>
+        github：<span
+          class="link"
+          @click="openToTarget(PROJECT_GITHUB)"
+        >
+          {{ PROJECT_GITHUB }}
+        </span>
       </div>
-      <div @click="openToTarget(DOWNLOAD_DESK_URL)">
-        客户端下载：<span class="link">{{ DOWNLOAD_DESK_URL }}</span>
+      <div>
+        客户端下载：<span
+          class="link"
+          @click="openToTarget(DOWNLOAD_DESK_URL)"
+        >
+          {{ DOWNLOAD_DESK_URL }}
+        </span>
+      </div>
+    </div>
+    <div class="rtc-config">
+      <div class="item">
+        <div class="txt">码率：</div>
+        <div class="down">
+          <n-select
+            size="small"
+            v-model:value="currentMaxBitrate"
+            :options="maxBitrate"
+          />
+        </div>
+      </div>
+      <div class="item">
+        <div class="txt">帧率：</div>
+        <div class="down">
+          <n-select
+            size="small"
+            v-model:value="currentMaxFramerate"
+            :options="maxFramerate"
+          />
+        </div>
+      </div>
+      <div class="item">
+        <div class="txt">分辨率：</div>
+        <div class="down big">
+          <n-select
+            size="small"
+            v-model:value="currentResolutionRatio"
+            :options="resolutionRatio"
+          />
+        </div>
+      </div>
+      <div class="item">
+        <div class="txt">视频内容：</div>
+        <div class="down">
+          <n-select
+            size="small"
+            v-model:value="currentVideoContentHint"
+            :options="videoContentHint"
+          />
+        </div>
+      </div>
+      <div class="item">
+        <div class="txt">音频内容：</div>
+        <div class="down big">
+          <n-select
+            size="small"
+            v-model:value="currentAudioContentHint"
+            :options="audioContentHint"
+          />
+        </div>
       </div>
     </div>
     <div>
@@ -82,11 +144,17 @@ import {
   WEBSOCKET_URL,
 } from '@/constant';
 import { usePull } from '@/hooks/use-pull';
+import { useRTCParams } from '@/hooks/use-rtcParams';
 import { closeUseTip, useTip } from '@/hooks/use-tip';
 import { useAppStore } from '@/store/app';
 import { useNetworkStore } from '@/store/network';
 import {
   RemoteDeskBehaviorEnum,
+  WsChangeAudioContentHintType,
+  WsChangeMaxBitrateType,
+  WsChangeMaxFramerateType,
+  WsChangeResolutionRatioType,
+  WsChangeVideoContentHintType,
   WsMsgTypeEnum,
   WsRemoteDeskBehaviorType,
   WsStartRemoteDesk,
@@ -96,7 +164,19 @@ const num = '123456';
 const appStore = useAppStore();
 const networkStore = useNetworkStore();
 const { videoWrapRef, initPull } = usePull(num);
+const {
+  maxBitrate,
+  maxFramerate,
+  resolutionRatio,
+  audioContentHint,
+  videoContentHint,
+} = useRTCParams();
 
+const currentMaxBitrate = ref(maxBitrate.value[3].value);
+const currentMaxFramerate = ref(maxFramerate.value[2].value);
+const currentResolutionRatio = ref(resolutionRatio.value[3].value);
+const currentVideoContentHint = ref(videoContentHint.value[3].value);
+const currentAudioContentHint = ref(audioContentHint.value[0].value);
 const roomId = ref(num);
 const receiverId = ref('');
 const remoteVideoRef = ref<HTMLDivElement>();
@@ -142,6 +222,7 @@ onMounted(() => {
 });
 
 function loopGetSettings() {
+  clearInterval(loopGetSettingsTimer.value);
   loopGetSettingsTimer.value = setInterval(() => {
     networkStore.rtcMap
       .get(receiverId.value)
@@ -231,16 +312,93 @@ function handleMouseWheel(e: WheelEvent) {
 }
 
 watch(
+  () => currentMaxBitrate.value,
+  (newval) => {
+    networkStore.rtcMap
+      .get(receiverId.value)
+      ?.dataChannelSend<WsChangeMaxBitrateType['data']>({
+        requestId: getRandomString(8),
+        msgType: WsMsgTypeEnum.changeMaxBitrate,
+        data: {
+          live_room_id: Number(roomId.value),
+          val: newval,
+        },
+      });
+  }
+);
+watch(
+  () => currentMaxFramerate.value,
+  (newval) => {
+    networkStore.rtcMap
+      .get(receiverId.value)
+      ?.dataChannelSend<WsChangeMaxFramerateType['data']>({
+        requestId: getRandomString(8),
+        msgType: WsMsgTypeEnum.changeMaxFramerate,
+        data: {
+          live_room_id: Number(roomId.value),
+          val: newval,
+        },
+      });
+  }
+);
+watch(
+  () => currentResolutionRatio.value,
+  (newval) => {
+    networkStore.rtcMap
+      .get(receiverId.value)
+      ?.dataChannelSend<WsChangeResolutionRatioType['data']>({
+        requestId: getRandomString(8),
+        msgType: WsMsgTypeEnum.changeResolutionRatio,
+        data: {
+          live_room_id: Number(roomId.value),
+          val: newval,
+        },
+      });
+  }
+);
+watch(
+  () => currentVideoContentHint.value,
+  (newval) => {
+    networkStore.rtcMap
+      .get(receiverId.value)
+      ?.dataChannelSend<WsChangeVideoContentHintType['data']>({
+        requestId: getRandomString(8),
+        msgType: WsMsgTypeEnum.changeVideoContentHint,
+        data: {
+          live_room_id: Number(roomId.value),
+          val: newval,
+        },
+      });
+  }
+);
+watch(
+  () => currentAudioContentHint.value,
+  (newval) => {
+    networkStore.rtcMap
+      .get(receiverId.value)
+      ?.dataChannelSend<WsChangeAudioContentHintType['data']>({
+        requestId: getRandomString(8),
+        msgType: WsMsgTypeEnum.changeAudioContentHint,
+        data: {
+          live_room_id: Number(roomId.value),
+          val: newval,
+        },
+      });
+  }
+);
+
+watch(
   () => appStore.remoteDesk.isClose,
   (newval) => {
     if (newval) {
-      networkStore.removeRtc(receiverId.value);
+      handleClose();
       useTip({
         content: '远程连接断开',
         hiddenCancel: true,
         hiddenClose: true,
       }).catch();
     } else {
+      loopGetSettings();
       closeUseTip();
     }
   }
@@ -500,6 +658,11 @@ function handleRemote() {
       roomId: roomId.value,
       sender: mySocketId.value,
       receiver: receiverId.value,
+      maxBitrate: currentMaxBitrate.value,
+      maxFramerate: currentMaxFramerate.value,
+      resolutionRatio: currentResolutionRatio.value,
+      videoContentHint: currentVideoContentHint.value,
+      audioContentHint: currentAudioContentHint.value,
     },
   });
 }
@@ -511,9 +674,21 @@ function handleRemote() {
     margin-right: 10px;
   }
 }
+.rtc-config {
+  display: flex;
+  .item {
+    display: flex;
+    align-items: center;
+    padding-right: 10px;
+
+    .down {
+      width: 150px;
+    }
+  }
+}
 .link {
-  cursor: pointer;
   color: $theme-color-gold;
+  cursor: pointer;
 }
 .wrap {
   line-height: 0;

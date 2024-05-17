@@ -35,27 +35,27 @@ export const useRTCParams = () => {
     {
       label: '4000',
       value: 4000,
-      disabled: true,
+      disabled: false,
     },
     {
       label: '5000',
       value: 5000,
-      disabled: true,
+      disabled: false,
     },
     {
       label: '6000',
       value: 6000,
-      disabled: true,
+      disabled: false,
     },
     {
       label: '7000',
       value: 7000,
-      disabled: true,
+      disabled: false,
     },
     {
       label: '8000',
       value: 8000,
-      disabled: true,
+      disabled: false,
     },
   ]);
   const maxFramerate = ref([
@@ -82,12 +82,12 @@ export const useRTCParams = () => {
     {
       label: '60帧',
       value: 60,
-      disabled: true,
+      disabled: false,
     },
     {
       label: '120帧',
       value: 120,
-      disabled: true,
+      disabled: false,
     },
   ]);
   const resolutionRatio = ref([
@@ -114,12 +114,56 @@ export const useRTCParams = () => {
     {
       label: '1440P',
       value: 1440,
-      disabled: true,
+      disabled: false,
     },
     {
       label: '2160P',
       value: 2160,
-      disabled: true,
+      disabled: false,
+    },
+  ]);
+  const videoContentHint = ref([
+    {
+      label: '默认',
+      value: '',
+      disabled: false,
+    },
+    {
+      label: '运动',
+      value: 'motion',
+      disabled: false,
+    },
+    {
+      label: '文本',
+      value: 'text',
+      disabled: false,
+    },
+    {
+      label: '平衡',
+      value: 'detail',
+      disabled: false,
+    },
+  ]);
+  const audioContentHint = ref([
+    {
+      label: '默认',
+      value: '',
+      disabled: false,
+    },
+    {
+      label: '音乐',
+      value: 'music',
+      disabled: false,
+    },
+    {
+      label: '语言',
+      value: 'speech',
+      disabled: false,
+    },
+    {
+      label: '语音识别',
+      value: 'speech-recognition',
+      disabled: false,
     },
   ]);
   watch(
@@ -184,5 +228,12 @@ export const useRTCParams = () => {
       },
     };
 
-  return { maxBitrate, maxFramerate, resolutionRatio, allMediaTypeList };
+  return {
+    maxBitrate,
+    maxFramerate,
+    resolutionRatio,
+    videoContentHint,
+    audioContentHint,
+    allMediaTypeList,
+  };
 };
