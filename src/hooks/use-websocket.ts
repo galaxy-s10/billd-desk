@@ -40,7 +40,6 @@ import {
   WsRemoteDeskBehaviorType,
   WsRoomLivingType,
   WsStartLiveType,
-  WsStartRemoteDesk,
   WsUpdateJoinInfoType,
 } from '@/types/websocket';
 import { createNullVideo, handleUserMedia } from '@/utils';
@@ -114,6 +113,16 @@ export const useWebsocket = () => {
       }
     },
     { immediate: true }
+  );
+
+  watch(
+    () => connectStatus.value,
+    (newval) => {
+      console.log('connectStatusconnectStatus', newval);
+    },
+    {
+      immediate: true,
+    }
   );
 
   const mySocketId = computed(() => {
@@ -307,6 +316,7 @@ export const useWebsocket = () => {
       handleHeartbeat(ws.socketIo!.id!);
       if (!ws) return;
       connectStatus.value = WsConnectStatusEnum.connect;
+      console.log('kk11');
       ws.status = WsConnectStatusEnum.connect;
       ws.update();
       sendJoin();
@@ -355,15 +365,6 @@ export const useWebsocket = () => {
     //     ]),
     //   }).catch(() => {});
     // });
-
-    // 收到startRemoteDesk
-    ws.socketIo.on(WsMsgTypeEnum.startRemoteDesk, (data: WsStartRemoteDesk) => {
-      console.log('收到startRemoteDesk', data);
-      if (data.data.receiver === mySocketId.value) {
-        appStore.remoteDesk.startRemoteDesk = true;
-        appStore.remoteDesk.sender = data.data.sender;
-      }
-    });
 
     // 收到srsOffer
     ws.socketIo.on(WsMsgTypeEnum.srsOffer, (data: WsOfferType['data']) => {
@@ -420,6 +421,15 @@ export const useWebsocket = () => {
               // data.data.receiver是接收者；我们现在new pc，发送者是自己，接收者肯定是房主，不能是data.data.receiver，因为data.data.receiver是自己
               receiver: data.sender,
               sdp: data.sdp,
+            });
+            appStore.remoteDesk.set(data.sender, {
+              sender: data.sender,
+              isClose: false,
+              // maxBitrate: data.maxBitrate,
+              // maxFramerate: data.maxFramerate,
+              // resolutionRatio: data.resolutionRatio,
+              // videoContentHint: data.videoContentHint,
+              // audioContentHint: data.audioContentHint,
             });
           } else {
             console.error('不是发给我的nativeWebRtcOffer-isRemoteDesk');

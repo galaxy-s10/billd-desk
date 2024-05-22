@@ -387,9 +387,9 @@ export function usePull(roomId: string) {
   );
 
   watch(
-    () => appStore.remoteDesk.isClose,
+    () => appStore.remoteDesk.size,
     (newval) => {
-      if (newval) {
+      if (!newval) {
         handleStopDrawing();
       }
     }

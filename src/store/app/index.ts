@@ -6,12 +6,22 @@ import { mobileRouterName } from '@/router';
 import { ILiveRoom } from '@/types/ILiveRoom';
 
 export type AppRootState = {
-  remoteDesk: {
-    sender: string;
-    startRemoteDesk: boolean;
-    isRemoteing?: boolean;
-    isClose?: boolean;
-  };
+  // remoteDesk: {
+  //   sender: string;
+  //   isClose: boolean;
+  // };
+  remoteDesk: Map<
+    string,
+    {
+      sender: string;
+      isClose: boolean;
+      maxBitrate?: number;
+      maxFramerate?: number;
+      resolutionRatio?: number;
+      audioContentHint?: string;
+      videoContentHint?: string;
+    }
+  >;
   playing: boolean;
   videoRatio: number;
   normalVolume: number;
@@ -72,12 +82,7 @@ export type AppRootState = {
 export const useAppStore = defineStore('app', {
   state: (): AppRootState => {
     return {
-      remoteDesk: {
-        startRemoteDesk: false,
-        sender: '',
-        isRemoteing: false,
-        isClose: undefined,
-      },
+      remoteDesk: new Map(),
       playing: false,
       videoRatio: 16 / 9,
       videoControls: {

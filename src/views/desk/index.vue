@@ -74,6 +74,27 @@
         </div>
       </div>
     </div>
+    <div class="rtc-config">
+      <div class="item">
+        <div class="txt">模式：</div>
+        <n-radio
+          :checked="isWatchMode === 'on'"
+          value="on"
+          name="basic-demo"
+          @change="handleChange"
+        >
+          观看模式
+        </n-radio>
+        <n-radio
+          :checked="isWatchMode === 'off'"
+          value="off"
+          name="basic-demo"
+          @change="handleChange"
+        >
+          控制模式
+        </n-radio>
+      </div>
+    </div>
     <div>
       <n-input-group>
         <n-input-group-label>我的设备</n-input-group-label>
@@ -94,7 +115,7 @@
         <n-button
           type="error"
           @click="handleClose"
-          v-if="appStore.remoteDesk.isRemoteing"
+          v-if="appStore.remoteDesk.size"
         >
           结束远程
         </n-button>
@@ -121,7 +142,7 @@
       <span class="item">丢包：{{ rtcLoss || '-' }}</span>
     </div>
     <div
-      class="wrap"
+      :class="{ wrap: 1, watch: isWatchMode === 'on' }"
       ref="remoteVideoRef"
       @mousedown="handleMouseDown"
       @mousemove="handleMouseMove"
@@ -145,7 +166,8 @@ import {
 } from '@/constant';
 import { usePull } from '@/hooks/use-pull';
 import { useRTCParams } from '@/hooks/use-rtcParams';
-import { closeUseTip, useTip } from '@/hooks/use-tip';
+import { closeUseTip } from '@/hooks/use-tip';
+import { useWebsocket } from '@/hooks/use-websocket';
 import { useAppStore } from '@/store/app';
 import { useNetworkStore } from '@/store/network';
 import {
@@ -155,6 +177,7 @@ import {
   WsChangeMaxFramerateType,
   WsChangeResolutionRatioType,
   WsChangeVideoContentHintType,
+  WsConnectStatusEnum,
   WsMsgTypeEnum,
   WsRemoteDeskBehaviorType,
   WsStartRemoteDesk,
@@ -163,6 +186,7 @@ import {
 const num = '123456';
 const appStore = useAppStore();
 const networkStore = useNetworkStore();
+const { connectStatus } = useWebsocket();
 const { videoWrapRef, initPull } = usePull(num);
 const {
   maxBitrate,
@@ -172,8 +196,10 @@ const {
   videoContentHint,
 } = useRTCParams();
 
+const isWatchMode = ref<'on' | 'off'>('on');
+
 const currentMaxBitrate = ref(maxBitrate.value[3].value);
-const currentMaxFramerate = ref(maxFramerate.value[2].value);
+const currentMaxFramerate = ref(maxFramerate.value[4].value);
 const currentResolutionRatio = ref(resolutionRatio.value[3].value);
 const currentVideoContentHint = ref(videoContentHint.value[3].value);
 const currentAudioContentHint = ref(audioContentHint.value[0].value);
@@ -221,6 +247,45 @@ onMounted(() => {
   loopGetSettings();
 });
 
+watch(
+  () => connectStatus,
+  (newval) => {
+    console.log('connectStatus', newval.value);
+    if (newval.value === WsConnectStatusEnum.connect) {
+      handleWsMsg();
+    }
+  },
+  {
+    immediate: true,
+  }
+);
+
+function handleWsMsg() {
+  const ws = networkStore.wsMap.get(roomId.value);
+  console.log(ws, ws?.socketIo, 113);
+  if (!ws?.socketIo) return;
+  // 收到startRemoteDesk
+  ws.socketIo.on(WsMsgTypeEnum.startRemoteDesk, (data: WsStartRemoteDesk) => {
+    console.log('收到startRemoteDesk', JSON.stringify(data));
+    if (data.data.receiver === mySocketId.value) {
+      appStore.remoteDesk.set(data.data.sender, {
+        sender: data.data.sender,
+        isClose: false,
+        maxBitrate: data.data.maxBitrate,
+        maxFramerate: data.data.maxFramerate,
+        resolutionRatio: data.data.resolutionRatio,
+        videoContentHint: data.data.videoContentHint,
+        audioContentHint: data.data.audioContentHint,
+      });
+    }
+  });
+}
+
+function handleChange(e) {
+  console.log(e, 'handleChange', e.target.value);
+  isWatchMode.value = e.target.value;
+}
+
 function loopGetSettings() {
   clearInterval(loopGetSettingsTimer.value);
   loopGetSettingsTimer.value = setInterval(() => {
@@ -234,7 +299,7 @@ function loopGetSettings() {
 }
 
 function handleMouseWheel(e: WheelEvent) {
-  if (!appStore.remoteDesk.isRemoteing) {
+  if (!appStore.remoteDesk.size) {
     return;
   }
   // console.log('handleMouseWheel', e);
@@ -388,19 +453,25 @@ watch(
 );
 
 watch(
-  () => appStore.remoteDesk.isClose,
+  () => appStore.remoteDesk,
   (newval) => {
-    if (newval) {
-      handleClose();
-      useTip({
-        content: '远程连接断开',
-        hiddenCancel: true,
-        hiddenClose: true,
-      }).catch();
-    } else {
-      loopGetSettings();
-      closeUseTip();
-    }
+    newval.forEach((item) => {
+      if (item.isClose) {
+        window.$notification.warning({
+          content: `${item.sender}远程连接断开`,
+          duration: 2000,
+        });
+        appStore.remoteDesk.delete(item.sender);
+        handleClose();
+        return;
+      } else {
+        loopGetSettings();
+        closeUseTip();
+      }
+    });
+  },
+  {
+    deep: true,
   }
 );
 
@@ -480,7 +551,7 @@ function handleKeyDown(e: KeyboardEvent) {
 }
 
 function handleDoublelclick() {
-  if (!appStore.remoteDesk.isRemoteing) {
+  if (!appStore.remoteDesk.size) {
     return;
   }
   networkStore.rtcMap
@@ -502,7 +573,7 @@ function handleDoublelclick() {
 }
 
 function handleContextmenu() {
-  if (!appStore.remoteDesk.isRemoteing) {
+  if (!appStore.remoteDesk.size) {
     return;
   }
   networkStore.rtcMap
@@ -524,7 +595,7 @@ function handleContextmenu() {
 }
 
 function handleMouseDown(event: MouseEvent) {
-  if (!appStore.remoteDesk.isRemoteing) {
+  if (!appStore.remoteDesk.size) {
     return;
   }
   isDown.value = true;
@@ -567,7 +638,7 @@ function handleMouseDown(event: MouseEvent) {
 }
 
 function handleMouseMove(event: MouseEvent) {
-  if (!appStore.remoteDesk.isRemoteing) {
+  if (!appStore.remoteDesk.size) {
     return;
   }
   // 获取点击相对于视窗的位置
@@ -602,7 +673,7 @@ function handleMouseMove(event: MouseEvent) {
 }
 
 function handleMouseUp(event: MouseEvent) {
-  if (!appStore.remoteDesk.isRemoteing) {
+  if (!appStore.remoteDesk.size) {
     return;
   }
   if (clickTimer) {
@@ -645,7 +716,6 @@ function handleMouseUp(event: MouseEvent) {
 
 function handleClose() {
   networkStore.removeRtc(receiverId.value);
-  appStore.remoteDesk.isClose = true;
   clearInterval(loopGetSettingsTimer.value);
   videoSettings.value = undefined;
 }
@@ -693,5 +763,8 @@ function handleRemote() {
 .wrap {
   line-height: 0;
   cursor: none;
+  &.watch {
+    pointer-events: none;
+  }
 }
 </style>

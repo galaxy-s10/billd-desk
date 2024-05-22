@@ -6,5 +6,6 @@ declare module '*.vue' {
 }
 interface Window {
   $message: import('naive-ui/es/message/src/MessageProvider').MessageApiInjection;
+  $notification: import('naive-ui/es/notification/index').NotificationProviderInst;
   TXLivePusher: any;
 }

@@ -391,8 +391,6 @@ export class WebRTCClass {
             msg: 'webrtc连接成功！',
             type: 'success',
           });
-          appStore.remoteDesk.isClose = false;
-          appStore.remoteDesk.isRemoteing = true;
           console.log('sender', this.sender, 'receiver', this.receiver);
           this.update();
         }
@@ -613,7 +611,10 @@ export class WebRTCClass {
   /** 手动关闭webrtc连接 */
   close = () => {
     try {
-      this.prettierLog({ msg: '手动关闭webrtc连接', type: 'warn' });
+      console.warn(
+        '手动关闭webrtc连接',
+        JSON.stringify({ sender: this.sender, receiver: this.receiver })
+      );
       clearInterval(this.loopGetStatsTimer);
       this.localStream?.getTracks().forEach((track) => {
         track.stop();
@@ -624,11 +625,22 @@ export class WebRTCClass {
       this.dataChannel = null;
       this.videoEl.remove();
       const appStore = useAppStore();
-      appStore.remoteDesk.isClose = true;
-      appStore.remoteDesk.isRemoteing = false;
-      appStore.remoteDesk.startRemoteDesk = false;
+      const networkStore = useNetworkStore();
+      appStore.remoteDesk.set(this.receiver, {
+        sender: this.receiver,
+        isClose: true,
+        maxBitrate: -1,
+        maxFramerate: -1,
+        resolutionRatio: -1,
+        videoContentHint: '',
+        audioContentHint: '',
+      });
+      networkStore.rtcMap.delete(this.receiver);
     } catch (error) {
-      this.prettierLog({ msg: '手动关闭webrtc连接失败', type: 'error' });
+      console.error(
+        '手动关闭webrtc连接失败',
+        JSON.stringify({ sender: this.sender, receiver: this.receiver })
+      );
       console.error(error);
     }
   };
@@ -636,6 +648,7 @@ export class WebRTCClass {
   /** 更新store */
   update = () => {
     const networkStore = useNetworkStore();
-    networkStore.updateRtcMap(this.receiver, this);
+    console.log('更新store');
+    networkStore.rtcMap.set(this.receiver, { ...this });
   };
 }

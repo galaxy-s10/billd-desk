@@ -1,7 +1,9 @@
 <template>
-  <NMessageProvider :max="3">
-    <ContentCpt></ContentCpt>
-  </NMessageProvider>
+  <NNotificationProvider>
+    <NMessageProvider :max="5">
+      <ContentCpt></ContentCpt>
+    </NMessageProvider>
+  </NNotificationProvider>
 </template>
 
 <script lang="ts">
@@ -11,7 +13,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { NMessageProvider } from 'naive-ui';
+import { NMessageProvider, NNotificationProvider } from 'naive-ui';
 
 import ContentCpt from './content/index.vue';
 </script>

@@ -2,17 +2,11 @@
   <div></div>
 </template>
 
-<script lang="ts">
-import { useMessage } from 'naive-ui';
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { useMessage, useNotification } from 'naive-ui';
 
-export default defineComponent({
-  components: {},
-  setup() {
-    // @ts-ignore
-    window.$message = useMessage();
-  },
-});
+window.$message = useMessage();
+window.$notification = useNotification();
 </script>
 
 <style lang="scss" scoped></style>
