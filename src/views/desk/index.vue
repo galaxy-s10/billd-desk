@@ -167,7 +167,7 @@ import {
 import { usePull } from '@/hooks/use-pull';
 import { useRTCParams } from '@/hooks/use-rtcParams';
 import { closeUseTip } from '@/hooks/use-tip';
-import { useWebsocket } from '@/hooks/use-websocket';
+import { useWebRtcRemoteDesk } from '@/hooks/webrtc/remoteDesk';
 import { useAppStore } from '@/store/app';
 import { useNetworkStore } from '@/store/network';
 import {
@@ -182,12 +182,18 @@ import {
   WsRemoteDeskBehaviorType,
   WsStartRemoteDesk,
 } from '@/types/websocket';
+import {
+  createNullVideo,
+  handlConstraints,
+  setAudioTrackContentHints,
+  setVideoTrackContentHints,
+} from '@/utils';
+import { WebRTCClass } from '@/utils/network/webRTC';
 
 const num = '123456';
 const appStore = useAppStore();
 const networkStore = useNetworkStore();
-const { connectStatus } = useWebsocket();
-const { videoWrapRef, initPull } = usePull(num);
+const { videoWrapRef, initPull, connectStatus } = usePull(num);
 const {
   maxBitrate,
   maxFramerate,
@@ -195,6 +201,12 @@ const {
   audioContentHint,
   videoContentHint,
 } = useRTCParams();
+
+const { updateWebRtcRemoteDeskConfig, webRtcRemoteDesk } =
+  useWebRtcRemoteDesk();
+
+const anchorStream = ref<MediaStream>();
+const rtc = ref<WebRTCClass>();
 
 const isWatchMode = ref<'on' | 'off'>('on');
 
@@ -248,10 +260,9 @@ onMounted(() => {
 });
 
 watch(
-  () => connectStatus,
+  () => connectStatus.value,
   (newval) => {
-    console.log('connectStatus', newval.value);
-    if (newval.value === WsConnectStatusEnum.connect) {
+    if (newval === WsConnectStatusEnum.connect) {
       handleWsMsg();
     }
   },
@@ -261,28 +272,72 @@ watch(
 );
 
 function handleWsMsg() {
+  console.log('handleWsMsg');
   const ws = networkStore.wsMap.get(roomId.value);
-  console.log(ws, ws?.socketIo, 113);
   if (!ws?.socketIo) return;
   // 收到startRemoteDesk
-  ws.socketIo.on(WsMsgTypeEnum.startRemoteDesk, (data: WsStartRemoteDesk) => {
-    console.log('收到startRemoteDesk', JSON.stringify(data));
-    if (data.data.receiver === mySocketId.value) {
-      appStore.remoteDesk.set(data.data.sender, {
-        sender: data.data.sender,
-        isClose: false,
-        maxBitrate: data.data.maxBitrate,
-        maxFramerate: data.data.maxFramerate,
-        resolutionRatio: data.data.resolutionRatio,
-        videoContentHint: data.data.videoContentHint,
-        audioContentHint: data.data.audioContentHint,
+  ws.socketIo.on(
+    WsMsgTypeEnum.startRemoteDesk,
+    async (data: WsStartRemoteDesk) => {
+      console.log('收到startRemoteDesk', JSON.stringify(data));
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        audio: true,
+        video: true,
       });
+      anchorStream.value = stream;
+      if (data.data.receiver === mySocketId.value) {
+        appStore.remoteDesk.set(data.data.sender, {
+          sender: data.data.sender,
+          isClose: false,
+          maxBitrate: data.data.maxBitrate,
+          maxFramerate: data.data.maxFramerate,
+          resolutionRatio: data.data.resolutionRatio,
+          videoContentHint: data.data.videoContentHint,
+          audioContentHint: data.data.audioContentHint,
+        });
+        handleRTC(data.data.sender);
+      }
     }
-  });
+  );
+}
+
+async function handleRTC(receiver) {
+  if (!anchorStream.value) return;
+  try {
+    await handlConstraints({
+      frameRate: currentMaxFramerate.value,
+      height: currentResolutionRatio.value,
+      stream: anchorStream.value,
+    });
+    setVideoTrackContentHints(
+      anchorStream.value,
+      videoContentHint.value as any
+    );
+    setAudioTrackContentHints(
+      anchorStream.value,
+      audioContentHint.value as any
+    );
+    updateWebRtcRemoteDeskConfig({
+      roomId: roomId.value,
+      anchorStream: anchorStream.value,
+    });
+    rtc.value = webRtcRemoteDesk.newWebRtc({
+      // 因为这里是收到offer，而offer是房主发的，所以此时的data.data.sender是房主；data.data.receiver是接收者；
+      // 但是这里的nativeWebRtc的sender，得是自己，不能是data.data.sender，不要混淆
+      sender: mySocketId.value,
+      receiver,
+      videoEl: createNullVideo(),
+    });
+    webRtcRemoteDesk.sendOffer({
+      sender: mySocketId.value,
+      receiver,
+    });
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 function handleChange(e) {
-  console.log(e, 'handleChange', e.target.value);
   isWatchMode.value = e.target.value;
 }
 
@@ -721,6 +776,10 @@ function handleClose() {
 }
 
 function handleRemote() {
+  if (receiverId.value === '') {
+    window.$message.warning('请输入被控设备id');
+    return;
+  }
   networkStore.wsMap.get(roomId.value)?.send<WsStartRemoteDesk['data']>({
     requestId: getRandomString(8),
     msgType: WsMsgTypeEnum.startRemoteDesk,

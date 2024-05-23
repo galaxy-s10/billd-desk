@@ -39,6 +39,7 @@ export function usePull(roomId: string) {
   const remoteVideo = ref<HTMLElement[]>([]);
   const remoteVideoMap = ref(new Map());
   const {
+    connectStatus,
     mySocketId,
     initWs,
     roomLiving,
@@ -466,6 +467,7 @@ export function usePull(roomId: string) {
   }
 
   return {
+    connectStatus,
     videoWrapRef,
     handlePlay,
     handleStopDrawing,

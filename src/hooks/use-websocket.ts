@@ -115,16 +115,6 @@ export const useWebsocket = () => {
     { immediate: true }
   );
 
-  watch(
-    () => connectStatus.value,
-    (newval) => {
-      console.log('connectStatusconnectStatus', newval);
-    },
-    {
-      immediate: true,
-    }
-  );
-
   const mySocketId = computed(() => {
     return networkStore.wsMap.get(roomId.value)?.socketIo?.id || '-1';
   });
@@ -316,7 +306,6 @@ export const useWebsocket = () => {
       handleHeartbeat(ws.socketIo!.id!);
       if (!ws) return;
       connectStatus.value = WsConnectStatusEnum.connect;
-      console.log('kk11');
       ws.status = WsConnectStatusEnum.connect;
       ws.update();
       sendJoin();
