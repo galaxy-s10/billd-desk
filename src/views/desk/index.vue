@@ -280,12 +280,13 @@ function handleWsMsg() {
     WsMsgTypeEnum.startRemoteDesk,
     async (data: WsStartRemoteDesk) => {
       console.log('收到startRemoteDesk', JSON.stringify(data));
-      const stream = await navigator.mediaDevices.getDisplayMedia({
-        audio: true,
-        video: true,
-      });
-      anchorStream.value = stream;
+
       if (data.data.receiver === mySocketId.value) {
+        const stream = await navigator.mediaDevices.getDisplayMedia({
+          audio: true,
+          video: true,
+        });
+        anchorStream.value = stream;
         appStore.remoteDesk.set(data.data.sender, {
           sender: data.data.sender,
           isClose: false,
@@ -296,6 +297,8 @@ function handleWsMsg() {
           audioContentHint: data.data.audioContentHint,
         });
         handleRTC(data.data.sender);
+      } else {
+        console.warn('不是和我远程');
       }
     }
   );
@@ -349,6 +352,7 @@ function loopGetSettings() {
       ?.localStream?.getVideoTracks()
       .forEach((item) => {
         videoSettings.value = item.getSettings();
+        console.log(JSON.stringify(videoSettings.value));
       });
   }, 1000);
 }
@@ -672,6 +676,10 @@ function handleMouseDown(event: MouseEvent) {
   const x = (xInsideElement / rect.width) * 1000;
   const y = (yInsideElement / rect.height) * 1000;
   console.log('handleMouseDown', x, y, xInsideElement, yInsideElement);
+  if (event.button === 2) {
+    console.log('handleMouseDown-当前是鼠标右键');
+    return;
+  }
   networkStore.rtcMap
     .get(receiverId.value)
     ?.dataChannelSend<WsRemoteDeskBehaviorType['data']>({
@@ -748,6 +756,10 @@ function handleMouseUp(event: MouseEvent) {
   const x = (xInsideElement / rect.width) * 1000;
   const y = (yInsideElement / rect.height) * 1000;
   console.log('handleMouseUp', x, y, xInsideElement, yInsideElement);
+  if (event.button === 2) {
+    console.log('handleMouseUp-当前是鼠标右键');
+    return;
+  }
   networkStore.rtcMap
     .get(receiverId.value)
     ?.dataChannelSend<WsRemoteDeskBehaviorType['data']>({
