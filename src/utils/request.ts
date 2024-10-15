@@ -116,6 +116,14 @@ class MyAxios {
   ): MyAxiosPromise<T> {
     return this.instance.post(url, data, config);
   }
+
+  put<T = any>(
+    url: string,
+    data?: {} | undefined,
+    config?: AxiosRequestConfig
+  ): MyAxiosPromise<T> {
+    return this.instance.put(url, data, config);
+  }
 }
 
 export default new MyAxios({

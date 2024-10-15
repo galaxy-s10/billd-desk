@@ -648,7 +648,6 @@ export class WebRTCClass {
   /** 更新store */
   update = () => {
     const networkStore = useNetworkStore();
-    console.log('更新store');
     networkStore.rtcMap.set(this.receiver, { ...this });
   };
 }

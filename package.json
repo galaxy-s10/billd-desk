@@ -57,7 +57,7 @@
     "pinia-plugin-persistedstate": "^3.2.0",
     "qiniu-js": "^3.4.2",
     "qrcode": "^1.5.3",
-    "socket.io-client": "^4.7.2",
+    "socket.io-client": "^4.8.0",
     "socket.io-msgpack-parser": "^3.0.2",
     "spark-md5": "^3.0.2",
     "video.js": "^8.3.0",

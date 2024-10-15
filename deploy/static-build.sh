@@ -6,7 +6,7 @@
 # Email: 2274751790@qq.com
 # FilePath: /billd-desk/deploy/static-build.sh
 # Github: https://github.com/galaxy-s10
-# LastEditTime: 2024-04-18 23:01:48
+# LastEditTime: 2024-06-07 01:16:11
 # LastEditors: shuisheng
 ###
 

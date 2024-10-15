@@ -3,7 +3,7 @@ import { Socket, io } from 'socket.io-client';
 import { useNetworkStore } from '@/store/network';
 import { useUserStore } from '@/store/user';
 import {
-  IWsFormat,
+  IReqWsFormat,
   WsConnectStatusEnum,
   WsMsgTypeEnum,
 } from '@/types/websocket';
@@ -69,19 +69,19 @@ export class WebSocketClass {
     }
     prettierSendWsMsg({ requestId, msgType, data });
     const userStore = useUserStore();
-    const sendData: IWsFormat<any> = {
+    const sendData: IReqWsFormat<any> = {
       request_id: requestId,
-      socket_id: this.socketIo.id,
-      is_anchor: this.isAnchor,
-      user_info: userStore.userInfo,
-      user_token: userStore.token || undefined,
+      socket_id: this.socketIo.id || '',
+      user_info: userStore.userInfo || {},
+      user_token: userStore.token || '',
+      time: +new Date(),
       data: data || {},
     };
     // const binary = stringToArrayBuffer(JSON.stringify(sendData));
     this.socketIo?.emit(msgType, sendData);
   };
 
-  // 更新store
+  /** 更新store */
   update = () => {
     const networkStore = useNetworkStore();
     // networkStore.updateWsMap(this.roomId, this);

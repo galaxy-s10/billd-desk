@@ -25,6 +25,8 @@ import {
   IDanmu,
   WsAnswerType,
   WsBatchSendOffer,
+  WsBilldDeskBehaviorType,
+  WsBilldDeskJoinType,
   WsCandidateType,
   WsConnectStatusEnum,
   WsDisableSpeakingType,
@@ -37,7 +39,6 @@ import {
   WsMsgTypeEnum,
   WsOfferType,
   WsOtherJoinType,
-  WsRemoteDeskBehaviorType,
   WsRoomLivingType,
   WsStartLiveType,
   WsUpdateJoinInfoType,
@@ -48,6 +49,7 @@ import {
   prettierReceiveWsMsg,
 } from '@/utils/network/webSocket';
 
+import { usePiniaCacheStore } from '@/store/cache';
 import { useForwardAll } from './webrtc/forwardAll';
 import { useForwardBilibili } from './webrtc/forwardBilibili';
 import { useForwardHuya } from './webrtc/forwardHuya';
@@ -119,7 +121,7 @@ export const useWebsocket = () => {
     return networkStore.wsMap.get(roomId.value)?.socketIo?.id || '-1';
   });
 
-  function handleHeartbeat(socketId: string) {
+  function handleHeartbeat() {
     loopHeartbeatTimer.value = setInterval(() => {
       const ws = networkStore.wsMap.get(roomId.value);
       if (!ws) return;
@@ -127,9 +129,7 @@ export const useWebsocket = () => {
         requestId: getRandomString(8),
         msgType: WsMsgTypeEnum.heartbeat,
         data: {
-          socket_id: socketId,
           live_room_id: Number(roomId.value),
-          roomLiving: isAnchor.value && roomLiving.value,
         },
       });
     }, 1000 * 5);
@@ -285,14 +285,14 @@ export const useWebsocket = () => {
   function sendJoin() {
     const instance = networkStore.wsMap.get(roomId.value);
     if (!instance) return;
-    instance.send<WsJoinType['data']>({
+    const cacheStore = usePiniaCacheStore();
+    instance.send<WsBilldDeskJoinType['data']>({
       requestId: getRandomString(8),
-      msgType: WsMsgTypeEnum.join,
+      msgType: WsMsgTypeEnum.billdDeskJoin,
       data: {
-        isRemoteDesk: isRemoteDesk.value,
-        socket_id: mySocketId.value,
         live_room_id: Number(roomId.value),
-        user_info: userStore.userInfo,
+        deskUserUuid: cacheStore.deskUserUuid,
+        deskUserPassword: cacheStore.deskUserPassword,
       },
     });
   }
@@ -303,7 +303,7 @@ export const useWebsocket = () => {
     // websocket连接成功
     ws.socketIo.on(WsConnectStatusEnum.connect, () => {
       prettierReceiveWsMsg(WsConnectStatusEnum.connect, ws.socketIo);
-      handleHeartbeat(ws.socketIo!.id!);
+      handleHeartbeat();
       if (!ws) return;
       connectStatus.value = WsConnectStatusEnum.connect;
       ws.status = WsConnectStatusEnum.connect;
@@ -552,18 +552,18 @@ export const useWebsocket = () => {
       }
     );
 
-    // 收到remoteDeskBehavior
+    // 收到billdDeskBehavior
     ws.socketIo.on(
-      WsMsgTypeEnum.remoteDeskBehavior,
-      (data: WsRemoteDeskBehaviorType['data']) => {
-        console.log('收到remoteDeskBehavior', data);
+      WsMsgTypeEnum.billdDeskBehavior,
+      (data: WsBilldDeskBehaviorType['data']) => {
+        console.log('收到billdDeskBehavior', data);
       }
     );
 
     // 主播正在直播
     ws.socketIo.on(
       WsMsgTypeEnum.roomLiving,
-      async (data: WsRoomLivingType['data']) => {
+      (data: WsRoomLivingType['data']) => {
         prettierReceiveWsMsg(WsMsgTypeEnum.roomLiving, data);
         roomLiving.value = true;
         if (data.anchor_socket_id) {
@@ -710,11 +710,14 @@ export const useWebsocket = () => {
     }
 
     // 用户加入房间完成
-    ws.socketIo.on(WsMsgTypeEnum.joined, async (data: WsJoinType['data']) => {
-      prettierReceiveWsMsg(WsMsgTypeEnum.joined, data);
-      appStore.setLiveRoomInfo(data.live_room);
-      anchorInfo.value = data.anchor_info;
-    });
+    ws.socketIo.on(
+      WsMsgTypeEnum.billdDeskJoined,
+      (data: WsJoinType['data']) => {
+        prettierReceiveWsMsg(WsMsgTypeEnum.billdDeskJoined, data);
+        appStore.setLiveRoomInfo(data.live_room);
+        anchorInfo.value = data.anchor_info;
+      }
+    );
 
     // batchSendOffer
     ws.socketIo.on(

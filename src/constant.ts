@@ -118,6 +118,8 @@ export const lsKeyPrefix = 'billd_live___';
 export const lsKey = {
   lastBuildDate: 'lastBuildDate',
   token: 'token',
+  uuid: 'uuid',
+  password: 'password',
 };
 
 export const mediaTypeEnumMap = {
