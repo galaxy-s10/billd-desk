@@ -83,6 +83,7 @@ export const useWebRtcTencentcloudCss = () => {
         }
       } catch (error) {
         console.error('webRtcTencentcloudCss的sendOffer错误');
+        console.log(error);
       }
     },
   };

@@ -1,54 +1,40 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "strict": true,
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
     "noImplicitAny": false,
-    "lib": ["dom", "esnext"],
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
     "jsx": "preserve",
-    "moduleResolution": "node",
-    "esModuleInterop": true, // ES 模块互操作,import React from 'react';react是module.exports导出的，因此需要设置该属性
-    "forceConsistentCasingInFileNames": true, // 在文件名中强制使用一致的大小写
-    "skipLibCheck": true, // 跳过d.ts声明文件的类型检查。
-    "resolveJsonModule": true, //解析json模块
-    "allowJs": true,
-    "checkJs": true,
-    // "noErrorTruncation": true, // https://github.com/vuejs/language-tools/issues/2533#issuecomment-1543496140
+
     "baseUrl": "./",
-    /**
-     * 当 TypeScript 编译文件时，它在输出目录中保持与输入目录中相同的目录结构。
-     * 如果你设置了allowJs:true，就会导致输入目录的js文件，编译后又输出到了同样的目录结构，
-     * 就会报错：无法写入文件xxx，因为它会覆盖输入文件。
-     * 因此手动设置输出目录，让输出目录不和原本的目录一致即可
-     */
-    "outDir": "./dist",
     "paths": {
-      "@/*": ["src/*"],
-      "script/*": ["script/*"]
-    }
-    // "paths": {
-    //   "@/*": ["./src/*"] // 这样写的话，@/不会提示路径，得使用baseUrl:'./'+paths:{"@/*": ["src/*"]}这样才的话@/才会提示路径
-    // }
+      "@/*": ["src/*"]
+    },
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   },
-  // 仅仅匹配这些文件，除了src以外的文件都不会被匹配
+
   "include": [
+    "electron-main/**/*.ts",
     "src/**/*.ts",
+    "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "script/**/*.ts",
-    "./.eslintrc.js",
-    "./babel.config.js",
-    "./postcss.config.js",
-    "./components.d.ts",
-    "windi.config.ts"
-  ],
-  // https://github.com/microsoft/TypeScript/wiki/Performance
-  "exclude": ["**/node_modules"],
-  // ts-node的时候会读取这里的配置
-  "ts-node": {
-    "compilerOptions": {
-      "module": "CommonJS" // 指定生成什么模块代码。
-    },
-    "transpileOnly": true // 只编译，报警告或者错误一样运行
-  }
+    "config/**/*.ts",
+    "components.d.ts"
+  ], // 仅仅匹配这些文件，除了src以外的文件都不会被匹配
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

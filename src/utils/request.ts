@@ -2,6 +2,7 @@ import axios, { Axios, AxiosRequestConfig } from 'axios';
 
 import { AXIOS_BASEURL } from '@/constant';
 import { useUserStore } from '@/store/user';
+import { getAxiosBaseUrl } from '@/utils/localStorage/app';
 import { getToken } from '@/utils/localStorage/user';
 
 export interface MyAxiosPromise<T = any>
@@ -56,11 +57,11 @@ class MyAxios {
           window.$message.error('请求超时，请重试');
           return;
         }
-        const statusCode = error.response.status as number;
         const errorResponse = error.response;
         const errorResponseData = errorResponse.data;
         const whiteList = ['400', '401', '403', '404', '500'];
         if (error.response) {
+          const statusCode = error.response.status as number;
           if (!whiteList.includes(`${statusCode}`)) {
             window.$message.error(error.message);
             return Promise.reject(error.message);
@@ -127,7 +128,7 @@ class MyAxios {
 }
 
 export default new MyAxios({
-  baseURL: AXIOS_BASEURL,
+  baseURL: getAxiosBaseUrl() || AXIOS_BASEURL,
   // baseURL: '/prodapi',
   timeout: 1000 * 5,
 });

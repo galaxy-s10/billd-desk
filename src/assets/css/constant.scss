@@ -1,0 +1,128 @@
+$theme-color-gold: #ffd700;
+$top-system-bar-height: 50px;
+
+// 自定义滚动条:https://developer.mozilla.org/zh-CN/docs/Web/CSS/::-webkit-scrollbar
+%customScrollbar {
+  // 整个滚动条
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 0px;
+    border-radius: 0px;
+    background: rgba(0, 0, 0, 0);
+  }
+
+  // 滚动条轨道
+  &::-webkit-scrollbar-track {
+    border-radius: 0px;
+    background: rgba(0, 0, 0, 0);
+    box-shadow: rgba(0, 0, 0, 0);
+  }
+
+  // 滚动条上的滚动滑块
+  &::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background: #e0e0e0;
+  }
+}
+
+// 自定义滚动条:https://developer.mozilla.org/zh-CN/docs/Web/CSS/::-webkit-scrollbar
+%hideScrollbar {
+  // 整个滚动条
+  &::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    border-radius: 0px;
+    background: rgba(0, 0, 0, 0);
+  }
+
+  // 滚动条轨道
+  &::-webkit-scrollbar-track {
+    border-radius: 0px;
+    background: rgba(0, 0, 0, 0);
+    box-shadow: rgba(0, 0, 0, 0);
+  }
+
+  // 滚动条上的滚动滑块
+  &::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background: transparent;
+  }
+}
+
+// 自定义滚动条:https://developer.mozilla.org/zh-CN/docs/Web/CSS/::-webkit-scrollbar
+%customScrollbarHide {
+  // 整个滚动条
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 0px;
+    border-radius: 0px;
+    background: rgba(0, 0, 0, 0);
+  }
+
+  // 滚动条轨道
+  &::-webkit-scrollbar-track {
+    border-radius: 0px;
+    background: rgba(0, 0, 0, 0);
+    box-shadow: rgba(0, 0, 0, 0);
+  }
+
+  // 滚动条上的滚动滑块
+  &::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background: transparent;
+  }
+}
+
+// 自定义横向滚动条:https://developer.mozilla.org/zh-CN/docs/Web/CSS/::-webkit-scrollbar
+%customHengScrollbar {
+  /* 滚动条的宽度 */
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 4px;
+  }
+
+  /* 滚动条的滑块 */
+  &::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 3px;
+  }
+}
+
+// 自定义横向滚动条:https://developer.mozilla.org/zh-CN/docs/Web/CSS/::-webkit-scrollbar
+%customHengScrollbarHide {
+  /* 滚动条的宽度 */
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 4px;
+  }
+
+  /* 滚动条的滑块 */
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 3px;
+  }
+}
+
+// 自定义滚动条:https://developer.mozilla.org/zh-CN/docs/Web/CSS/::-webkit-scrollbar
+%customMiniScrollbar {
+  // 整个滚动条
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 0px;
+    border-radius: 0px;
+    background: rgba(0, 0, 0, 0);
+  }
+
+  // 滚动条轨道
+  &::-webkit-scrollbar-track {
+    border-radius: 0px;
+    background: rgba(0, 0, 0, 0);
+    box-shadow: rgba(0, 0, 0, 0);
+  }
+
+  // 滚动条上的滚动滑块
+  &::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background: #e0e0e0;
+  }
+}

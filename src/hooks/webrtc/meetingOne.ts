@@ -93,6 +93,7 @@ export const useWebRtcMeetingOne = () => {
         }
       } catch (error) {
         console.error('meetingOne的sendOffer错误');
+        console.log(error);
       }
     },
     /**
@@ -119,7 +120,7 @@ export const useWebRtcMeetingOne = () => {
           await rtc.setRemoteDescription(sdp);
           userStream.value?.getTracks().forEach((track) => {
             if (userStream.value) {
-              console.log('meetingOne的sendAnswer插入track', track);
+              console.log('meetingOne的sendAnswer插入track');
               rtc.peerConnection?.addTrack(track, userStream.value);
             }
           });
@@ -145,15 +146,6 @@ export const useWebRtcMeetingOne = () => {
       } catch (error) {
         console.error('meetingOne的sendAnswer错误');
         console.log(error);
-      }
-    },
-    addTrack: ({ stream, receiver }: { stream; receiver: string }) => {
-      const rtc = networkStore.rtcMap.get(receiver);
-      if (rtc) {
-        stream.getTracks().forEach((track) => {
-          console.log('meetingOne的sendOffer插入track66', track.kind, track);
-          rtc.peerConnection?.addTrack(track, stream);
-        });
       }
     },
   };

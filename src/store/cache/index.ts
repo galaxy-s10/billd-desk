@@ -1,34 +1,38 @@
 import { defineStore } from 'pinia';
 
-import { lsKeyPrefix } from '@/constant';
-import { AppRootState } from '@/store/app';
+import { LS_KEY_PREFIX } from '@/constant';
 
 export type PiniaCacheRootState = {
   muted: boolean;
   volume: number;
+  linkDeviceList: {
+    remoteDeskUserUuid: string;
+    remoteDeskUserPassword: string;
+  }[];
+  isAlwaysOnTop: boolean;
+  hidePwd: boolean;
   deskUserUuid: string;
   deskUserPassword: string;
   remoteDeskUserUuid: string;
-  'resource-list': AppRootState['allTrack'];
+  remoteDeskUserPassword: string;
 };
 
-export const usePiniaCacheStore = defineStore(`${lsKeyPrefix}pinia-cache`, {
+export const usePiniaCacheStore = defineStore(`${LS_KEY_PREFIX}pinia-cache`, {
   persist: {
-    key: `${lsKeyPrefix}pinia-cache`,
+    key: `${LS_KEY_PREFIX}pinia-cache`,
   },
   state: (): PiniaCacheRootState => {
     return {
+      muted: true,
+      volume: 70,
+      linkDeviceList: [],
+      isAlwaysOnTop: false,
+      hidePwd: false,
       deskUserUuid: '',
       deskUserPassword: '',
       remoteDeskUserUuid: '',
-      muted: true,
-      volume: 80,
-      'resource-list': [],
+      remoteDeskUserPassword: '',
     };
   },
-  actions: {
-    setResourceList(res: PiniaCacheRootState['resource-list']) {
-      this['resource-list'] = res;
-    },
-  },
+  actions: {},
 });

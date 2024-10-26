@@ -1,76 +1,73 @@
 <template>
   <n-config-provider :theme-overrides="themeOverrides">
-    <n-dialog-provider>
-      <router-view></router-view>
-    </n-dialog-provider>
+    <router-view></router-view>
   </n-config-provider>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'MainApp',
-};
-</script>
-
 <script lang="ts" setup>
-import { isMobile } from 'billd-utils';
 import { GlobalThemeOverrides, NConfigProvider } from 'naive-ui';
 import { onMounted } from 'vue';
 
-import { THEME_COLOR, appBuildInfo } from '@/constant';
-import { useCheckUpdate } from '@/hooks/use-common';
+import {
+  fetchDeskVersionByVersion,
+  fetchDeskVersionCheck,
+  fetchDeskVersionLatest,
+} from '@/api/deskVersion';
+import { APP_BUILD_INFO, WINDOW_ID_ENUM } from '@/constant';
+import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
+import { useAppStore } from '@/store/app';
 import { usePiniaCacheStore } from '@/store/cache';
-import { getHostnameUrl } from '@/utils';
-import { getLastBuildDate, setLastBuildDate } from '@/utils/localStorage/app';
+import { ipcRenderer } from '@/utils';
 
-const { checkUpdate } = useCheckUpdate();
+const appStore = useAppStore();
 const cacheStore = usePiniaCacheStore();
 
+const { handlesetAlwaysOnTop } = useIpcRendererSend();
 const themeOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: THEME_COLOR,
-    primaryColorHover: THEME_COLOR,
+    primaryColor: '#ffd700',
+    primaryColorHover: '#ffd700',
   },
 };
 
 onMounted(() => {
-  checkUpdate({
-    htmlUrl: getHostnameUrl(),
+  console.log('当前地址栏', location.href);
+  appStore.version = APP_BUILD_INFO.pkgVersion;
+  appStore.lastBuildDate = APP_BUILD_INFO.lastBuildDate;
+  handlesetAlwaysOnTop({
+    windowId: WINDOW_ID_ENUM.remote,
+    flag: cacheStore.isAlwaysOnTop,
   });
-  handleUpdate();
-  cacheStore.muted = true;
-  cacheStore.volume = 0;
-
-  // 启用vconsole
-  // import('vconsole')
-  //   .then((VConsole) => {
-  //     // eslint-disable-next-line
-  //     new VConsole.default();
-  //   })
-  //   .catch(() => {});
-  if (isMobile()) {
-    const metaEl = document.querySelector('meta[name="viewport"]');
-    metaEl?.setAttribute(
-      'content',
-      'width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'
-    );
+  getClient();
+  if (ipcRenderer) {
+    handleDeskVersionCheck();
   }
 });
 
-function handleUpdate() {
-  const old = getLastBuildDate();
-  if (appBuildInfo.lastBuildDate !== old) {
-    localStorage.clear();
+async function handleDeskVersionCheck() {
+  const res = await fetchDeskVersionCheck(appStore.version);
+  if (res.code === 200 && res.data) {
+    appStore.updateModalInfo = res.data;
   }
-  setLastBuildDate(appBuildInfo.lastBuildDate);
+}
+
+async function getClient() {
+  let res;
+  if (ipcRenderer) {
+    res = await fetchDeskVersionByVersion(appStore.version);
+  } else {
+    res = await fetchDeskVersionLatest();
+  }
+  if (res.code === 200 && res.data) {
+    appStore.deskVersionInfo = res.data;
+  }
 }
 </script>
 
+<style lang="scss" scoped></style>
+
 <style lang="scss">
-body {
-  font-size: 16px;
-  // naive的message会影响全局line-height
-  line-height: initial;
+#app {
+  user-select: none;
 }
 </style>
-<style lang="scss" scoped></style>

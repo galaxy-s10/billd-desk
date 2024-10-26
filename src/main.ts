@@ -1,27 +1,22 @@
-// 一定要引入webrtc-adapter（约等于垫片，适配safari等其他浏览器）
-import '@/assets/main.scss';
-import '@/utils/showBilldVersion';
-import 'webrtc-adapter';
-// import 'windi.css'; // windicss-webpack-plugin会解析windi.css这个MODULE_ID
+import '@/assets/css/main.scss';
 import { createApp } from 'vue';
 
 import Message from '@/components/Message/index.vue';
-import registerDirectives from '@/directives';
 import { i18n } from '@/hooks/use-i18n';
-import router from '@/router';
-import store from '@/store';
+import router from '@/router/index';
+import store from '@/store/index';
 
 import App from './App.vue';
 
+const messageEl = document.createElement('div');
+document.body.appendChild(messageEl);
+
 const app = createApp(App);
-registerDirectives(app);
-app.use(i18n);
+const message = createApp(Message);
+
 app.use(store);
 app.use(router);
+app.use(i18n);
 
-const message = createApp(Message);
-const messageEle = document.createElement('div');
-const appEl = document.getElementById('app');
-appEl?.appendChild(messageEle);
-message.mount(messageEle);
 app.mount('#app');
+message.mount(messageEl);

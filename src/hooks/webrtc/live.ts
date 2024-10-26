@@ -91,6 +91,7 @@ export const useWebRtcLive = () => {
         }
       } catch (error) {
         console.error('webRtcLive的sendOffer错误');
+        console.log(error);
       }
     },
     /**
@@ -136,6 +137,7 @@ export const useWebRtcLive = () => {
         }
       } catch (error) {
         console.error('webRtcLive的sendAnswer错误');
+        console.log(error);
       }
     },
   };

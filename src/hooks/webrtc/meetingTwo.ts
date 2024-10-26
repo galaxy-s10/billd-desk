@@ -98,6 +98,7 @@ export const useWebRtcManyToManyMeeting = () => {
         }
       } catch (error) {
         console.error('webRtcManyToManyMeeting的sendOffer错误');
+        console.log(error);
       }
     },
     /**
@@ -153,6 +154,7 @@ export const useWebRtcManyToManyMeeting = () => {
         }
       } catch (error) {
         console.error('webRtcManyToManyMeeting的sendAnswer错误');
+        console.log(error);
       }
     },
   };

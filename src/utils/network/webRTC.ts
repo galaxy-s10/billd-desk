@@ -1,13 +1,14 @@
 import { getRandomString } from 'billd-utils';
 
+import { COTURN_URL } from '@/constant';
 import { LiveLineEnum, MediaTypeEnum } from '@/interface';
-import { prodDomain } from '@/spec-config';
 import { AppRootState, useAppStore } from '@/store/app';
 import { useNetworkStore } from '@/store/network';
 import { WsCandidateType, WsMsgTypeEnum } from '@/types/websocket';
+import { getCoturnUrl } from '@/utils/localStorage/app';
 
 export class WebRTCClass {
-  roomId = '-1';
+  roomId = '';
   sender = '';
   receiver = '';
 
@@ -63,33 +64,7 @@ export class WebRTCClass {
     this.isSRS = data.isSRS;
     console.warn('new webrtc参数:', data);
     this.createPeerConnection();
-    this.loopGetStats();
   }
-
-  prettierLog = (data: {
-    msg: string;
-    type?: 'log' | 'warn' | 'error' | 'success';
-  }) => {
-    const { msg, type } = data;
-    if (type === 'success') {
-      console.log(
-        `%c ` +
-          `【WebRTCClass】${new Date().toLocaleString()},房间id:${
-            this.roomId
-          }` +
-          ` %c ${msg} ` +
-          `%c`,
-        'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
-        'background:#41b883 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
-        'background:transparent'
-      );
-    } else {
-      console[type || 'log'](
-        `【WebRTCClass】${new Date().toLocaleString()},房间id:${this.roomId}`,
-        msg
-      );
-    }
-  };
 
   loopGetStats = () => {
     this.loopGetStatsTimer = setInterval(async () => {
@@ -134,6 +109,31 @@ export class WebRTCClass {
         console.log(error);
       }
     }, 1000);
+  };
+
+  prettierLog = (data: {
+    msg: string;
+    type?: 'log' | 'warn' | 'error' | 'success';
+  }) => {
+    const { msg, type } = data;
+    if (type === 'success') {
+      console.log(
+        `%c ` +
+          `【WebRTCClass】${new Date().toLocaleString()},房间id:${
+            this.roomId
+          }` +
+          ` %c ${msg} ` +
+          `%c`,
+        'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
+        'background:#41b883 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
+        'background:transparent'
+      );
+    } else {
+      console[type || 'log'](
+        `【WebRTCClass】${new Date().toLocaleString()},房间id:${this.roomId}`,
+        msg
+      );
+    }
   };
 
   /** 设置最大码率 */
@@ -477,18 +477,6 @@ export class WebRTCClass {
     );
 
     this.prettierLog({
-      msg: '开始监听pc的icecandidateerror事件',
-      type: 'warn',
-    });
-    this.peerConnection.addEventListener('icecandidateerror', (err) => {
-      this.prettierLog({
-        msg: 'pc收到icecandidateerror',
-        type: 'error',
-      });
-      console.log(err);
-    });
-
-    this.prettierLog({
       msg: '开始监听pc的negotiationneeded事件',
       type: 'warn',
     });
@@ -514,14 +502,7 @@ export class WebRTCClass {
       console.error('dataChannel未连接成功，不发送消息！', msgType, data);
       return;
     }
-    console.warn(
-      'dataChannel发送消息',
-      JSON.stringify({
-        msgType,
-        requestId,
-        data,
-      })
-    );
+    console.log('dataChannel发送消息', msgType);
     this.dataChannel.send(
       JSON.stringify({
         msgType,
@@ -529,6 +510,15 @@ export class WebRTCClass {
         data,
       })
     );
+  };
+
+  dataChannelSendBlob = ({ blob }) => {
+    if (this.dataChannel?.readyState !== 'open') {
+      console.error('dataChannel未连接成功，不发送消息！');
+      return;
+    }
+    console.log('dataChannelSendBlob发送消息');
+    this.dataChannel.send(blob);
   };
 
   /** 创建对等连接 */
@@ -546,7 +536,7 @@ export class WebRTCClass {
             //   urls: 'stun:stun.l.google.com:19302',
             // },
             {
-              urls: `turn:hk.${prodDomain}`,
+              urls: getCoturnUrl() || COTURN_URL,
               username: 'hss',
               credential: '123456',
             },
@@ -554,59 +544,38 @@ export class WebRTCClass {
       this.peerConnection = new RTCPeerConnection({
         iceServers,
       });
-      if (!this.isSRS) {
-        this.handleDataChannel();
-      }
+      this.peerConnection.ondatachannel = (event) => {
+        this.cbDataChannel = event.channel;
+        this.update();
+      };
+      this.dataChannel = this.peerConnection.createDataChannel(
+        'MessageChannel',
+        {
+          // maxRetransmits，用户代理应尝试重新传输在不可靠模式下第一次失败的消息的最大次数。虽然该值是 16 位无符号数，但每个用户代理都可以将其限制为它认为合适的任何最大值。
+          maxRetransmits: 3,
+          // ordered，表示通过 RTCDataChannel 的信息的到达顺序需要和发送顺序一致 (true), 或者到达顺序不需要和发送顺序一致 (false). 默认：true
+          ordered: false,
+          // protocol: 'udp',
+        }
+      );
+      this.dataChannel.onopen = () => {
+        this.prettierLog({
+          msg: 'dataChannel连接成功！',
+          type: 'success',
+        });
+      };
+      this.dataChannel.onerror = () => {
+        this.prettierLog({
+          msg: 'dataChannel连接失败！',
+          type: 'error',
+        });
+        this.close();
+      };
       this.handleStreamEvent();
       this.handleConnectionEvent();
       this.update();
     }
   };
-
-  handleDataChannel = () => {
-    if (!this.peerConnection) return;
-    this.peerConnection.ondatachannel = (event) => {
-      this.cbDataChannel = event.channel;
-      this.update();
-    };
-    this.dataChannel = this.peerConnection.createDataChannel('MessageChannel', {
-      // maxRetransmits，用户代理应尝试重新传输在不可靠模式下第一次失败的消息的最大次数。虽然该值是 16 位无符号数，但每个用户代理都可以将其限制为它认为合适的任何最大值。
-      maxRetransmits: 3,
-      // ordered，表示通过 RTCDataChannel 的信息的到达顺序需要和发送顺序一致 (true), 或者到达顺序不需要和发送顺序一致 (false). 默认：true
-      ordered: true,
-      protocol: 'udp',
-    });
-    this.dataChannel.onopen = () => {
-      this.prettierLog({
-        msg: 'dataChannel连接成功！',
-        type: 'success',
-      });
-    };
-    this.dataChannel.onerror = () => {
-      this.prettierLog({
-        msg: 'dataChannel连接失败！',
-        type: 'error',
-      });
-      this.close();
-    };
-  };
-
-  setVideoTrackContentHints(stream, hint) {
-    const tracks = stream.getVideoTracks();
-    console.log('setVideoTrackContentHints', tracks);
-    tracks.forEach((track) => {
-      if ('contentHint' in track) {
-        track.contentHint = hint;
-        console.log('setVideoTrackContentHints', hint);
-        if (track.contentHint !== hint) {
-          // eslint-disable-next-line
-          console.error(`Invalid video track contentHint: "${hint}"`);
-        }
-      } else {
-        console.error('MediaStreamTrack contentHint attribute not supported');
-      }
-    });
-  }
 
   /** 手动关闭webrtc连接 */
   close = () => {
@@ -615,12 +584,12 @@ export class WebRTCClass {
         '手动关闭webrtc连接',
         JSON.stringify({ sender: this.sender, receiver: this.receiver })
       );
-      clearInterval(this.loopGetStatsTimer);
       this.localStream?.getTracks().forEach((track) => {
         track.stop();
       });
       this.localStream = null;
       this.peerConnection?.close();
+      this.dataChannel?.close();
       this.peerConnection = null;
       this.dataChannel = null;
       this.videoEl.remove();
@@ -648,6 +617,7 @@ export class WebRTCClass {
   /** 更新store */
   update = () => {
     const networkStore = useNetworkStore();
+    console.log('更新store', this.receiver);
     networkStore.rtcMap.set(this.receiver, { ...this });
   };
 }

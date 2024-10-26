@@ -18,7 +18,9 @@ export function prettierSendWsMsg(data: {
   data;
 }) {
   console.warn(
-    `【websocket】发送消息 msgType:${data.msgType},requestId:${data.requestId}`,
+    `${new Date().toLocaleString()}【websocket】发送消息 msgType:${
+      data.msgType
+    },requestId:${data.requestId}`,
     data
   );
 }
@@ -81,11 +83,10 @@ export class WebSocketClass {
     this.socketIo?.emit(msgType, sendData);
   };
 
-  /** 更新store */
+  // 更新store
   update = () => {
     const networkStore = useNetworkStore();
-    // networkStore.updateWsMap(this.roomId, this);
-    networkStore.wsMap.set(this.roomId, { ...this });
+    networkStore.updateWsMap(this.roomId, this);
   };
 
   // 手动关闭websocket连接

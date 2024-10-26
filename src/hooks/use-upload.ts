@@ -1,33 +1,19 @@
-import { upload } from 'qiniu-js';
-import { ref } from 'vue';
-
 import {
-  fetchQiniuUploadToken,
   fetchUpload,
   fetchUploadChunk,
   fetchUploadMergeChunk,
   fetchUploadProgress,
 } from '@/api/qiniuData';
-import { QINIU_RESOURCE } from '@/constant';
 import { getHash, splitFile } from '@/utils';
 
-export async function useUpload({
+export const useUpload = async ({
   prefix,
   file,
 }: {
   prefix: string;
   file: File;
-}): Promise<
-  | {
-      flag: boolean;
-      respBody?: any;
-      respErr?: any;
-      respInfo?: any;
-      resultUrl?: string | undefined;
-    }
-  | undefined
-> {
-  const timer = ref();
+}) => {
+  let timer;
   let isMerge = false;
 
   const mergeAndUpload = async ({ hash, ext, prefix }) => {
@@ -37,7 +23,7 @@ export async function useUpload({
       ext,
       prefix,
     });
-    clearInterval(timer.value);
+    clearInterval(timer);
     return data;
   };
 
@@ -51,13 +37,7 @@ export async function useUpload({
       });
     }
     const chunkList = splitFile(file);
-    return new Promise<{
-      flag: boolean;
-      respBody?: any;
-      respErr?: any;
-      respInfo?: any;
-      resultUrl?: string | undefined;
-    }>((resolve) => {
+    return new Promise((resolve) => {
       for (let i = 0; i < chunkList.length; i += 1) {
         const v = chunkList[i];
         const form = new FormData();
@@ -70,30 +50,25 @@ export async function useUpload({
         fetchUploadChunk(form).then((res) => {
           if (res.data.percentage === 50) {
             if (!isMerge) {
-              mergeAndUpload({ hash, ext, prefix })
-                .then((uploadRes) => {
-                  console.log('mergeAndUpload成功', uploadRes);
-                  resolve(uploadRes);
-                })
-                .catch((err) => {
-                  console.error('mergeAndUpload失败', err);
-                  resolve({ flag: false });
-                });
+              mergeAndUpload({ hash, ext, prefix }).then((uploadRes) => {
+                resolve(uploadRes);
+              });
               isMerge = true;
             }
           }
         });
       }
       let flag = false;
-      timer.value = setInterval(async () => {
+      timer = setInterval(async () => {
         try {
+          // eslint-disable-next-line @typescript-eslint/no-shadow
           const { code, data, message } = await fetchUploadProgress({
             hash,
             prefix,
             ext,
           });
           if (flag) {
-            clearInterval(timer.value);
+            clearInterval(timer);
             return;
           }
           if (code === 1) {
@@ -102,60 +77,16 @@ export async function useUpload({
               flag = true;
             }
           } else {
-            clearInterval(timer.value);
-            console.error(code, data, message);
+            console.log(code, data, message);
           }
         } catch (error) {
-          console.error(error);
-          clearInterval(timer.value);
+          console.log(error);
+          clearInterval(timer);
         }
       }, 1000);
     });
   } catch (error) {
-    console.error(error);
-  } finally {
-    clearInterval(timer.value);
+    console.log(error);
+    clearInterval(timer);
   }
-}
-
-export async function useQiniuJsUpload({
-  prefix,
-  file,
-}: {
-  prefix: string;
-  file: File;
-}) {
-  const { hash, ext } = await getHash(file);
-  const res = await fetchQiniuUploadToken({ ext, hash, prefix });
-  if (res.code === 200) {
-    return new Promise<{ flag: boolean; err?: any; resultUrl?: string }>(
-      (resolve) => {
-        const key = `${prefix + hash}.${ext}`;
-        const observable = upload(file, key, res.data);
-        observable.subscribe({
-          next(res) {
-            console.log('next', res);
-          },
-          error(err) {
-            console.log('error', err);
-            resolve({
-              flag: false,
-              err,
-            });
-          },
-          complete(res) {
-            console.log('complete', res);
-            resolve({
-              flag: true,
-              resultUrl: `${QINIU_RESOURCE.url}/${res.key as string}`,
-            });
-          },
-        });
-      }
-    );
-  } else {
-    return Promise.resolve<{ flag: boolean; err?: any; resultUrl?: string }>({
-      flag: false,
-    });
-  }
-}
+};

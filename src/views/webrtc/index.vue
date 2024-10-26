@@ -11,179 +11,222 @@
       >
         连接详情
       </span>
+
       <div
         class="info"
         :class="{ show: showDetail }"
       >
-        <div>wss：{{ WEBSOCKET_URL }}</div>
-        <div>axios：{{ AXIOS_BASEURL }}</div>
-        <n-button @click="windowReload">刷新页面</n-button>
-        <n-button @click="handleDebug">打开调试</n-button>
-        <div>
-          <span class="item">
-            分辨率：<span v-if="videoSettings?.width">
-              {{ videoSettings?.width || '-' }}x{{
-                videoSettings?.height || '-'
-              }}
-            </span>
-            <span v-else>-</span>
-          </span>
-          <span class="item">
-            帧率：{{ videoSettings?.frameRate?.toFixed(2) || '-' }}
-          </span>
-        </div>
-        <n-input-group>
-          <n-input-group-label>roomId</n-input-group-label>
-          <n-input
-            v-model:value="roomId"
-            :style="{ width: '200px' }"
-            disabled
-            placeholder=""
-          />
-        </n-input-group>
+        <div
+          class="debug-info"
+          v-if="appStore.showDebug"
+        >
+          <div>
+            <span @click="windowReload">刷新</span>
+            <span>，</span>
+            <span @click="handleOpenDevTools({ windowId })">控制台</span>
+          </div>
 
-        <n-input-group>
-          <n-input-group-label>主控uuid</n-input-group-label>
-          <n-input
-            v-model:value="deskUserUuid"
-            :style="{ width: '200px' }"
-            disabled
-            placeholder=""
-          />
-        </n-input-group>
-        <n-input-group>
-          <n-input-group-label>被控uuid</n-input-group-label>
-          <n-input
-            v-model:value="remoteDeskUserUuid"
-            :style="{ width: '200px' }"
-            disabled
-            placeholder=""
-          />
-        </n-input-group>
-        <n-input-group>
-          <n-button>我的设备</n-button>
-          <n-input
-            v-model:value="mySocketId"
-            :style="{ width: '200px' }"
-            disabled
-            placeholder=""
-          />
-          <n-button @click="handleCopy(mySocketId)">复制</n-button>
-        </n-input-group>
-
-        <n-input-group>
-          <n-button>控制设备</n-button>
-          <n-input
-            v-model:value="receiverId"
-            :style="{ width: '200px' }"
-            disabled
-            placeholder=""
-          />
-          <n-button @click="handleCopy(receiverId)">复制</n-button>
-        </n-input-group>
-        <div class="rtc-info">
-          <span class="item">
-            分辨率：<span v-if="videoSettings?.width">
-              {{ videoSettings?.width || '-' }}x{{
-                videoSettings?.height || '-'
-              }}
+          <div>
+            <span>窗口Id：</span>
+            <span
+              class="link"
+              @click="handleCopy(windowId)"
+            >
+              {{ windowId }}
             </span>
-            <span v-else>-</span>
-          </span>
-          <span class="item">
-            帧率：{{ videoSettings?.frameRate?.toFixed(2) || '-' }}
-          </span>
-          <span class="item">延迟：{{ rtcRtt || '-' }}</span>
-          <span class="item">丢包：{{ rtcLoss || '-' }}</span>
+            <span>，</span>
+            <span>roomId：</span>
+            <span
+              class="link"
+              @click="handleCopy(roomId)"
+            >
+              {{ roomId }}
+            </span>
+          </div>
+          <div>
+            <span>socketId：</span>
+            <span
+              class="link"
+              @click="handleCopy(mySocketId)"
+            >
+              {{ mySocketId }}
+            </span>
+          </div>
         </div>
-        <div class="rtc-config">
-          <div class="item">
-            <div class="txt">模式：</div>
-            <n-radio
-              :checked="isWatchMode === 'on'"
-              value="on"
-              name="basic-demo"
-              @change="handleChange"
-            >
-              观看模式
-            </n-radio>
-            <n-radio
-              :checked="isWatchMode === 'off'"
-              value="off"
-              name="basic-demo"
-              @change="handleChange"
-            >
-              控制模式
-            </n-radio>
+
+        <div class="link-config">
+          <div class="link-item">
+            <n-space>
+              <div class="link-label">模式：</div>
+              <n-radio
+                :checked="!isWatchMode"
+                @change="isWatchMode = false"
+              >
+                控制模式
+              </n-radio>
+              <n-radio
+                :checked="isWatchMode"
+                @change="isWatchMode = true"
+              >
+                观看模式
+              </n-radio>
+            </n-space>
           </div>
-          <div class="item">
-            <div class="txt">码率：</div>
-            <div class="down">
-              <n-select
-                size="small"
-                v-model:value="currentMaxBitrate"
-                :options="maxBitrate"
-              />
-            </div>
+          <div class="link-item">
+            <n-space>
+              <div class="link-label">鼠标：</div>
+              <n-radio
+                :checked="showCursor"
+                @change="showCursor = true"
+              >
+                显示
+              </n-radio>
+              <n-radio
+                :checked="!showCursor"
+                @change="showCursor = false"
+              >
+                隐藏
+              </n-radio>
+            </n-space>
           </div>
-          <div class="item">
-            <div class="txt">帧率：</div>
-            <div class="down">
-              <n-select
-                size="small"
-                v-model:value="currentMaxFramerate"
-                :options="maxFramerate"
-              />
-            </div>
+          <div class="link-item">
+            <n-space>
+              <div class="link-label">码率：</div>
+              <n-radio-group v-model:value="currentMaxBitrate">
+                <n-radio
+                  v-for="item in maxBitrate"
+                  :key="item.value"
+                  :value="item.value"
+                >
+                  {{ item.label }}
+                </n-radio>
+              </n-radio-group>
+            </n-space>
           </div>
-          <div class="item">
-            <div class="txt">分辨率：</div>
-            <div class="down big">
-              <n-select
-                size="small"
-                v-model:value="currentResolutionRatio"
-                :options="resolutionRatio"
-              />
-            </div>
+          <div class="link-item">
+            <n-space>
+              <div class="link-label">帧率：</div>
+              <n-radio-group v-model:value="currentMaxFramerate">
+                <n-radio
+                  v-for="item in maxFramerate"
+                  :key="item.value"
+                  :value="item.value"
+                >
+                  {{ item.label }}
+                </n-radio>
+              </n-radio-group>
+            </n-space>
           </div>
-          <div class="item">
-            <div class="txt">视频内容：</div>
-            <div class="down">
-              <n-select
-                size="small"
-                v-model:value="currentVideoContentHint"
-                :options="videoContentHint"
-              />
-            </div>
+          <div class="link-item">
+            <n-space>
+              <div class="link-label">分辨率：</div>
+              <n-radio-group v-model:value="currentResolutionRatio">
+                <n-radio
+                  v-for="item in resolutionRatio"
+                  :key="item.value"
+                  :value="item.value"
+                >
+                  {{ item.label }}
+                </n-radio>
+              </n-radio-group>
+            </n-space>
           </div>
-          <div class="item">
-            <div class="txt">音频内容：</div>
-            <div class="down big">
-              <n-select
-                size="small"
-                v-model:value="currentAudioContentHint"
-                :options="audioContentHint"
-              />
-            </div>
+          <div class="link-item">
+            <n-space>
+              <div class="link-label">视频内容：</div>
+              <n-radio-group v-model:value="currentVideoContentHint">
+                <n-radio
+                  v-for="item in videoContentHint"
+                  :key="item.value"
+                  :value="item.value"
+                >
+                  {{ item.label }}
+                </n-radio>
+              </n-radio-group>
+            </n-space>
+          </div>
+          <div class="link-item">
+            <n-space>
+              <div class="link-label">音频内容：</div>
+              <n-radio-group v-model:value="currentAudioContentHint">
+                <n-radio
+                  v-for="item in audioContentHint"
+                  :key="item.value"
+                  :value="item.value"
+                >
+                  {{ item.label }}
+                </n-radio>
+              </n-radio-group>
+            </n-space>
+          </div>
+          <div class="link-item">
+            <n-space>
+              <div class="link-label">分辨率：</div>
+              <div class="item">
+                {{ videoSettings?.width + 'x' + videoSettings?.height }}
+              </div>
+            </n-space>
+          </div>
+          <div class="link-item">
+            <n-space>
+              <div class="link-label">帧率：</div>
+              <div class="item">
+                {{ videoSettings?.frameRate?.toFixed(2) }}
+              </div>
+            </n-space>
+          </div>
+          <div class="link-item">
+            <n-space>
+              <div class="link-label">延迟：</div>
+              <div class="item">
+                {{ rtcRtt }}
+              </div>
+            </n-space>
+          </div>
+          <div class="link-item">
+            <n-space>
+              <div class="link-label">丢包：</div>
+              <div class="item">
+                {{ rtcLoss }}
+              </div>
+            </n-space>
+          </div>
+          <div class="link-item">
+            <n-space>
+              <div class="link-label"></div>
+              <div
+                class="item btn"
+                @click="handleClose"
+              >
+                关闭连接
+              </div>
+            </n-space>
           </div>
         </div>
       </div>
     </div>
 
     <div
-      :class="{ wrap: 1, watch: isWatchMode === 'on' }"
+      class="remote-video"
       ref="videoWrapRef"
+      :class="{ 'hide-cursor': !showCursor, watch: isWatchMode }"
       @mousedown="handleMouseDown"
       @mousemove="handleMouseMove"
       @mouseup="handleMouseUp"
       @dblclick="handleDoublelclick"
       @contextmenu="handleContextmenu"
     ></div>
+
+    <div
+      class="loading"
+      v-if="loading"
+    >
+      正在连接...
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { Key } from '@nut-tree/shared';
 import { useDraggable } from '@vueuse/core';
 import {
   computeBox,
@@ -194,11 +237,13 @@ import {
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
-import { AXIOS_BASEURL, WEBSOCKET_URL } from '@/constant';
+import { NUT_KEY_MAP, WINDOW_ID_ENUM } from '@/constant';
+import { IPC_EVENT } from '@/event';
+import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
 import { useRTCParams } from '@/hooks/use-rtcParams';
-import { closeUseTip, useTip } from '@/hooks/use-tip';
+import { useTip } from '@/hooks/use-tip';
 import { useWebsocket } from '@/hooks/use-websocket';
-import { useWebRtcRemoteDesk } from '@/hooks/webrtc/remoteDesk';
+import router, { routerName } from '@/router';
 import { useAppStore } from '@/store/app';
 import { useNetworkStore } from '@/store/network';
 import {
@@ -214,26 +259,21 @@ import {
   WsConnectStatusEnum,
   WsMsgTypeEnum,
 } from '@/types/websocket';
-import {
-  createNullVideo,
-  handlConstraints,
-  setAudioTrackContentHints,
-  setVideoTrackContentHints,
-  videoFullBox,
-} from '@/utils';
-import { WebRTCClass } from '@/utils/network/webRTC';
+import { ipcRendererInvoke, ipcRendererSend, videoFullBox } from '@/utils';
 
-const roomId = ref('');
 const route = useRoute();
 const appStore = useAppStore();
 const networkStore = useNetworkStore();
+
 const {
   initWs,
   remoteDeskUserUuid,
+  remoteDeskUserPassword,
   deskUserUuid,
   deskUserPassword,
   connectStatus,
 } = useWebsocket();
+
 const {
   maxBitrate,
   maxFramerate,
@@ -242,35 +282,32 @@ const {
   videoContentHint,
 } = useRTCParams();
 
-const { updateWebRtcRemoteDeskConfig, webRtcRemoteDesk } =
-  useWebRtcRemoteDesk();
+const { handleOpenDevTools } = useIpcRendererSend();
 
-const anchorStream = ref<MediaStream>();
-const rtc = ref<WebRTCClass>();
-
-const isWatchMode = ref<'on' | 'off'>('on');
-
-const showDetail = ref(true);
+const titlebarHeight = ref(50);
+const loading = ref(true);
+const isWatchMode = ref(false);
+const showCursor = ref(true);
+const receiverId = ref('');
+const loopBilldDeskUpdateUserTimer = ref();
+const showDetail = ref(false);
 const dragEl = ref<HTMLDivElement>();
 const { style } = useDraggable(dragEl, {
   initialValue: { x: 40, y: 40 },
 });
-
 const currentMaxBitrate = ref(maxBitrate.value[3].value);
 const currentMaxFramerate = ref(maxFramerate.value[4].value);
 const currentResolutionRatio = ref(resolutionRatio.value[3].value);
 const currentVideoContentHint = ref(videoContentHint.value[3].value);
 const currentAudioContentHint = ref(audioContentHint.value[0].value);
-const loopBilldDeskUpdateUserTimer = ref();
-const receiverId = ref('');
-const videoWrapRef = ref<HTMLDivElement>();
-const isDown = ref(false);
-const loopGetSettingsTimer = ref();
-const videoSettings = ref<MediaTrackSettings>();
-let clickTimer;
+
+let clickTimer: any;
 let isLongClick = false;
+const videoList = ref<HTMLVideoElement[]>([]);
+const videoWrapRef = ref<HTMLVideoElement>();
+const windowId = ref(WINDOW_ID_ENUM.webrtc);
+const roomId = ref('');
 const videoMap = ref(new Map());
-const showLoading = ref(true);
 const mySocketId = computed(() => {
   return networkStore.wsMap.get(roomId.value)?.socketIo?.id || '';
 });
@@ -291,335 +328,103 @@ const rtcLoss = computed(() => {
   return arr.join();
 });
 
-function handleDebug() {}
-
-onUnmounted(() => {
-  window.removeEventListener('keydown', handleKeyDown);
-  videoWrapRef.value?.removeEventListener('wheel', handleMouseWheel);
-  handleClose();
-  clearInterval(loopBilldDeskUpdateUserTimer.value);
-});
+const loopGetSettingsTimer = ref();
+const loopReconnectTimer = ref();
+const videoSettings = ref<MediaTrackSettings>();
 
 onMounted(() => {
+  console.log('webrtc页面');
   console.log(route.query);
-  if (route.query['roomId'] !== undefined) {
-    // @ts-ignore
-    roomId.value = route.query['roomId'];
-  }
-  if (route.query['maxBitrate'] !== undefined) {
-    // @ts-ignore
-    currentMaxBitrate.value = route.query['maxBitrate'];
-  }
-  if (route.query['maxFramerate'] !== undefined) {
-    // @ts-ignore
-    currentMaxFramerate.value = route.query['maxFramerate'];
-  }
-  if (route.query['resolutionRatio'] !== undefined) {
-    // @ts-ignore
-    currentResolutionRatio.value = route.query['resolutionRatio'];
-  }
-  if (route.query['videoContentHint'] !== undefined) {
-    // @ts-ignore
-    currentVideoContentHint.value = route.query['videoContentHint'];
-  }
-  if (route.query['audioContentHint'] !== undefined) {
-    // @ts-ignore
-    currentAudioContentHint.value = route.query['audioContentHint'];
-  }
-  if (route.query['deskUserUuid'] !== undefined) {
-    // @ts-ignore
-    deskUserUuid.value = route.query['deskUserUuid'];
-  }
-  if (route.query['deskUserPassword'] !== undefined) {
-    // @ts-ignore
-    deskUserPassword.value = route.query['deskUserPassword'];
-  }
-  if (route.query.remoteDeskUserUuid !== undefined) {
-    remoteDeskUserUuid.value = `${route.query.remoteDeskUserUuid as string}`;
+  if (route.query.deskUserUuid !== undefined) {
+    deskUserUuid.value = String(route.query.deskUserUuid);
   } else {
-    window.$message.error('remoteDeskUserUuid为空');
+    window.$message.error('设备代码为空');
     return;
   }
-  handleInit();
+  if (route.query.deskUserPassword !== undefined) {
+    deskUserPassword.value = String(route.query.deskUserPassword);
+  } else {
+    window.$message.error('临时密码为空');
+    return;
+  }
+  if (route.query.remoteDeskUserUuid !== undefined) {
+    remoteDeskUserUuid.value = String(route.query.remoteDeskUserUuid);
+  } else {
+    window.$message.error('远程设备代码为空');
+    return;
+  }
+  if (route.query.remoteDeskUserPassword !== undefined) {
+    remoteDeskUserPassword.value = String(route.query.remoteDeskUserPassword);
+  } else {
+    window.$message.error('远程设备密码为空');
+    return;
+  }
+  if (route.query.roomId !== undefined) {
+    roomId.value = String(route.query.roomId);
+  }
+  if (route.query.maxBitrate !== undefined) {
+    currentMaxBitrate.value = Number(route.query.maxBitrate);
+  }
+  if (route.query.maxFramerate !== undefined) {
+    currentMaxFramerate.value = Number(route.query.maxFramerate);
+  }
+  if (route.query.resolutionRatio !== undefined) {
+    currentResolutionRatio.value = Number(route.query.resolutionRatio);
+  }
+  if (route.query.videoContentHint !== undefined) {
+    currentVideoContentHint.value = String(route.query.videoContentHint);
+  }
+  if (route.query.audioContentHint !== undefined) {
+    currentAudioContentHint.value = String(route.query.audioContentHint);
+  }
+  init();
+  window.addEventListener('resize', handleResize);
 });
 
-function handleInit() {
+onUnmounted(() => {
+  clearInterval(loopBilldDeskUpdateUserTimer.value);
+  videoWrapRef.value?.removeEventListener('wheel', handleMouseWheel);
+  window.removeEventListener('resize', handleResize);
+  window.removeEventListener('keydown', handleKeyDown);
+  window.removeEventListener('keyup', handleKeyUp);
+  networkStore.removeAllWsAndRtc();
+});
+
+function handleResize() {
+  videoList.value.forEach((item) => {
+    console.log(item);
+    handleVideoElSize(item, false);
+  });
+}
+
+function init() {
+  handleInitIpcRendererOn();
+  handleInitIpcRendererSend();
   handleLoopBilldDeskUpdateUserTimer();
+  videoWrapRef.value?.addEventListener('wheel', handleMouseWheel);
+  window.addEventListener('keydown', handleKeyDown);
+  window.addEventListener('keyup', handleKeyUp);
   initWs({
     roomId: roomId.value,
     isAnchor: false,
     isRemoteDesk: true,
   });
-  videoWrapRef.value?.addEventListener('wheel', handleMouseWheel);
-  window.addEventListener('keydown', handleKeyDown);
   loopGetSettings();
 }
-
-function handleLoopBilldDeskUpdateUserTimer() {
-  clearInterval(loopBilldDeskUpdateUserTimer.value);
-  loopBilldDeskUpdateUserTimer.value = setInterval(() => {
-    networkStore.wsMap.get(roomId.value)?.send<WsBilldDeskStartRemote['data']>({
-      requestId: getRandomString(8),
-      msgType: WsMsgTypeEnum.billdDeskUpdateUser,
-      data: {
-        roomId: roomId.value,
-        sender: mySocketId.value,
-        receiver: '',
-        maxBitrate: currentMaxBitrate.value,
-        maxFramerate: currentMaxFramerate.value,
-        resolutionRatio: currentResolutionRatio.value,
-        videoContentHint: currentVideoContentHint.value,
-        audioContentHint: currentAudioContentHint.value,
-        deskUserUuid: deskUserUuid.value,
-        deskUserPassword: deskUserPassword.value,
-        remoteDeskUserUuid: remoteDeskUserUuid.value,
-      },
-    });
-  }, 1000 * 2);
-}
-
-watch(
-  () => networkStore.rtcMap,
-  (newVal) => {
-    newVal.forEach((item) => {
-      if (videoWrapRef.value) {
-        if (videoMap.value.has(item.receiver)) {
-          return;
-        }
-        videoMap.value.set(item.receiver, 1);
-        item.videoEl.addEventListener('loadedmetadata', () => {
-          if (!videoWrapRef.value) return;
-          const rect = videoWrapRef.value.getBoundingClientRect();
-          const res = computeBox({
-            width: item.videoEl.videoWidth,
-            height: item.videoEl.videoHeight,
-            maxHeight: rect.height,
-            minHeight: rect.height,
-            maxWidth: rect.width,
-            minWidth: rect.width,
-          });
-          videoFullBox({
-            wrapSize: {
-              width: res.width,
-              height: res.height,
-            },
-            videoEl: item.videoEl,
-          });
-
-          showLoading.value = false;
-        });
-        videoWrapRef.value.appendChild(item.videoEl);
-      }
-    });
-    nextTick(() => {
-      if (videoWrapRef.value) {
-        if (newVal.size) {
-          videoWrapRef.value.style.display = 'inline-block';
-        } else {
-          videoWrapRef.value.style.removeProperty('display');
-        }
-      }
-    });
-  },
-  {
-    deep: true,
-    immediate: true,
-  }
-);
 
 watch(
   () => connectStatus.value,
   (newval) => {
+    console.log('connectStatus', newval);
     if (newval === WsConnectStatusEnum.connect) {
+      clearInterval(loopReconnectTimer.value);
       handleWsMsg();
+    } else if (newval === WsConnectStatusEnum.disconnect) {
+      window.$message.warning('disconnect');
     }
   },
-  {
-    immediate: true,
-  }
+  { immediate: true }
 );
-
-function handleWsMsg() {
-  const ws = networkStore.wsMap.get(roomId.value);
-  // 收到billdDeskStartRemoteResult
-  ws?.socketIo?.on(
-    WsMsgTypeEnum.billdDeskStartRemoteResult,
-    (data: WsBilldDeskStartRemoteResult['data']) => {
-      console.log('收到billdDeskStartRemoteResult', data);
-      if (data.code !== 0) {
-        useTip({
-          content: data.msg,
-          hiddenCancel: true,
-          hiddenClose: true,
-        });
-      } else {
-        if (data.data) {
-          receiverId.value = data.data.receiver;
-          appStore.remoteDesk.set(data.data.receiver, {
-            audioContentHint: data.data.audioContentHint,
-            videoContentHint: data.data.videoContentHint,
-            sender: data.data.sender,
-            isClose: false,
-            maxBitrate: data.data.maxBitrate,
-            maxFramerate: data.data.maxFramerate,
-            resolutionRatio: data.data.resolutionRatio,
-          });
-        }
-      }
-    }
-  );
-  ws?.send<WsBilldDeskStartRemote['data']>({
-    requestId: getRandomString(8),
-    msgType: WsMsgTypeEnum.billdDeskStartRemote,
-    data: {
-      roomId: roomId.value,
-      sender: mySocketId.value,
-      receiver: '',
-      maxBitrate: currentMaxBitrate.value,
-      maxFramerate: currentMaxFramerate.value,
-      resolutionRatio: currentResolutionRatio.value,
-      videoContentHint: currentVideoContentHint.value,
-      audioContentHint: currentAudioContentHint.value,
-      deskUserUuid: deskUserUuid.value,
-      deskUserPassword: deskUserPassword.value,
-      remoteDeskUserUuid: remoteDeskUserUuid.value,
-    },
-  });
-}
-
-async function handleRTC(receiver) {
-  if (!anchorStream.value) return;
-  try {
-    await handlConstraints({
-      frameRate: currentMaxFramerate.value,
-      height: currentResolutionRatio.value,
-      stream: anchorStream.value,
-    });
-    setVideoTrackContentHints(
-      anchorStream.value,
-      videoContentHint.value as any
-    );
-    setAudioTrackContentHints(
-      anchorStream.value,
-      audioContentHint.value as any
-    );
-    updateWebRtcRemoteDeskConfig({
-      roomId: roomId.value,
-      anchorStream: anchorStream.value,
-    });
-    rtc.value = webRtcRemoteDesk.newWebRtc({
-      // 因为这里是收到offer，而offer是房主发的，所以此时的data.data.sender是房主；data.data.receiver是接收者；
-      // 但是这里的nativeWebRtc的sender，得是自己，不能是data.data.sender，不要混淆
-      sender: mySocketId.value,
-      receiver,
-      videoEl: createNullVideo(),
-    });
-    webRtcRemoteDesk.sendOffer({
-      sender: mySocketId.value,
-      receiver,
-    });
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-function handleChange(e) {
-  isWatchMode.value = e.target.value;
-}
-
-function loopGetSettings() {
-  clearInterval(loopGetSettingsTimer.value);
-  loopGetSettingsTimer.value = setInterval(() => {
-    networkStore.rtcMap
-      .get(receiverId.value)
-      ?.localStream?.getVideoTracks()
-      .forEach((item) => {
-        videoSettings.value = item.getSettings();
-        console.log(JSON.stringify(videoSettings.value));
-      });
-  }, 1000);
-}
-
-function handleMouseWheel(e: WheelEvent) {
-  if (!appStore.remoteDesk.size) {
-    return;
-  }
-  e.preventDefault();
-  const requestId = getRandomString(8);
-  if (e.deltaY > 0) {
-    networkStore.rtcMap
-      .get(receiverId.value)
-      ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
-        requestId,
-        msgType: WsMsgTypeEnum.billdDeskBehavior,
-        data: {
-          roomId: roomId.value,
-          sender: mySocketId.value,
-          receiver: receiverId.value,
-          type: BilldDeskBehaviorEnum.scrollDown,
-          keyboardtype: 0,
-          x: 0,
-          y: 0,
-          amount: Math.abs(e.deltaY),
-        },
-      });
-  } else if (e.deltaY < 0) {
-    const requestId = getRandomString(8);
-    networkStore.rtcMap
-      .get(receiverId.value)
-      ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
-        requestId,
-        msgType: WsMsgTypeEnum.billdDeskBehavior,
-        data: {
-          roomId: roomId.value,
-          sender: mySocketId.value,
-          receiver: receiverId.value,
-          type: BilldDeskBehaviorEnum.scrollUp,
-          keyboardtype: 0,
-          x: 0,
-          y: 0,
-          amount: Math.abs(e.deltaY),
-        },
-      });
-  }
-  if (e.deltaX > 0) {
-    const requestId = getRandomString(8);
-    networkStore.rtcMap
-      .get(receiverId.value)
-      ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
-        requestId,
-        msgType: WsMsgTypeEnum.billdDeskBehavior,
-        data: {
-          roomId: roomId.value,
-          sender: mySocketId.value,
-          receiver: receiverId.value,
-          type: BilldDeskBehaviorEnum.scrollRight,
-          keyboardtype: 0,
-          x: 0,
-          y: 0,
-          amount: Math.abs(e.deltaX),
-        },
-      });
-  } else if (e.deltaX < 0) {
-    const requestId = getRandomString(8);
-    networkStore.rtcMap
-      .get(receiverId.value)
-      ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
-        requestId,
-        msgType: WsMsgTypeEnum.billdDeskBehavior,
-        data: {
-          roomId: roomId.value,
-          sender: mySocketId.value,
-          receiver: receiverId.value,
-          type: BilldDeskBehaviorEnum.scrollLeft,
-          keyboardtype: 0,
-          x: 0,
-          y: 0,
-          amount: Math.abs(e.deltaX),
-        },
-      });
-  }
-}
 
 watch(
   () => currentMaxBitrate.value,
@@ -697,26 +502,258 @@ watch(
   }
 );
 
-watch(
-  () => appStore.remoteDesk,
-  (newval) => {
-    newval.forEach((item) => {
-      if (item.isClose) {
-        window.$notification.warning({
-          content: `${item.sender}远程连接断开`,
-          duration: 2000,
+function handleLoopBilldDeskUpdateUserTimer() {
+  clearInterval(loopBilldDeskUpdateUserTimer.value);
+  loopBilldDeskUpdateUserTimer.value = setInterval(() => {
+    networkStore.wsMap.get(roomId.value)?.send<WsBilldDeskStartRemote['data']>({
+      requestId: getRandomString(8),
+      msgType: WsMsgTypeEnum.billdDeskUpdateUser,
+      data: {
+        roomId: roomId.value,
+        sender: mySocketId.value,
+        receiver: '',
+        maxBitrate: currentMaxBitrate.value,
+        maxFramerate: currentMaxFramerate.value,
+        resolutionRatio: currentResolutionRatio.value,
+        videoContentHint: currentVideoContentHint.value,
+        audioContentHint: currentAudioContentHint.value,
+        deskUserUuid: deskUserUuid.value,
+        deskUserPassword: deskUserPassword.value,
+        remoteDeskUserUuid: remoteDeskUserUuid.value,
+        remoteDeskUserPassword: remoteDeskUserPassword.value,
+      },
+    });
+  }, 1000 * 2);
+}
+
+function handleWsMsg() {
+  const ws = networkStore.wsMap.get(roomId.value);
+  // 收到billdDeskStartRemoteResult
+  ws?.socketIo?.on(
+    WsMsgTypeEnum.billdDeskStartRemoteResult,
+    (data: WsBilldDeskStartRemoteResult['data']) => {
+      console.log('收到billdDeskStartRemoteResult', data);
+      if (data.code !== 0) {
+        useTip({
+          content: data.msg,
+          hiddenCancel: true,
+          hiddenClose: true,
         });
-        appStore.remoteDesk.delete(item.sender);
-        handleClose();
-        return;
       } else {
-        loopGetSettings();
-        closeUseTip();
+        if (data.data) {
+          receiverId.value = data.data.receiver;
+          appStore.remoteDesk.set(data.data.receiver, {
+            audioContentHint: data.data.audioContentHint,
+            videoContentHint: data.data.videoContentHint,
+            sender: data.data.sender,
+            isClose: false,
+            maxBitrate: data.data.maxBitrate,
+            maxFramerate: data.data.maxFramerate,
+            resolutionRatio: data.data.resolutionRatio,
+          });
+        }
+      }
+    }
+  );
+  ws?.send<WsBilldDeskStartRemote['data']>({
+    requestId: getRandomString(8),
+    msgType: WsMsgTypeEnum.billdDeskStartRemote,
+    data: {
+      roomId: roomId.value,
+      sender: mySocketId.value,
+      receiver: '',
+      maxBitrate: currentMaxBitrate.value,
+      maxFramerate: currentMaxFramerate.value,
+      resolutionRatio: currentResolutionRatio.value,
+      videoContentHint: currentVideoContentHint.value,
+      audioContentHint: currentAudioContentHint.value,
+      deskUserUuid: deskUserUuid.value,
+      deskUserPassword: deskUserPassword.value,
+      remoteDeskUserUuid: remoteDeskUserUuid.value,
+      remoteDeskUserPassword: remoteDeskUserPassword.value,
+    },
+  });
+}
+
+async function handleInitIpcRendererSend() {}
+
+function handleInitIpcRendererOn() {}
+
+function loopGetSettings() {
+  clearInterval(loopGetSettingsTimer.value);
+  loopGetSettingsTimer.value = setInterval(() => {
+    networkStore.rtcMap
+      .get(receiverId.value)
+      ?.localStream?.getVideoTracks()
+      .forEach((item) => {
+        videoSettings.value = item.getSettings();
+      });
+  }, 1000);
+}
+
+function handleMouseWheel(e: WheelEvent) {
+  if (isWatchMode.value) return;
+  e.preventDefault();
+  if (e.deltaY > 0) {
+    networkStore.rtcMap
+      .get(receiverId.value)
+      ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
+        requestId: getRandomString(8),
+        msgType: WsMsgTypeEnum.billdDeskBehavior,
+        data: {
+          roomId: roomId.value,
+          sender: mySocketId.value,
+          receiver: receiverId.value,
+          type: BilldDeskBehaviorEnum.scrollDown,
+          keyboardtype: 0,
+          x: 0,
+          y: 0,
+          amount: Math.abs(e.deltaY),
+        },
+      });
+  } else if (e.deltaY < 0) {
+    networkStore.rtcMap
+      .get(receiverId.value)
+      ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
+        requestId: getRandomString(8),
+        msgType: WsMsgTypeEnum.billdDeskBehavior,
+        data: {
+          roomId: roomId.value,
+          sender: mySocketId.value,
+          receiver: receiverId.value,
+          type: BilldDeskBehaviorEnum.scrollUp,
+          keyboardtype: 0,
+          x: 0,
+          y: 0,
+          amount: Math.abs(e.deltaY),
+        },
+      });
+  }
+  if (e.deltaX > 0) {
+    networkStore.rtcMap
+      .get(receiverId.value)
+      ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
+        requestId: getRandomString(8),
+        msgType: WsMsgTypeEnum.billdDeskBehavior,
+        data: {
+          roomId: roomId.value,
+          sender: mySocketId.value,
+          receiver: receiverId.value,
+          type: BilldDeskBehaviorEnum.scrollRight,
+          keyboardtype: 0,
+          x: 0,
+          y: 0,
+          amount: Math.abs(e.deltaX),
+        },
+      });
+  } else if (e.deltaX < 0) {
+    networkStore.rtcMap
+      .get(receiverId.value)
+      ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
+        requestId: getRandomString(8),
+        msgType: WsMsgTypeEnum.billdDeskBehavior,
+        data: {
+          roomId: roomId.value,
+          sender: mySocketId.value,
+          receiver: receiverId.value,
+          type: BilldDeskBehaviorEnum.scrollLeft,
+          keyboardtype: 0,
+          x: 0,
+          y: 0,
+          amount: Math.abs(e.deltaX),
+        },
+      });
+  }
+}
+
+function handleClose() {
+  networkStore.removeAllWsAndRtc();
+  router.push({ name: routerName.remote });
+}
+
+function handleVideoElSize(videoEl, setWindowBounds = false) {
+  if (!videoWrapRef.value) return;
+  const clientWidth = document.documentElement.clientWidth;
+  const clientHeight = document.documentElement.clientHeight;
+  const res = computeBox({
+    width: videoEl.videoWidth,
+    height: videoEl.videoHeight,
+    maxHeight: clientWidth,
+    minHeight: 0,
+    maxWidth: clientHeight,
+    minWidth: 0,
+  });
+  videoFullBox({
+    wrapSize: {
+      width: clientWidth,
+      height: clientHeight,
+    },
+    videoEl,
+  });
+  if (res.width && res.height && setWindowBounds) {
+    ipcRendererSend({
+      windowId: windowId.value,
+      channel: IPC_EVENT.setWindowBounds,
+      requestId: getRandomString(8),
+      data: {
+        width: Math.ceil(res.width),
+        height: Math.ceil(res.height + titlebarHeight.value),
+      },
+    });
+  }
+}
+
+watch(
+  () => appStore.remoteDesk.size,
+  (newval) => {
+    if (!newval) {
+      networkStore.removeAllWsAndRtc();
+    }
+  }
+);
+
+watch(
+  () => networkStore.rtcMap,
+  (newVal) => {
+    newVal.forEach((item) => {
+      if (videoWrapRef.value) {
+        if (videoMap.value.has(item.receiver)) {
+          if (item.peerConnection?.iceConnectionState === 'connected') {
+            loading.value = false;
+          }
+          return;
+        }
+
+        videoMap.value.set(item.receiver, 1);
+        item.videoEl.addEventListener('loadedmetadata', async () => {
+          const res1 = await ipcRendererInvoke({
+            windowId: windowId.value,
+            channel: IPC_EVENT.getWindowTitlebarHeight,
+            requestId: getRandomString(8),
+            data: {},
+          });
+          if (res1?.code === 0) {
+            titlebarHeight.value = res1.data.height;
+          }
+          handleVideoElSize(item.videoEl, true);
+        });
+        videoList.value.push(item.videoEl);
+        videoWrapRef.value.appendChild(item.videoEl);
+      }
+    });
+    nextTick(() => {
+      if (videoWrapRef.value) {
+        if (newVal.size) {
+          videoWrapRef.value.style.display = 'inline-block';
+        } else {
+          videoWrapRef.value.style.removeProperty('display');
+        }
       }
     });
   },
   {
     deep: true,
+    immediate: true,
   }
 );
 
@@ -726,69 +763,40 @@ function handleCopy(str) {
 }
 
 function handleKeyDown(e: KeyboardEvent) {
-  // console.log(e.key, e.code);
-  const keyMap = {
-    Delete: Key.Delete,
-    Enter: Key.Enter,
-    Space: Key.Space,
-    Backspace: Key.Backspace,
-    ShiftLeft: Key.LeftShift,
-    ShiftRight: Key.RightShift,
-    AltLeft: Key.LeftAlt,
-    AltRight: Key.RightAlt,
-    Tab: Key.Tab,
-    Backquote: Key.Quote,
-    Backslash: Key.Backslash,
-    ArrowUp: Key.Up,
-    ArrowDown: Key.Down,
-    ArrowLeft: Key.Left,
-    ArrowRight: Key.Right,
-    CapsLock: Key.CapsLock,
-    ControlLeft: Key.LeftControl,
-    ControlRight: Key.RightControl,
-    MetaLeft: Key.LeftCmd,
-    LeftWin: Key.LeftCmd,
-    MetaRight: Key.RightCmd,
-    RightWin: Key.RightCmd,
-    Fn: Key.Fn,
-    F1: Key.F1,
-    F2: Key.F2,
-    F3: Key.F3,
-    F4: Key.F4,
-    F5: Key.F5,
-    F6: Key.F6,
-    F7: Key.F7,
-    F8: Key.F8,
-    F9: Key.F9,
-    F10: Key.F10,
-    F11: Key.F11,
-    F12: Key.F12,
-    F13: Key.F13,
-    F14: Key.F14,
-    F15: Key.F15,
-    F16: Key.F16,
-    F17: Key.F17,
-    F18: Key.F18,
-    F19: Key.F19,
-    F20: Key.F20,
-    F21: Key.F21,
-    F22: Key.F22,
-    F23: Key.F23,
-    F24: Key.F24,
-  };
-  const requestId = getRandomString(8);
-
+  if (isWatchMode.value) return;
   networkStore.rtcMap
     .get(receiverId.value)
     ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
-      requestId,
+      requestId: getRandomString(8),
       msgType: WsMsgTypeEnum.billdDeskBehavior,
       data: {
         roomId: roomId.value,
         sender: mySocketId.value,
         receiver: receiverId.value,
-        type: BilldDeskBehaviorEnum.keyboardType,
-        keyboardtype: keyMap[e.code] || e.key,
+        type: BilldDeskBehaviorEnum.keyboardPressKey,
+        keyboardtype:
+          NUT_KEY_MAP[e.code] || NUT_KEY_MAP[e.key.toUpperCase()] || e.key,
+        x: 0,
+        y: 0,
+        amount: 0,
+      },
+    });
+}
+
+function handleKeyUp(e: KeyboardEvent) {
+  if (isWatchMode.value) return;
+  networkStore.rtcMap
+    .get(receiverId.value)
+    ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
+      requestId: getRandomString(8),
+      msgType: WsMsgTypeEnum.billdDeskBehavior,
+      data: {
+        roomId: roomId.value,
+        sender: mySocketId.value,
+        receiver: receiverId.value,
+        type: BilldDeskBehaviorEnum.keyboardReleaseKey,
+        keyboardtype:
+          NUT_KEY_MAP[e.code] || NUT_KEY_MAP[e.key.toUpperCase()] || e.key,
         x: 0,
         y: 0,
         amount: 0,
@@ -797,14 +805,10 @@ function handleKeyDown(e: KeyboardEvent) {
 }
 
 function handleDoublelclick() {
-  if (!appStore.remoteDesk.size) {
-    return;
-  }
-  const requestId = getRandomString(8);
   networkStore.rtcMap
     .get(receiverId.value)
     ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
-      requestId,
+      requestId: getRandomString(8),
       msgType: WsMsgTypeEnum.billdDeskBehavior,
       data: {
         roomId: roomId.value,
@@ -820,14 +824,10 @@ function handleDoublelclick() {
 }
 
 function handleContextmenu() {
-  if (!appStore.remoteDesk.size) {
-    return;
-  }
-  const requestId = getRandomString(8);
   networkStore.rtcMap
     .get(receiverId.value)
     ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
-      requestId,
+      requestId: getRandomString(8),
       msgType: WsMsgTypeEnum.billdDeskBehavior,
       data: {
         roomId: roomId.value,
@@ -843,10 +843,6 @@ function handleContextmenu() {
 }
 
 function handleMouseDown(event: MouseEvent) {
-  if (!appStore.remoteDesk.size) {
-    return;
-  }
-  isDown.value = true;
   clickTimer = setTimeout(function () {
     console.log('长按');
     isLongClick = true;
@@ -869,20 +865,17 @@ function handleMouseDown(event: MouseEvent) {
     console.log('handleMouseDown-当前是鼠标右键');
     return;
   }
-  const requestId = getRandomString(8);
   networkStore.rtcMap
     .get(receiverId.value)
     ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
-      requestId,
+      requestId: getRandomString(8),
       msgType: WsMsgTypeEnum.billdDeskBehavior,
       data: {
         roomId: roomId.value,
         sender: mySocketId.value,
         receiver: receiverId.value,
         keyboardtype: 0,
-        type: isLongClick
-          ? BilldDeskBehaviorEnum.pressButtonLeft
-          : BilldDeskBehaviorEnum.pressButtonLeft,
+        type: BilldDeskBehaviorEnum.pressButtonLeft,
         x,
         y,
         amount: 0,
@@ -891,10 +884,6 @@ function handleMouseDown(event: MouseEvent) {
 }
 
 function handleMouseMove(event: MouseEvent) {
-  console.log(appStore.remoteDesk.size, 'appStore.remoteDesk.size');
-  if (!appStore.remoteDesk.size) {
-    return;
-  }
   // 获取点击相对于视窗的位置
   const clickX = event.clientX;
   const clickY = event.clientY;
@@ -916,7 +905,6 @@ function handleMouseMove(event: MouseEvent) {
     xInsideElement,
     yInsideElement
   );
-
   networkStore.rtcMap
     .get(receiverId.value)
     ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
@@ -936,13 +924,9 @@ function handleMouseMove(event: MouseEvent) {
 }
 
 function handleMouseUp(event: MouseEvent) {
-  if (!appStore.remoteDesk.size) {
-    return;
-  }
   if (clickTimer) {
     clearTimeout(clickTimer);
   }
-  isDown.value = false;
   // 获取点击相对于视窗的位置
   const clickX = event.clientX;
   const clickY = event.clientY;
@@ -955,15 +939,7 @@ function handleMouseUp(event: MouseEvent) {
   const yInsideElement = clickY - rect.top;
   const x = (xInsideElement / rect.width) * 1000;
   const y = (yInsideElement / rect.height) * 1000;
-  const requestId = getRandomString(8);
-  console.log(
-    'handleMouseUp',
-    receiverId,
-    x,
-    y,
-    xInsideElement,
-    yInsideElement
-  );
+  console.log('handleMouseUp', x, y, xInsideElement, yInsideElement);
   if (event.button === 2) {
     console.log('handleMouseUp-当前是鼠标右键');
     return;
@@ -971,7 +947,7 @@ function handleMouseUp(event: MouseEvent) {
   networkStore.rtcMap
     .get(receiverId.value)
     ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
-      requestId,
+      requestId: getRandomString(8),
       msgType: WsMsgTypeEnum.billdDeskBehavior,
       data: {
         roomId: roomId.value,
@@ -988,16 +964,13 @@ function handleMouseUp(event: MouseEvent) {
     });
   isLongClick = false;
 }
-
-function handleClose() {
-  networkStore.removeRtc(receiverId.value);
-  clearInterval(loopGetSettingsTimer.value);
-  videoSettings.value = undefined;
-}
 </script>
 
 <style lang="scss" scoped>
 .webrtc-wrap {
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
   .drag {
     position: fixed;
     z-index: 999;
@@ -1021,25 +994,64 @@ function handleClose() {
       top: 100%;
       left: 0;
       display: none;
+      box-sizing: border-box;
       padding: 10px;
+      width: 800px;
       background-color: white;
       box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      .debug-info {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        padding-right: 5px;
+        font-size: 12px;
+        .link {
+          color: red;
+          cursor: pointer;
+        }
+      }
+      .link-config {
+        position: relative;
+        z-index: 9;
+        margin-top: 10px;
+        .link-item {
+          margin-bottom: 4px;
+          .link-label {
+            width: 80px;
+            text-align: right;
+          }
+          .btn {
+            padding: 2px 10px;
+            border-radius: 5px;
+            background-color: red;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+          }
+        }
+      }
       &.show {
         display: block;
       }
-      .input-upload {
-        opacity: 0;
-      }
     }
   }
-  .wrap {
-    width: 100vw;
-    height: 100vh;
+  .remote-video {
+    max-width: 100vw;
+    max-height: 100vh;
     line-height: 0;
-    // cursor: none;
-    &.watch {
-      // pointer-events: none;
+    &.hide-cursor {
+      cursor: none;
     }
+    &.watch {
+      pointer-events: none;
+    }
+  }
+  .loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    font-size: 30px;
+    transform: translate(-50%, -50%);
   }
 }
 </style>

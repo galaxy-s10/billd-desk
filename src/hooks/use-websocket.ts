@@ -35,7 +35,6 @@ import {
   WsConnectStatusEnum,
   WsDisableSpeakingType,
   WsGetLiveUserType,
-  WsHeartbeatType,
   WsJoinType,
   WsLeavedType,
   WsMessageType,
@@ -47,6 +46,7 @@ import {
   WsUpdateJoinInfoType,
 } from '@/types/websocket';
 import { createNullVideo, handleUserMedia } from '@/utils';
+import { getWssUrl } from '@/utils/localStorage/app';
 import {
   WebSocketClass,
   prettierReceiveWsMsg,
@@ -78,6 +78,7 @@ export const useWebsocket = () => {
   const isAnchor = ref(false);
   const isRemoteDesk = ref(false);
   const remoteDeskUserUuid = ref('');
+  const remoteDeskUserPassword = ref('');
   const deskUserUuid = ref('');
   const deskUserPassword = ref('');
   const anchorInfo = ref<IUser>();
@@ -128,21 +129,7 @@ export const useWebsocket = () => {
     return networkStore.wsMap.get(roomId.value)?.socketIo?.id || '-1';
   });
 
-  function handleHeartbeat() {
-    if (isRemoteDesk.value) return;
-    clearInterval(loopHeartbeatTimer.value);
-    loopHeartbeatTimer.value = setInterval(() => {
-      const ws = networkStore.wsMap.get(roomId.value);
-      if (!ws) return;
-      ws.send<WsHeartbeatType['data']>({
-        requestId: getRandomString(8),
-        msgType: WsMsgTypeEnum.heartbeat,
-        data: {
-          live_room_id: Number(roomId.value),
-        },
-      });
-    }, 1000 * 5);
-  }
+  function handleHeartbeat() {}
 
   function handleSendGetLiveUser(liveRoomId: number) {
     loopGetLiveUserTimer.value = setInterval(() => {
@@ -642,6 +629,7 @@ export const useWebsocket = () => {
         prettierReceiveWsMsg(WsMsgTypeEnum.billdDeskJoined, data);
         appStore.setLiveRoomInfo(data.live_room);
         anchorInfo.value = data.anchor_info;
+        joinedReceiver.value = data.receiver!;
       }
     );
 
@@ -821,7 +809,7 @@ export const useWebsocket = () => {
     }
     new WebSocketClass({
       roomId: roomId.value,
-      url: WEBSOCKET_URL,
+      url: getWssUrl() || WEBSOCKET_URL,
       isAnchor: data.isAnchor,
     });
     initReceive();
@@ -835,6 +823,7 @@ export const useWebsocket = () => {
     deskUserUuid,
     deskUserPassword,
     remoteDeskUserUuid,
+    remoteDeskUserPassword,
     connectStatus,
     mySocketId,
     canvasVideoStream,

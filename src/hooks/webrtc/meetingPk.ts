@@ -56,7 +56,7 @@ export const useWebRtcMeetingPk = () => {
       sender: string;
       receiver: string;
     }) => {
-      console.log('meetingPk的sendOffer', {
+      console.log('meetingOne的sendOffer', {
         sender,
         receiver,
       });
@@ -67,13 +67,13 @@ export const useWebRtcMeetingPk = () => {
         if (rtc) {
           anchorStream.value?.getTracks().forEach((track) => {
             if (anchorStream.value) {
-              console.log('meetingPk的sendOffer插入track', track.kind, track);
+              console.log('meetingOne的sendOffer插入track', track.kind, track);
               rtc.peerConnection?.addTrack(track, anchorStream.value);
             }
           });
           const offerSdp = await rtc.createOffer();
           if (!offerSdp) {
-            console.error('meetingPk的offerSdp为空');
+            console.error('meetingOne的offerSdp为空');
             return;
           }
           await rtc.setLocalDescription(offerSdp!);
@@ -92,7 +92,8 @@ export const useWebRtcMeetingPk = () => {
           console.error('rtc不存在');
         }
       } catch (error) {
-        console.error('meetingPk的sendOffer错误');
+        console.error('meetingOne的sendOffer错误');
+        console.log(error);
       }
     },
     /**
@@ -107,7 +108,7 @@ export const useWebRtcMeetingPk = () => {
       sender: string;
       receiver: string;
     }) => {
-      console.log('meetingPk的sendAnswer', {
+      console.log('meetingOne的sendAnswer', {
         sender,
         receiver,
       });
@@ -119,13 +120,13 @@ export const useWebRtcMeetingPk = () => {
           await rtc.setRemoteDescription(sdp);
           userStream.value?.getTracks().forEach((track) => {
             if (userStream.value) {
-              console.log('meetingPk的sendAnswer插入track');
+              console.log('meetingOne的sendAnswer插入track');
               rtc.peerConnection?.addTrack(track, userStream.value);
             }
           });
           const answerSdp = await rtc.createAnswer();
           if (!answerSdp) {
-            console.error('meetingPk的answerSdp为空');
+            console.error('meetingOne的answerSdp为空');
             return;
           }
           await rtc.setLocalDescription(answerSdp);
@@ -143,17 +144,8 @@ export const useWebRtcMeetingPk = () => {
           console.error('rtc不存在');
         }
       } catch (error) {
-        console.error('meetingPk的sendAnswer错误');
+        console.error('meetingOne的sendAnswer错误');
         console.log(error);
-      }
-    },
-    addTrack: ({ stream, receiver }: { stream; receiver: string }) => {
-      const rtc = networkStore.rtcMap.get(receiver);
-      if (rtc) {
-        stream.getTracks().forEach((track) => {
-          console.log('meetingPk的sendOffer插入track666', track.kind, track);
-          rtc.peerConnection?.addTrack(track, stream);
-        });
       }
     },
   };

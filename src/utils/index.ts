@@ -1,6 +1,40 @@
 // TIP: ctrl+cmd+t,生成函数注释
+
 import { computeBox, getRangeRandom } from 'billd-utils';
 import sparkMD5 from 'spark-md5';
+
+import { IIpcRendererData } from '@/interface';
+
+export const ipcRenderer = window.electronAPI?.ipcRenderer;
+
+const ipcRendererOnMap = {};
+
+export function ipcRendererSend(data: IIpcRendererData) {
+  console.log('ipcRendererSend', data.channel, data.data);
+  ipcRenderer?.send(data.channel, {
+    requestId: data.requestId,
+    data: { windowId: data.windowId, ...data.data },
+  });
+}
+export function ipcRendererInvoke(data: IIpcRendererData) {
+  console.log('ipcRendererInvoke', data.channel, data.data);
+  return ipcRenderer?.invoke(data.channel, {
+    requestId: data.requestId,
+    data: { windowId: data.windowId, ...data.data },
+  });
+}
+
+export function ipcRendererOn(channel, cb) {
+  if (ipcRendererOnMap[channel]) return;
+  ipcRendererOnMap[channel] = true;
+  console.log('ipcRendererOn', channel);
+  ipcRenderer?.on(channel, cb);
+}
+
+export function ipcRendererOff(channel, cb) {
+  console.log('ipcRendererOff', channel);
+  ipcRenderer?.removeListener(channel, cb);
+}
 
 /** 设置约束 */
 export async function handlConstraints(data: {
@@ -514,15 +548,6 @@ export const createVideo = ({
   videoEl.oncontextmenu = (e) => {
     e.preventDefault();
   };
-  setTimeout(() => {
-    if (autoplay) {
-      try {
-        videoEl.play();
-      } catch (error) {
-        console.log('play失败', error);
-      }
-    }
-  }, 0);
   if (appendChild) {
     if (!show) {
       videoEl.style.width = `1px`;
@@ -571,8 +596,8 @@ export function videoFullBox(data: {
       maxWidth: wrapSize.width,
       minWidth: wrapSize.width,
     });
-    videoEl.style.width = `${Number(res.width.toFixed()) as number}px`;
-    videoEl.style.height = `${Number(res.height.toFixed()) as number}px`;
+    videoEl.style.width = `${res.width as number}px`;
+    videoEl.style.height = `${res.height as number}px`;
     videoEl.setAttribute('resolution-width', width);
     videoEl.setAttribute('resolution-height', height);
   }
@@ -617,8 +642,8 @@ export function videoToCanvas(data: {
       maxWidth: wrapSize.width,
       minWidth: wrapSize.width,
     });
-    canvas.style.width = `${Number(res.width.toFixed()) as number}px`;
-    canvas.style.height = `${Number(res.height.toFixed()) as number}px`;
+    canvas.style.width = `${res.width as number}px`;
+    canvas.style.height = `${res.height as number}px`;
   }
   setVideoSize({ width: w, height: h });
   data.videoResize?.({ w, h });

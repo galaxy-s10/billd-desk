@@ -38,17 +38,27 @@ export const useNetworkStore = defineStore('network', {
       }
       this.rtcMap.delete(socketId);
     },
-    removeAllWs() {
+    removeAllWsAndRtc() {
       this.wsMap.forEach((item) => {
-        item.close?.();
+        item.close();
+      });
+      this.rtcMap.forEach((item) => {
+        item.close();
       });
       this.wsMap.clear();
+      this.rtcMap.clear();
     },
     removeAllRtc() {
       this.rtcMap.forEach((item) => {
-        item.close?.();
+        item.close();
       });
       this.rtcMap.clear();
+    },
+    removeAllWs() {
+      this.wsMap.forEach((item) => {
+        item.close();
+      });
+      this.wsMap.clear();
     },
   },
 });

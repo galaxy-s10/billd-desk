@@ -1,11 +1,8 @@
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 
-import { DEFAULT_AUTH_INFO } from '@/constant';
 import { MediaTypeEnum } from '@/interface';
-import { useUserStore } from '@/store/user';
 
 export const useRTCParams = () => {
-  const userStore = useUserStore();
   const maxBitrate = ref([
     {
       label: '1',
@@ -37,26 +34,26 @@ export const useRTCParams = () => {
       value: 4000,
       disabled: false,
     },
-    {
-      label: '5000',
-      value: 5000,
-      disabled: false,
-    },
-    {
-      label: '6000',
-      value: 6000,
-      disabled: false,
-    },
-    {
-      label: '7000',
-      value: 7000,
-      disabled: false,
-    },
-    {
-      label: '8000',
-      value: 8000,
-      disabled: false,
-    },
+    // {
+    //   label: '5000',
+    //   value: 5000,
+    //   disabled: false,
+    // },
+    // {
+    //   label: '6000',
+    //   value: 6000,
+    //   disabled: false,
+    // },
+    // {
+    //   label: '7000',
+    //   value: 7000,
+    //   disabled: false,
+    // },
+    // {
+    //   label: '8000',
+    //   value: 8000,
+    //   disabled: false,
+    // },
   ]);
   const maxFramerate = ref([
     {
@@ -166,32 +163,7 @@ export const useRTCParams = () => {
       disabled: false,
     },
   ]);
-  watch(
-    () => userStore.userInfo,
-    (newval) => {
-      if (newval) {
-        if (
-          userStore.userInfo?.auths?.find(
-            (v) => v.auth_value === DEFAULT_AUTH_INFO.LIVE_PULL_SVIP.auth_value
-          )
-        ) {
-          maxBitrate.value = maxBitrate.value.map((item) => {
-            item.disabled = false;
-            return item;
-          });
-          maxFramerate.value = maxFramerate.value.map((item) => {
-            item.disabled = false;
-            return item;
-          });
-          resolutionRatio.value = resolutionRatio.value.map((item) => {
-            item.disabled = false;
-            return item;
-          });
-        }
-      }
-    },
-    { immediate: true }
-  );
+
   const allMediaTypeList: Record<string, { type: MediaTypeEnum; txt: string }> =
     {
       [MediaTypeEnum.camera]: {

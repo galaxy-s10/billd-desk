@@ -1,6 +1,5 @@
 node_modules
 dist
 components.d.ts
-.eslintcache
 .DS_Store
 deploy/index.js

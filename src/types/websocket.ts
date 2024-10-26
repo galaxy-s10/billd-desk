@@ -73,6 +73,7 @@ export enum WsMsgTypeEnum {
 
   msrBlob = 'msrBlob',
   batchSendOffer = 'batchSendOffer',
+  fileTransfer = 'fileTransfer',
 
   changeMaxBitrate = 'changeMaxBitrate',
   changeMaxFramerate = 'changeMaxFramerate',
@@ -130,27 +131,27 @@ export interface IWsFormat<T> {
 }
 
 export type WsChangeMaxBitrateType = IWsFormat<{
-  live_room_id: number;
+  live_room_id: number | string;
   val: number;
 }>;
 
 export type WsChangeMaxFramerateType = IWsFormat<{
-  live_room_id: number;
+  live_room_id: number | string;
   val: number;
 }>;
 
 export type WsChangeResolutionRatioType = IWsFormat<{
-  live_room_id: number;
+  live_room_id: number | string;
   val: number;
 }>;
 
 export type WsChangeVideoContentHintType = IWsFormat<{
-  live_room_id: number;
+  live_room_id: number | string;
   val: string;
 }>;
 
 export type WsChangeAudioContentHintType = IWsFormat<{
-  live_room_id: number;
+  live_room_id: number | string;
   val: string;
 }>;
 
@@ -167,17 +168,6 @@ export type WSLivePkKeyType = IWsFormat<{
 
 /** 获取在线用户 */
 export type WSGetRoomAllUserType = IWsFormat<{
-  liveUser: ILiveUser[];
-}>;
-
-/** 直播pk秘钥 */
-export type WsLivePkKeyType = IWsFormat<{
-  live_room_id: number;
-  key: string;
-}>;
-
-/** 获取在线用户 */
-export type WsGetRoomAllUserType = IWsFormat<{
   liveUser: ILiveUser[];
 }>;
 
@@ -275,6 +265,10 @@ export type WsJoinType = IWsFormat<{
   user_info?: IUser;
   isRemoteDesk?: boolean;
   socket_list?: string[];
+  deskUserUuid?: string;
+  deskUserPassword?: string;
+  remoteDeskUserUuid?: string;
+  receiver?: string;
 }>;
 
 /** 用户离开直播间 */
@@ -297,11 +291,6 @@ export type WsMsrBlobType = IWsFormat<{
   delay: number;
   /** 单位：毫秒 */
   max_delay: number;
-}>;
-
-export type WsBatchSendOffer = IWsFormat<{
-  roomId: string;
-  socket_list?: string[];
 }>;
 
 export type WsOfferType = IReqWsFormat<{
@@ -346,6 +335,8 @@ export enum BilldDeskBehaviorEnum {
   scrollRight,
 
   keyboardType,
+  keyboardPressKey,
+  keyboardReleaseKey,
 }
 
 export type WsBilldDeskStartRemote = IReqWsFormat<{
@@ -360,6 +351,7 @@ export type WsBilldDeskStartRemote = IReqWsFormat<{
   deskUserUuid: string;
   deskUserPassword: string;
   remoteDeskUserUuid: string;
+  remoteDeskUserPassword: string;
 }>;
 
 export type WsBilldDeskBehaviorType = IReqWsFormat<{

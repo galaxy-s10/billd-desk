@@ -1,24 +1,64 @@
 import { UploadFileInfo } from 'naive-ui';
 import { defineStore } from 'pinia';
 
-import { LiveLineEnum, LiveRenderEnum, MediaTypeEnum } from '@/interface';
+import {
+  IDeskVersion,
+  LiveLineEnum,
+  LiveRenderEnum,
+  MediaTypeEnum,
+} from '@/interface';
+import { mobileRouterName } from '@/router';
 import { ILiveRoom } from '@/types/ILiveRoom';
 
 export type AppRootState = {
-  // remoteDesk: {
-  //   sender: string;
-  //   isClose: boolean;
-  // };
+  showDebug: boolean;
+  version: string;
+  updateModalInfo?: {
+    version: string;
+    show_version: string;
+    isUpdate: number;
+    forceUpdate: number;
+    checkUpdate: number;
+    updateContent: string;
+    updateDate: string;
+    download: {
+      macos_dmg: string;
+      window_64_exe: string;
+      window_32_exe: string;
+      window_arm_exe: string;
+      linux_64_deb: string;
+      linux_64_tar: string;
+      linux_arm_deb: string;
+      linux_arm_tar: string;
+    };
+    disableList: {
+      version: string;
+      msg: string;
+    }[];
+    remark: string;
+  };
+  deskVersionInfo?: IDeskVersion;
+  lastBuildDate: string;
+  scaleFactor: number;
+  windowId: number;
+  workAreaSize: {
+    width: number;
+    height: number;
+  };
+  primaryDisplaySize: {
+    width: number;
+    height: number;
+  };
   remoteDesk: Map<
     string,
     {
       sender: string;
       isClose: boolean;
-      maxBitrate?: number;
-      maxFramerate?: number;
-      resolutionRatio?: number;
-      audioContentHint?: string;
-      videoContentHint?: string;
+      maxBitrate: number;
+      maxFramerate: number;
+      resolutionRatio: number;
+      audioContentHint: string;
+      videoContentHint: string;
     }
   >;
   playing: boolean;
@@ -81,6 +121,15 @@ export type AppRootState = {
 export const useAppStore = defineStore('app', {
   state: (): AppRootState => {
     return {
+      showDebug: false,
+      version: '',
+      updateModalInfo: undefined,
+      deskVersionInfo: undefined,
+      lastBuildDate: '',
+      scaleFactor: 1,
+      windowId: -1,
+      workAreaSize: { width: 0, height: 0 },
+      primaryDisplaySize: { width: 0, height: 0 },
       remoteDesk: new Map(),
       playing: false,
       videoRatio: 16 / 9,
@@ -90,8 +139,12 @@ export const useAppStore = defineStore('app', {
       videoControlsValue: {
         pipMode: false,
       },
-      normalVolume: 80,
-      navList: [],
+      normalVolume: 70,
+      navList: [
+        { routeName: mobileRouterName.h5, name: '频道' },
+        { routeName: mobileRouterName.h5Rank, name: '排行' },
+        { routeName: mobileRouterName.h5Profile, name: '我的' },
+      ],
       allTrack: [],
       liveLine: LiveLineEnum.hls,
       liveRoomInfo: undefined,

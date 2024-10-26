@@ -1,9 +1,10 @@
+export * from '@/pure-interface';
 import {
   ILiveRoom,
   LiveRoomIsShowEnum,
   LiveRoomStatusEnum,
-} from './types/ILiveRoom';
-import { IUser } from './types/IUser';
+} from '@/types/ILiveRoom';
+import { IUser } from '@/types/IUser';
 
 export interface IFlvStatistics {
   url: string;
@@ -428,6 +429,37 @@ export interface BilldHtmlWebpackPluginLog {
   committerName: string;
   committerEmail: string;
   lastBuildDate: string;
+}
+
+export interface IDeskVersion {
+  id?: number;
+  /** 1:强制更新; 2:不强制更新 */
+  force?: number;
+  /** 版本 */
+  version?: string;
+  /** 显示版本 */
+  show_version?: string;
+  /** 更新内容 */
+  update_content?: string;
+  /** 更新日期 */
+  update_date?: string;
+  /** 是否禁用，1:禁用; 2:不禁用 */
+  disable?: number;
+  /** 禁用消息 */
+  disable_msg?: number;
+  download_macos_dmg?: string;
+  download_window_64_exe?: string;
+  download_window_32_exe?: string;
+  download_window_arm_exe?: string;
+  download_linux_64_deb?: string;
+  download_linux_64_tar?: string;
+  download_linux_arm_deb?: string;
+  download_linux_arm_tar?: string;
+  remark?: string;
+
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
 }
 
 export enum PlatformEnum {
