@@ -40,6 +40,7 @@
     "@nut-tree/nut-js": "^4.0.0",
     "@nut-tree/shared": "^4.0.0",
     "@vicons/ionicons5": "^0.12.0",
+    "@vueuse/core": "^11.1.0",
     "@webav/av-recorder": "^0.3.3",
     "axios": "^1.2.1",
     "billd-deploy": "^1.0.25",

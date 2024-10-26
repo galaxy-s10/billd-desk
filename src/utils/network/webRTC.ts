@@ -174,7 +174,7 @@ export class WebRTCClass {
     this.prettierLog({ msg: 'createOffer开始', type: 'warn' });
     try {
       const sdp = await this.peerConnection.createOffer();
-      this.prettierLog({ msg: 'createOffer成功', type: 'warn' });
+      this.prettierLog({ msg: 'createOffer成功', type: 'success' });
       return sdp;
     } catch (error) {
       this.prettierLog({ msg: 'createOffer失败', type: 'error' });
@@ -188,7 +188,7 @@ export class WebRTCClass {
     this.prettierLog({ msg: 'createAnswer开始', type: 'warn' });
     try {
       const sdp = await this.peerConnection.createAnswer();
-      this.prettierLog({ msg: 'createAnswer成功', type: 'warn' });
+      this.prettierLog({ msg: 'createAnswer成功', type: 'success' });
       return sdp;
     } catch (error) {
       this.prettierLog({ msg: 'createAnswer失败', type: 'error' });
@@ -201,7 +201,7 @@ export class WebRTCClass {
     this.prettierLog({ msg: 'addIceCandidate开始', type: 'warn' });
     try {
       await this.peerConnection?.addIceCandidate(candidate);
-      this.prettierLog({ msg: 'addIceCandidate成功', type: 'warn' });
+      this.prettierLog({ msg: 'addIceCandidate成功', type: 'success' });
     } catch (error) {
       this.prettierLog({ msg: 'addIceCandidate错误', type: 'error' });
       console.error(error);
@@ -214,7 +214,7 @@ export class WebRTCClass {
     this.prettierLog({ msg: 'setLocalDescription开始', type: 'warn' });
     try {
       await this.peerConnection.setLocalDescription(sdp);
-      this.prettierLog({ msg: 'setLocalDescription成功', type: 'warn' });
+      this.prettierLog({ msg: 'setLocalDescription成功', type: 'success' });
     } catch (error) {
       this.prettierLog({ msg: 'setLocalDescription失败', type: 'error' });
       console.error(error);
@@ -227,7 +227,7 @@ export class WebRTCClass {
     this.prettierLog({ msg: 'setRemoteDescription开始', type: 'warn' });
     try {
       await this.peerConnection.setRemoteDescription(sdp);
-      this.prettierLog({ msg: 'setRemoteDescription成功', type: 'warn' });
+      this.prettierLog({ msg: 'setRemoteDescription成功', type: 'success' });
     } catch (error) {
       this.prettierLog({ msg: 'setRemoteDescription失败', type: 'error' });
       console.error(error);
@@ -360,7 +360,7 @@ export class WebRTCClass {
             candidate: event.candidate,
             sender: this.sender,
             receiver: this.receiver,
-            live_room_id: Number(this.roomId),
+            live_room_id: this.roomId,
           },
         });
       } else {

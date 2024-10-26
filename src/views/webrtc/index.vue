@@ -1,173 +1,178 @@
 <template>
-  <div>
-    <div>
-      <!-- <div v-if="NODE_ENV === 'development'"> -->
-      <div>version：-</div>
-      <div>wss：{{ WEBSOCKET_URL }}</div>
-      <div>axios：{{ AXIOS_BASEURL }}</div>
-      <div>
-        github：<span
-          class="link"
-          @click="openToTarget(PROJECT_GITHUB)"
-        >
-          {{ PROJECT_GITHUB }}
-        </span>
-      </div>
-      <div>
-        客户端下载：<span
-          class="link"
-          @click="openToTarget(DOWNLOAD_DESK_URL)"
-        >
-          {{ DOWNLOAD_DESK_URL }}
-        </span>
-      </div>
-    </div>
-    <div>
-      <n-input-group>
-        <n-input-group-label>socketId</n-input-group-label>
-        <n-input
-          v-model:value="mySocketId"
-          :style="{ width: '200px' }"
-          disabled
-          placeholder=""
-        />
-        <n-button @click="handleCopy(mySocketId)">复制</n-button>
-      </n-input-group>
-      <n-input-group>
-        <n-input-group-label>主控uuid</n-input-group-label>
-        <n-input
-          v-model:value="cacheStore.deskUserUuid"
-          :style="{ width: '200px' }"
-          disabled
-          placeholder=""
-        />
-        <n-button @click="handleCopy(cacheStore.deskUserUuid)">复制</n-button>
-        <n-button @click="handleReset">重置</n-button>
-      </n-input-group>
-      <n-input-group>
-        <n-input-group-label>主控密码</n-input-group-label>
-        <n-input
-          v-model:value="cacheStore.deskUserPassword"
-          :style="{ width: '200px' }"
-          @blur="handleUpdatePassword"
-          placeholder=""
-        />
-        <n-button @click="handleCopy(cacheStore.deskUserPassword)"
-          >复制</n-button
-        >
-      </n-input-group>
-      <n-input-group>
-        <n-input-group-label>被控uuid</n-input-group-label>
-        <n-input
-          :style="{ width: '200px' }"
-          placeholder=""
-          v-model:value="cacheStore.remoteDeskUserUuid"
-        />
-        <n-button
-          type="error"
-          @click="handleClose"
-          v-if="appStore.remoteDesk.size"
-        >
-          结束远程
-        </n-button>
-        <n-button
-          v-else
-          type="primary"
-          @click="handleRemote"
-        >
-          开始远程
-        </n-button>
-      </n-input-group>
-    </div>
-    <div class="rtc-config">
-      <div class="item">
-        <div class="txt">码率：</div>
-        <div class="down">
-          <n-select
-            size="small"
-            v-model:value="currentMaxBitrate"
-            :options="maxBitrate"
-          />
-        </div>
-      </div>
-      <div class="item">
-        <div class="txt">帧率：</div>
-        <div class="down">
-          <n-select
-            size="small"
-            v-model:value="currentMaxFramerate"
-            :options="maxFramerate"
-          />
-        </div>
-      </div>
-      <div class="item">
-        <div class="txt">分辨率：</div>
-        <div class="down big">
-          <n-select
-            size="small"
-            v-model:value="currentResolutionRatio"
-            :options="resolutionRatio"
-          />
-        </div>
-      </div>
-      <div class="item">
-        <div class="txt">视频内容：</div>
-        <div class="down">
-          <n-select
-            size="small"
-            v-model:value="currentVideoContentHint"
-            :options="videoContentHint"
-          />
-        </div>
-      </div>
-      <div class="item">
-        <div class="txt">音频内容：</div>
-        <div class="down big">
-          <n-select
-            size="small"
-            v-model:value="currentAudioContentHint"
-            :options="audioContentHint"
-          />
-        </div>
-      </div>
-    </div>
-    <div class="rtc-config">
-      <div class="item">
-        <div class="txt">模式：</div>
-        <n-radio
-          :checked="isWatchMode === 'on'"
-          value="on"
-          name="basic-demo"
-          @change="handleChange"
-        >
-          观看模式
-        </n-radio>
-        <n-radio
-          :checked="isWatchMode === 'off'"
-          value="off"
-          name="basic-demo"
-          @change="handleChange"
-        >
-          控制模式
-        </n-radio>
-      </div>
-    </div>
-    <div class="info">
-      <span class="item">
-        分辨率：<span v-if="videoSettings?.width">
-          {{ videoSettings?.width || '-' }}x{{ videoSettings?.height || '-' }}
-        </span>
-        <span v-else>-</span>
+  <div class="webrtc-wrap">
+    <div
+      class="drag"
+      :style="style"
+      ref="dragEl"
+    >
+      <span
+        class="txt"
+        @click="showDetail = !showDetail"
+      >
+        连接详情
       </span>
-      <span class="item">
-        帧率：{{ videoSettings?.frameRate?.toFixed(2) || '-' }}
-      </span>
-      <span class="item">延迟：{{ rtcRtt || '-' }}</span>
-      <span class="item">丢包：{{ rtcLoss || '-' }}</span>
+      <div
+        class="info"
+        :class="{ show: showDetail }"
+      >
+        <div>wss：{{ WEBSOCKET_URL }}</div>
+        <div>axios：{{ AXIOS_BASEURL }}</div>
+        <n-button @click="windowReload">刷新页面</n-button>
+        <n-button @click="handleDebug">打开调试</n-button>
+        <div>
+          <span class="item">
+            分辨率：<span v-if="videoSettings?.width">
+              {{ videoSettings?.width || '-' }}x{{
+                videoSettings?.height || '-'
+              }}
+            </span>
+            <span v-else>-</span>
+          </span>
+          <span class="item">
+            帧率：{{ videoSettings?.frameRate?.toFixed(2) || '-' }}
+          </span>
+        </div>
+        <n-input-group>
+          <n-input-group-label>roomId</n-input-group-label>
+          <n-input
+            v-model:value="roomId"
+            :style="{ width: '200px' }"
+            disabled
+            placeholder=""
+          />
+        </n-input-group>
+
+        <n-input-group>
+          <n-input-group-label>主控uuid</n-input-group-label>
+          <n-input
+            v-model:value="deskUserUuid"
+            :style="{ width: '200px' }"
+            disabled
+            placeholder=""
+          />
+        </n-input-group>
+        <n-input-group>
+          <n-input-group-label>被控uuid</n-input-group-label>
+          <n-input
+            v-model:value="remoteDeskUserUuid"
+            :style="{ width: '200px' }"
+            disabled
+            placeholder=""
+          />
+        </n-input-group>
+        <n-input-group>
+          <n-button>我的设备</n-button>
+          <n-input
+            v-model:value="mySocketId"
+            :style="{ width: '200px' }"
+            disabled
+            placeholder=""
+          />
+          <n-button @click="handleCopy(mySocketId)">复制</n-button>
+        </n-input-group>
+
+        <n-input-group>
+          <n-button>控制设备</n-button>
+          <n-input
+            v-model:value="receiverId"
+            :style="{ width: '200px' }"
+            disabled
+            placeholder=""
+          />
+          <n-button @click="handleCopy(receiverId)">复制</n-button>
+        </n-input-group>
+        <div class="rtc-info">
+          <span class="item">
+            分辨率：<span v-if="videoSettings?.width">
+              {{ videoSettings?.width || '-' }}x{{
+                videoSettings?.height || '-'
+              }}
+            </span>
+            <span v-else>-</span>
+          </span>
+          <span class="item">
+            帧率：{{ videoSettings?.frameRate?.toFixed(2) || '-' }}
+          </span>
+          <span class="item">延迟：{{ rtcRtt || '-' }}</span>
+          <span class="item">丢包：{{ rtcLoss || '-' }}</span>
+        </div>
+        <div class="rtc-config">
+          <div class="item">
+            <div class="txt">模式：</div>
+            <n-radio
+              :checked="isWatchMode === 'on'"
+              value="on"
+              name="basic-demo"
+              @change="handleChange"
+            >
+              观看模式
+            </n-radio>
+            <n-radio
+              :checked="isWatchMode === 'off'"
+              value="off"
+              name="basic-demo"
+              @change="handleChange"
+            >
+              控制模式
+            </n-radio>
+          </div>
+          <div class="item">
+            <div class="txt">码率：</div>
+            <div class="down">
+              <n-select
+                size="small"
+                v-model:value="currentMaxBitrate"
+                :options="maxBitrate"
+              />
+            </div>
+          </div>
+          <div class="item">
+            <div class="txt">帧率：</div>
+            <div class="down">
+              <n-select
+                size="small"
+                v-model:value="currentMaxFramerate"
+                :options="maxFramerate"
+              />
+            </div>
+          </div>
+          <div class="item">
+            <div class="txt">分辨率：</div>
+            <div class="down big">
+              <n-select
+                size="small"
+                v-model:value="currentResolutionRatio"
+                :options="resolutionRatio"
+              />
+            </div>
+          </div>
+          <div class="item">
+            <div class="txt">视频内容：</div>
+            <div class="down">
+              <n-select
+                size="small"
+                v-model:value="currentVideoContentHint"
+                :options="videoContentHint"
+              />
+            </div>
+          </div>
+          <div class="item">
+            <div class="txt">音频内容：</div>
+            <div class="down big">
+              <n-select
+                size="small"
+                v-model:value="currentAudioContentHint"
+                :options="audioContentHint"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
     <div
       :class="{ wrap: 1, watch: isWatchMode === 'on' }"
-      ref="remoteVideoRef"
+      ref="videoWrapRef"
       @mousedown="handleMouseDown"
       @mousemove="handleMouseMove"
       @mouseup="handleMouseUp"
@@ -179,27 +184,22 @@
 
 <script lang="ts" setup>
 import { Key } from '@nut-tree/shared';
-import { copyToClipBoard, getRandomString, openToTarget } from 'billd-utils';
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { useDraggable } from '@vueuse/core';
+import {
+  computeBox,
+  copyToClipBoard,
+  getRandomString,
+  windowReload,
+} from 'billd-utils';
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
-import {
-  fetchDeskUserCreate,
-  fetchDeskUserLogin,
-  fetchDeskUserUpdateByUuid,
-  fetchFindReceiverByUuid,
-} from '@/api/deskUser';
-import {
-  AXIOS_BASEURL,
-  DOWNLOAD_DESK_URL,
-  PROJECT_GITHUB,
-  WEBSOCKET_URL,
-} from '@/constant';
-import { usePull } from '@/hooks/use-pull';
+import { AXIOS_BASEURL, WEBSOCKET_URL } from '@/constant';
 import { useRTCParams } from '@/hooks/use-rtcParams';
 import { closeUseTip, useTip } from '@/hooks/use-tip';
+import { useWebsocket } from '@/hooks/use-websocket';
 import { useWebRtcRemoteDesk } from '@/hooks/webrtc/remoteDesk';
 import { useAppStore } from '@/store/app';
-import { usePiniaCacheStore } from '@/store/cache';
 import { useNetworkStore } from '@/store/network';
 import {
   BilldDeskBehaviorEnum,
@@ -219,15 +219,21 @@ import {
   handlConstraints,
   setAudioTrackContentHints,
   setVideoTrackContentHints,
+  videoFullBox,
 } from '@/utils';
-import { getPassword, setPassword, setUuid } from '@/utils/localStorage/user';
 import { WebRTCClass } from '@/utils/network/webRTC';
 
-const num = '123456';
+const roomId = ref('');
+const route = useRoute();
 const appStore = useAppStore();
 const networkStore = useNetworkStore();
-const cacheStore = usePiniaCacheStore();
-const { videoWrapRef, initPull, connectStatus } = usePull(num);
+const {
+  initWs,
+  remoteDeskUserUuid,
+  deskUserUuid,
+  deskUserPassword,
+  connectStatus,
+} = useWebsocket();
 const {
   maxBitrate,
   maxFramerate,
@@ -242,25 +248,31 @@ const { updateWebRtcRemoteDeskConfig, webRtcRemoteDesk } =
 const anchorStream = ref<MediaStream>();
 const rtc = ref<WebRTCClass>();
 
-const password = ref(getPassword());
 const isWatchMode = ref<'on' | 'off'>('on');
+
+const showDetail = ref(true);
+const dragEl = ref<HTMLDivElement>();
+const { style } = useDraggable(dragEl, {
+  initialValue: { x: 40, y: 40 },
+});
 
 const currentMaxBitrate = ref(maxBitrate.value[3].value);
 const currentMaxFramerate = ref(maxFramerate.value[4].value);
 const currentResolutionRatio = ref(resolutionRatio.value[3].value);
 const currentVideoContentHint = ref(videoContentHint.value[3].value);
 const currentAudioContentHint = ref(audioContentHint.value[0].value);
-const tiemr = ref();
-const roomId = ref(num);
+const loopBilldDeskUpdateUserTimer = ref();
 const receiverId = ref('');
-const remoteVideoRef = ref<HTMLDivElement>();
+const videoWrapRef = ref<HTMLDivElement>();
 const isDown = ref(false);
 const loopGetSettingsTimer = ref();
 const videoSettings = ref<MediaTrackSettings>();
 let clickTimer;
 let isLongClick = false;
+const videoMap = ref(new Map());
+const showLoading = ref(true);
 const mySocketId = computed(() => {
-  return networkStore.wsMap.get(roomId.value)?.socketIo?.id || '-1';
+  return networkStore.wsMap.get(roomId.value)?.socketIo?.id || '';
 });
 
 const rtcRtt = computed(() => {
@@ -279,40 +291,141 @@ const rtcLoss = computed(() => {
   return arr.join();
 });
 
+function handleDebug() {}
+
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown);
-  remoteVideoRef.value?.removeEventListener('wheel', handleMouseWheel);
+  videoWrapRef.value?.removeEventListener('wheel', handleMouseWheel);
   handleClose();
-  clearInterval(tiemr.value);
+  clearInterval(loopBilldDeskUpdateUserTimer.value);
 });
 
 onMounted(() => {
-  clearInterval(tiemr.value);
-  tiemr.value = setInterval(() => {
+  console.log(route.query);
+  if (route.query['roomId'] !== undefined) {
+    // @ts-ignore
+    roomId.value = route.query['roomId'];
+  }
+  if (route.query['maxBitrate'] !== undefined) {
+    // @ts-ignore
+    currentMaxBitrate.value = route.query['maxBitrate'];
+  }
+  if (route.query['maxFramerate'] !== undefined) {
+    // @ts-ignore
+    currentMaxFramerate.value = route.query['maxFramerate'];
+  }
+  if (route.query['resolutionRatio'] !== undefined) {
+    // @ts-ignore
+    currentResolutionRatio.value = route.query['resolutionRatio'];
+  }
+  if (route.query['videoContentHint'] !== undefined) {
+    // @ts-ignore
+    currentVideoContentHint.value = route.query['videoContentHint'];
+  }
+  if (route.query['audioContentHint'] !== undefined) {
+    // @ts-ignore
+    currentAudioContentHint.value = route.query['audioContentHint'];
+  }
+  if (route.query['deskUserUuid'] !== undefined) {
+    // @ts-ignore
+    deskUserUuid.value = route.query['deskUserUuid'];
+  }
+  if (route.query['deskUserPassword'] !== undefined) {
+    // @ts-ignore
+    deskUserPassword.value = route.query['deskUserPassword'];
+  }
+  if (route.query.remoteDeskUserUuid !== undefined) {
+    remoteDeskUserUuid.value = `${route.query.remoteDeskUserUuid as string}`;
+  } else {
+    window.$message.error('remoteDeskUserUuid为空');
+    return;
+  }
+  handleInit();
+});
+
+function handleInit() {
+  handleLoopBilldDeskUpdateUserTimer();
+  initWs({
+    roomId: roomId.value,
+    isAnchor: false,
+    isRemoteDesk: true,
+  });
+  videoWrapRef.value?.addEventListener('wheel', handleMouseWheel);
+  window.addEventListener('keydown', handleKeyDown);
+  loopGetSettings();
+}
+
+function handleLoopBilldDeskUpdateUserTimer() {
+  clearInterval(loopBilldDeskUpdateUserTimer.value);
+  loopBilldDeskUpdateUserTimer.value = setInterval(() => {
     networkStore.wsMap.get(roomId.value)?.send<WsBilldDeskStartRemote['data']>({
       requestId: getRandomString(8),
       msgType: WsMsgTypeEnum.billdDeskUpdateUser,
       data: {
         roomId: roomId.value,
         sender: mySocketId.value,
-        receiver: receiverId.value,
+        receiver: '',
         maxBitrate: currentMaxBitrate.value,
         maxFramerate: currentMaxFramerate.value,
         resolutionRatio: currentResolutionRatio.value,
         videoContentHint: currentVideoContentHint.value,
         audioContentHint: currentAudioContentHint.value,
-        deskUserUuid: cacheStore.deskUserUuid,
-        deskUserPassword: cacheStore.deskUserPassword,
-        remoteDeskUserUuid: cacheStore.remoteDeskUserUuid,
+        deskUserUuid: deskUserUuid.value,
+        deskUserPassword: deskUserPassword.value,
+        remoteDeskUserUuid: remoteDeskUserUuid.value,
       },
     });
   }, 1000 * 2);
-  initUser();
-  remoteVideoRef.value?.addEventListener('wheel', handleMouseWheel);
-  videoWrapRef.value = remoteVideoRef.value;
-  window.addEventListener('keydown', handleKeyDown);
-  loopGetSettings();
-});
+}
+
+watch(
+  () => networkStore.rtcMap,
+  (newVal) => {
+    newVal.forEach((item) => {
+      if (videoWrapRef.value) {
+        if (videoMap.value.has(item.receiver)) {
+          return;
+        }
+        videoMap.value.set(item.receiver, 1);
+        item.videoEl.addEventListener('loadedmetadata', () => {
+          if (!videoWrapRef.value) return;
+          const rect = videoWrapRef.value.getBoundingClientRect();
+          const res = computeBox({
+            width: item.videoEl.videoWidth,
+            height: item.videoEl.videoHeight,
+            maxHeight: rect.height,
+            minHeight: rect.height,
+            maxWidth: rect.width,
+            minWidth: rect.width,
+          });
+          videoFullBox({
+            wrapSize: {
+              width: res.width,
+              height: res.height,
+            },
+            videoEl: item.videoEl,
+          });
+
+          showLoading.value = false;
+        });
+        videoWrapRef.value.appendChild(item.videoEl);
+      }
+    });
+    nextTick(() => {
+      if (videoWrapRef.value) {
+        if (newVal.size) {
+          videoWrapRef.value.style.display = 'inline-block';
+        } else {
+          videoWrapRef.value.style.removeProperty('display');
+        }
+      }
+    });
+  },
+  {
+    deep: true,
+    immediate: true,
+  }
+);
 
 watch(
   () => connectStatus.value,
@@ -328,11 +441,10 @@ watch(
 
 function handleWsMsg() {
   const ws = networkStore.wsMap.get(roomId.value);
-  if (!ws?.socketIo) return;
   // 收到billdDeskStartRemoteResult
-  ws.socketIo.on(
+  ws?.socketIo?.on(
     WsMsgTypeEnum.billdDeskStartRemoteResult,
-    async (data: WsBilldDeskStartRemoteResult['data']) => {
+    (data: WsBilldDeskStartRemoteResult['data']) => {
       console.log('收到billdDeskStartRemoteResult', data);
       if (data.code !== 0) {
         useTip({
@@ -341,44 +453,38 @@ function handleWsMsg() {
           hiddenClose: true,
         });
       } else {
-        if (!data.data) return;
-        if (data.data.receiver === mySocketId.value) {
-          if (data.data.maxBitrate !== undefined) {
-            currentMaxBitrate.value = data.data.maxBitrate;
-          }
-          if (data.data.maxFramerate !== undefined) {
-            currentMaxFramerate.value = data.data.maxFramerate;
-          }
-          if (data.data.resolutionRatio !== undefined) {
-            currentResolutionRatio.value = data.data.resolutionRatio;
-          }
-          if (data.data.videoContentHint !== undefined) {
-            currentVideoContentHint.value = data.data.videoContentHint;
-          }
-          if (data.data.audioContentHint !== undefined) {
-            currentAudioContentHint.value = data.data.audioContentHint;
-          }
-          const stream = await navigator.mediaDevices.getDisplayMedia({
-            audio: true,
-            video: true,
-          });
-          anchorStream.value = stream;
-          appStore.remoteDesk.set(data.data.sender, {
+        if (data.data) {
+          receiverId.value = data.data.receiver;
+          appStore.remoteDesk.set(data.data.receiver, {
+            audioContentHint: data.data.audioContentHint,
+            videoContentHint: data.data.videoContentHint,
             sender: data.data.sender,
             isClose: false,
             maxBitrate: data.data.maxBitrate,
             maxFramerate: data.data.maxFramerate,
             resolutionRatio: data.data.resolutionRatio,
-            videoContentHint: data.data.videoContentHint,
-            audioContentHint: data.data.audioContentHint,
           });
-          handleRTC(data.data.sender);
-        } else {
-          console.warn('不是和我远程');
         }
       }
     }
   );
+  ws?.send<WsBilldDeskStartRemote['data']>({
+    requestId: getRandomString(8),
+    msgType: WsMsgTypeEnum.billdDeskStartRemote,
+    data: {
+      roomId: roomId.value,
+      sender: mySocketId.value,
+      receiver: '',
+      maxBitrate: currentMaxBitrate.value,
+      maxFramerate: currentMaxFramerate.value,
+      resolutionRatio: currentResolutionRatio.value,
+      videoContentHint: currentVideoContentHint.value,
+      audioContentHint: currentAudioContentHint.value,
+      deskUserUuid: deskUserUuid.value,
+      deskUserPassword: deskUserPassword.value,
+      remoteDeskUserUuid: remoteDeskUserUuid.value,
+    },
+  });
 }
 
 async function handleRTC(receiver) {
@@ -438,13 +544,13 @@ function handleMouseWheel(e: WheelEvent) {
   if (!appStore.remoteDesk.size) {
     return;
   }
-  // console.log('handleMouseWheel', e);
   e.preventDefault();
+  const requestId = getRandomString(8);
   if (e.deltaY > 0) {
     networkStore.rtcMap
       .get(receiverId.value)
       ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
-        requestId: getRandomString(8),
+        requestId,
         msgType: WsMsgTypeEnum.billdDeskBehavior,
         data: {
           roomId: roomId.value,
@@ -458,10 +564,11 @@ function handleMouseWheel(e: WheelEvent) {
         },
       });
   } else if (e.deltaY < 0) {
+    const requestId = getRandomString(8);
     networkStore.rtcMap
       .get(receiverId.value)
       ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
-        requestId: getRandomString(8),
+        requestId,
         msgType: WsMsgTypeEnum.billdDeskBehavior,
         data: {
           roomId: roomId.value,
@@ -476,10 +583,11 @@ function handleMouseWheel(e: WheelEvent) {
       });
   }
   if (e.deltaX > 0) {
+    const requestId = getRandomString(8);
     networkStore.rtcMap
       .get(receiverId.value)
       ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
-        requestId: getRandomString(8),
+        requestId,
         msgType: WsMsgTypeEnum.billdDeskBehavior,
         data: {
           roomId: roomId.value,
@@ -493,10 +601,11 @@ function handleMouseWheel(e: WheelEvent) {
         },
       });
   } else if (e.deltaX < 0) {
+    const requestId = getRandomString(8);
     networkStore.rtcMap
       .get(receiverId.value)
       ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
-        requestId: getRandomString(8),
+        requestId,
         msgType: WsMsgTypeEnum.billdDeskBehavior,
         data: {
           roomId: roomId.value,
@@ -611,62 +720,6 @@ watch(
   }
 );
 
-function handleReset() {
-  cacheStore.deskUserUuid = '';
-  cacheStore.deskUserPassword = '';
-  initUser();
-}
-
-async function initUser() {
-  if (!cacheStore.deskUserUuid || !cacheStore.deskUserPassword) {
-    console.log('生成账号');
-    const res = await fetchDeskUserCreate();
-    if (res.code === 200) {
-      cacheStore.deskUserUuid = res.data.uuid!;
-      cacheStore.deskUserPassword = res.data.password!;
-      password.value = res.data.password!;
-      setUuid(res.data.uuid!);
-      setPassword(res.data.password!);
-      initPull({
-        isRemoteDesk: true,
-      });
-    }
-  } else {
-    const res = await fetchDeskUserLogin({
-      uuid: cacheStore.deskUserUuid,
-      password: cacheStore.deskUserPassword,
-    });
-    if (res.code === 200) {
-      setUuid(cacheStore.deskUserUuid);
-      setPassword(cacheStore.deskUserPassword);
-      initPull({
-        isRemoteDesk: true,
-      });
-    }
-  }
-}
-
-async function handleUpdatePassword() {
-  if (
-    password.value &&
-    password.value.length > 6 &&
-    password.value.length < 12
-  ) {
-    const res = await fetchDeskUserUpdateByUuid({
-      uuid: cacheStore.deskUserUuid!,
-      password: cacheStore.deskUserPassword!,
-      new_password: password.value!,
-    });
-    if (res.code === 200) {
-      setUuid(cacheStore.deskUserUuid!);
-      setPassword(password.value);
-    }
-    window.$message.success('更新密码成功！');
-  } else {
-    window.$message.warning('密码长度要求6-12位！');
-  }
-}
-
 function handleCopy(str) {
   copyToClipBoard(str);
   window.$message.success('复制成功');
@@ -723,11 +776,12 @@ function handleKeyDown(e: KeyboardEvent) {
     F23: Key.F23,
     F24: Key.F24,
   };
+  const requestId = getRandomString(8);
 
   networkStore.rtcMap
     .get(receiverId.value)
     ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
-      requestId: getRandomString(8),
+      requestId,
       msgType: WsMsgTypeEnum.billdDeskBehavior,
       data: {
         roomId: roomId.value,
@@ -746,10 +800,11 @@ function handleDoublelclick() {
   if (!appStore.remoteDesk.size) {
     return;
   }
+  const requestId = getRandomString(8);
   networkStore.rtcMap
     .get(receiverId.value)
     ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
-      requestId: getRandomString(8),
+      requestId,
       msgType: WsMsgTypeEnum.billdDeskBehavior,
       data: {
         roomId: roomId.value,
@@ -768,10 +823,11 @@ function handleContextmenu() {
   if (!appStore.remoteDesk.size) {
     return;
   }
+  const requestId = getRandomString(8);
   networkStore.rtcMap
     .get(receiverId.value)
     ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
-      requestId: getRandomString(8),
+      requestId,
       msgType: WsMsgTypeEnum.billdDeskBehavior,
       data: {
         roomId: roomId.value,
@@ -813,10 +869,11 @@ function handleMouseDown(event: MouseEvent) {
     console.log('handleMouseDown-当前是鼠标右键');
     return;
   }
+  const requestId = getRandomString(8);
   networkStore.rtcMap
     .get(receiverId.value)
     ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
-      requestId: getRandomString(8),
+      requestId,
       msgType: WsMsgTypeEnum.billdDeskBehavior,
       data: {
         roomId: roomId.value,
@@ -834,6 +891,7 @@ function handleMouseDown(event: MouseEvent) {
 }
 
 function handleMouseMove(event: MouseEvent) {
+  console.log(appStore.remoteDesk.size, 'appStore.remoteDesk.size');
   if (!appStore.remoteDesk.size) {
     return;
   }
@@ -849,11 +907,20 @@ function handleMouseMove(event: MouseEvent) {
   const yInsideElement = clickY - rect.top;
   const x = (xInsideElement / rect.width) * 1000;
   const y = (yInsideElement / rect.height) * 1000;
-  console.log('handleMouseMove', x, y, xInsideElement, yInsideElement);
+  const requestId = getRandomString(8);
+  console.log(
+    'handleMouseMove',
+    requestId,
+    x,
+    y,
+    xInsideElement,
+    yInsideElement
+  );
+
   networkStore.rtcMap
     .get(receiverId.value)
     ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
-      requestId: getRandomString(8),
+      requestId,
       msgType: WsMsgTypeEnum.billdDeskBehavior,
       data: {
         roomId: roomId.value,
@@ -888,7 +955,15 @@ function handleMouseUp(event: MouseEvent) {
   const yInsideElement = clickY - rect.top;
   const x = (xInsideElement / rect.width) * 1000;
   const y = (yInsideElement / rect.height) * 1000;
-  console.log('handleMouseUp', x, y, xInsideElement, yInsideElement);
+  const requestId = getRandomString(8);
+  console.log(
+    'handleMouseUp',
+    receiverId,
+    x,
+    y,
+    xInsideElement,
+    yInsideElement
+  );
   if (event.button === 2) {
     console.log('handleMouseUp-当前是鼠标右键');
     return;
@@ -896,7 +971,7 @@ function handleMouseUp(event: MouseEvent) {
   networkStore.rtcMap
     .get(receiverId.value)
     ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
-      requestId: getRandomString(8),
+      requestId,
       msgType: WsMsgTypeEnum.billdDeskBehavior,
       data: {
         roomId: roomId.value,
@@ -919,69 +994,52 @@ function handleClose() {
   clearInterval(loopGetSettingsTimer.value);
   videoSettings.value = undefined;
 }
-
-async function handleRemote() {
-  if (cacheStore.remoteDeskUserUuid === '') {
-    window.$message.warning('请输入被控uuid');
-    return;
-  }
-  if (!cacheStore.deskUserUuid || !cacheStore.deskUserPassword) {
-    window.$message.warning('deskUserUuid或deskUserPassword错误');
-    return;
-  }
-  const res = await fetchFindReceiverByUuid(cacheStore.remoteDeskUserUuid);
-  console.log('remoteDeskUserUuid', res);
-  if (res.code === 200) {
-    if (res.data.receiver === '') {
-    }
-  }
-  networkStore.wsMap.get(roomId.value)?.send<WsBilldDeskStartRemote['data']>({
-    requestId: getRandomString(8),
-    msgType: WsMsgTypeEnum.billdDeskStartRemote,
-    data: {
-      roomId: roomId.value,
-      sender: mySocketId.value,
-      receiver: receiverId.value,
-      deskUserUuid: cacheStore.deskUserUuid,
-      deskUserPassword: cacheStore.deskUserPassword,
-      remoteDeskUserUuid: cacheStore.remoteDeskUserUuid,
-      maxBitrate: currentMaxBitrate.value,
-      maxFramerate: currentMaxFramerate.value,
-      resolutionRatio: currentResolutionRatio.value,
-      videoContentHint: currentVideoContentHint.value,
-      audioContentHint: currentAudioContentHint.value,
-    },
-  });
-}
 </script>
 
 <style lang="scss" scoped>
-.info {
-  .item {
-    margin-right: 10px;
-  }
-}
-.rtc-config {
-  display: flex;
-  .item {
+.webrtc-wrap {
+  .drag {
+    position: fixed;
+    z-index: 999;
     display: flex;
     align-items: center;
-    padding-right: 10px;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow:
+      rgba(0, 0, 0, 0.15) 0px 15px 25px,
+      rgba(0, 0, 0, 0.05) 0px 5px 10px;
+    .txt {
+      cursor: pointer;
 
-    .down {
-      width: 150px;
+      user-select: none;
+    }
+    .info {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      display: none;
+      padding: 10px;
+      background-color: white;
+      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      &.show {
+        display: block;
+      }
+      .input-upload {
+        opacity: 0;
+      }
     }
   }
-}
-.link {
-  color: $theme-color-gold;
-  cursor: pointer;
-}
-.wrap {
-  line-height: 0;
-  cursor: none;
-  &.watch {
-    pointer-events: none;
+  .wrap {
+    width: 100vw;
+    height: 100vh;
+    line-height: 0;
+    // cursor: none;
+    &.watch {
+      // pointer-events: none;
+    }
   }
 }
 </style>

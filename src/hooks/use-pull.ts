@@ -1,8 +1,6 @@
-import { getRandomString } from 'billd-utils';
 import { nextTick, onUnmounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
-import { commentAuthTip, loginTip } from '@/hooks/use-login';
 import { useFlvPlay, useHlsPlay } from '@/hooks/use-play';
 import { useWebsocket } from '@/hooks/use-websocket';
 import {
@@ -15,14 +13,14 @@ import { useAppStore } from '@/store/app';
 import { usePiniaCacheStore } from '@/store/cache';
 import { useNetworkStore } from '@/store/network';
 import { ILiveRoom, LiveRoomTypeEnum } from '@/types/ILiveRoom';
-import { WsMessageType, WsMsgTypeEnum } from '@/types/websocket';
 import { videoFullBox, videoToCanvas } from '@/utils';
 
-export function usePull(roomId: string) {
+export function usePull() {
   const route = useRoute();
   const networkStore = useNetworkStore();
   const cacheStore = usePiniaCacheStore();
   const appStore = useAppStore();
+  const roomId = ref('');
   const danmuStr = ref('');
   const msgIsFile = ref(WsMessageMsgIsFileEnum.no);
   const danmuMsgType = ref<DanmuMsgTypeEnum>(DanmuMsgTypeEnum.danmu);
@@ -56,6 +54,10 @@ export function usePull(roomId: string) {
   onUnmounted(() => {
     handleStopDrawing();
   });
+
+  function initRoomId(id: string) {
+    roomId.value = id;
+  }
 
   function handleStopDrawing() {
     destroyFlv();
@@ -158,7 +160,6 @@ export function usePull(roomId: string) {
         roomLiving.value = true;
         videoLoading.value = false;
         appStore.playing = true;
-        cacheStore.muted = false;
       }
       if (
         isRemoteDesk.value ||
@@ -339,9 +340,9 @@ export function usePull(roomId: string) {
         el.muted = newVal;
       });
       if (!newVal) {
-        cacheStore.setVolume(cacheStore.volume || appStore.normalVolume);
+        cacheStore.volume = cacheStore.volume || appStore.normalVolume;
       } else {
-        cacheStore.setVolume(0);
+        cacheStore.volume = 0;
       }
     }
   );
@@ -353,9 +354,9 @@ export function usePull(roomId: string) {
         el.volume = newVal / 100;
       });
       if (!newVal) {
-        cacheStore.setMuted(true);
+        cacheStore.muted = true;
       } else {
-        cacheStore.setMuted(false);
+        cacheStore.muted = false;
       }
     }
   );
@@ -408,7 +409,7 @@ export function usePull(roomId: string) {
     isRemoteDesk.value = !!data.isRemoteDesk;
     initWs({
       isRemoteDesk: data.isRemoteDesk,
-      roomId,
+      roomId: roomId.value,
       isAnchor: false,
     });
   }
@@ -430,43 +431,11 @@ export function usePull(roomId: string) {
     if (key === 'enter') {
       event.preventDefault();
       danmuMsgType.value = DanmuMsgTypeEnum.danmu;
-      sendDanmu();
     }
-  }
-
-  function sendDanmu() {
-    if (!loginTip()) {
-      return;
-    }
-    if (!commentAuthTip()) {
-      return;
-    }
-    if (!danmuStr.value.trim().length) {
-      window.$message.warning('请输入弹幕内容！');
-      return;
-    }
-    const instance = networkStore.wsMap.get(roomId);
-    if (!instance) return;
-    const requestId = getRandomString(8);
-    const messageData: WsMessageType['data'] = {
-      socket_id: '',
-      msg: danmuStr.value,
-      msgType: danmuMsgType.value,
-      live_room_id: Number(roomId),
-      msgIsFile: msgIsFile.value,
-      send_msg_time: +new Date(),
-      user_agent: navigator.userAgent,
-    };
-    instance.send({
-      requestId,
-      msgType: WsMsgTypeEnum.message,
-      data: messageData,
-    });
-
-    danmuStr.value = '';
   }
 
   return {
+    initRoomId,
     connectStatus,
     videoWrapRef,
     handlePlay,
@@ -475,7 +444,6 @@ export function usePull(roomId: string) {
     closeWs,
     closeRtc,
     keydownDanmu,
-    sendDanmu,
     handleSendGetLiveUser,
     showPlayBtn,
     danmuMsgType,

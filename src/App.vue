@@ -38,8 +38,8 @@ onMounted(() => {
     htmlUrl: getHostnameUrl(),
   });
   handleUpdate();
-  cacheStore.setMuted(true);
-  cacheStore.setVolume(0);
+  cacheStore.muted = true;
+  cacheStore.volume = 0;
 
   // 启用vconsole
   // import('vconsole')

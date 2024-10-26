@@ -30,11 +30,5 @@ export const usePiniaCacheStore = defineStore(`${lsKeyPrefix}pinia-cache`, {
     setResourceList(res: PiniaCacheRootState['resource-list']) {
       this['resource-list'] = res;
     },
-    setMuted(res: PiniaCacheRootState['muted']) {
-      this.muted = res;
-    },
-    setVolume(res: PiniaCacheRootState['volume']) {
-      this.volume = res;
-    },
   },
 });

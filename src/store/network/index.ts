@@ -38,5 +38,17 @@ export const useNetworkStore = defineStore('network', {
       }
       this.rtcMap.delete(socketId);
     },
+    removeAllWs() {
+      this.wsMap.forEach((item) => {
+        item.close?.();
+      });
+      this.wsMap.clear();
+    },
+    removeAllRtc() {
+      this.rtcMap.forEach((item) => {
+        item.close?.();
+      });
+      this.rtcMap.clear();
+    },
   },
 });

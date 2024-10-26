@@ -160,6 +160,17 @@ export type WsUpdateJoinInfoType = IWsFormat<{
 }>;
 
 /** 直播pk秘钥 */
+export type WSLivePkKeyType = IWsFormat<{
+  live_room_id: number;
+  key: string;
+}>;
+
+/** 获取在线用户 */
+export type WSGetRoomAllUserType = IWsFormat<{
+  liveUser: ILiveUser[];
+}>;
+
+/** 直播pk秘钥 */
 export type WsLivePkKeyType = IWsFormat<{
   live_room_id: number;
   key: string;
@@ -293,24 +304,24 @@ export type WsBatchSendOffer = IWsFormat<{
   socket_list?: string[];
 }>;
 
-export type WsOfferType = IWsFormat<{
+export type WsOfferType = IReqWsFormat<{
   live_room: ILiveRoom;
   sdp: any;
   sender: string;
   receiver: string;
-  live_room_id: number;
+  live_room_id: number | string;
   isRemoteDesk?: boolean;
 }>;
 
-export type WsAnswerType = IWsFormat<{
+export type WsAnswerType = IReqWsFormat<{
   sdp: any;
   sender: string;
   receiver: string;
-  live_room_id: number;
+  live_room_id: number | string;
 }>;
 
-export type WsCandidateType = IWsFormat<{
-  live_room_id: number;
+export type WsCandidateType = IReqWsFormat<{
+  live_room_id: number | string;
   candidate: RTCIceCandidate;
   receiver: string;
   sender: string;
@@ -366,12 +377,12 @@ export type WsBilldDeskBehaviorType = IReqWsFormat<{
 export type WsBilldDeskJoinType = IReqWsFormat<{
   deskUserUuid: string;
   deskUserPassword: string;
-  live_room_id: number;
+  live_room_id: string;
 }>;
 
 /** 用户加入直播间 */
 export type WsBilldDeskJoinedType = IResWsFormat<{
-  live_room_id?: number;
+  live_room_id?: string;
 }>;
 
 export type WsBilldDeskStartRemoteResult = IResWsFormat<{
