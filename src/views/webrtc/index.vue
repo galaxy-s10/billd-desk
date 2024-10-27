@@ -562,6 +562,8 @@ function handleWsMsg() {
         if (data.data) {
           receiverId.value = data.data.receiver;
           appStore.remoteDesk.set(data.data.receiver, {
+            deskUserUuid: data.data.deskUserUuid,
+            remoteDeskUserUuid: data.data.remoteDeskUserUuid,
             audioContentHint: data.data.audioContentHint,
             videoContentHint: data.data.videoContentHint,
             sender: data.data.sender,

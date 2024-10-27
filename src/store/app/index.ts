@@ -52,6 +52,8 @@ export type AppRootState = {
   remoteDesk: Map<
     string,
     {
+      deskUserUuid: string;
+      remoteDeskUserUuid: string;
       sender: string;
       isClose: boolean;
       maxBitrate: number;

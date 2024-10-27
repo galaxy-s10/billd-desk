@@ -1,1 +1,1 @@
-export * from '@/utils/cookie/thirdLogin';
+export * from './thirdLogin';

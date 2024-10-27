@@ -180,6 +180,8 @@ export const useWebsocket = () => {
         sender: mySocketId.value,
         receiver: 'srs',
         videoEl: createNullVideo(),
+        deskUserUuid: deskUserUuid.value,
+        remoteDeskUserUuid: remoteDeskUserUuid.value,
       });
       webRtcSrs.sendOffer({
         sender: mySocketId.value,
@@ -195,6 +197,8 @@ export const useWebsocket = () => {
         sender: mySocketId.value,
         receiver: 'tencentcloud_css',
         videoEl: createNullVideo(),
+        deskUserUuid: deskUserUuid.value,
+        remoteDeskUserUuid: remoteDeskUserUuid.value,
       });
       webRtcTencentcloudCss.sendOffer({
         sender: mySocketId.value,
@@ -210,6 +214,8 @@ export const useWebsocket = () => {
         sender: mySocketId.value,
         receiver: 'srs',
         videoEl: createNullVideo(),
+        deskUserUuid: deskUserUuid.value,
+        remoteDeskUserUuid: remoteDeskUserUuid.value,
       });
       webRtcSrs.sendOffer({
         sender: mySocketId.value,
@@ -225,6 +231,8 @@ export const useWebsocket = () => {
         sender: mySocketId.value,
         receiver: 'tencentcloud_css',
         videoEl: createNullVideo(),
+        deskUserUuid: deskUserUuid.value,
+        remoteDeskUserUuid: remoteDeskUserUuid.value,
       });
       webRtcTencentcloudCss.sendOffer({
         sender: mySocketId.value,
@@ -353,6 +361,8 @@ export const useWebsocket = () => {
               sender: mySocketId.value,
               receiver: data.sender,
               videoEl: createNullVideo(),
+              deskUserUuid: deskUserUuid.value,
+              remoteDeskUserUuid: remoteDeskUserUuid.value,
             });
             await webRtcRemoteDesk.sendAnswer({
               sender: mySocketId.value,
@@ -398,6 +408,8 @@ export const useWebsocket = () => {
                 sender: mySocketId.value,
                 receiver: data.sender,
                 videoEl: createNullVideo(),
+                deskUserUuid: deskUserUuid.value,
+                remoteDeskUserUuid: remoteDeskUserUuid.value,
               });
               await webRtcMeetingPk.sendAnswer({
                 sender: mySocketId.value,
@@ -431,6 +443,8 @@ export const useWebsocket = () => {
               sender: mySocketId.value,
               receiver: data.sender,
               videoEl: createNullVideo(),
+              deskUserUuid: deskUserUuid.value,
+              remoteDeskUserUuid: remoteDeskUserUuid.value,
             });
             await webRtcLive.sendAnswer({
               sender: mySocketId.value,
@@ -466,6 +480,8 @@ export const useWebsocket = () => {
               sender: mySocketId.value,
               receiver: data.sender,
               videoEl: createNullVideo(),
+              deskUserUuid: deskUserUuid.value,
+              remoteDeskUserUuid: remoteDeskUserUuid.value,
             });
             await webRtcMeetingOne.sendAnswer({
               sender: mySocketId.value,
@@ -685,6 +701,8 @@ export const useWebsocket = () => {
                 sender: mySocketId.value,
                 receiver: item,
                 videoEl: createNullVideo(),
+                deskUserUuid: deskUserUuid.value,
+                remoteDeskUserUuid: remoteDeskUserUuid.value,
               });
               webRtcLive.sendOffer({
                 sender: mySocketId.value,
@@ -706,6 +724,8 @@ export const useWebsocket = () => {
                 sender: mySocketId.value,
                 receiver: item,
                 videoEl: createNullVideo(),
+                deskUserUuid: deskUserUuid.value,
+                remoteDeskUserUuid: remoteDeskUserUuid.value,
               });
               webRtcMeetingOne.sendOffer({
                 sender: mySocketId.value,
@@ -727,6 +747,8 @@ export const useWebsocket = () => {
                 sender: mySocketId.value,
                 receiver: item,
                 videoEl: createNullVideo(),
+                deskUserUuid: deskUserUuid.value,
+                remoteDeskUserUuid: remoteDeskUserUuid.value,
               });
               webRtcMeetingPk.sendOffer({
                 sender: mySocketId.value,
@@ -748,6 +770,8 @@ export const useWebsocket = () => {
                 sender: mySocketId.value,
                 receiver: item,
                 videoEl: createNullVideo(),
+                deskUserUuid: deskUserUuid.value,
+                remoteDeskUserUuid: remoteDeskUserUuid.value,
               });
               webRtcMeetingPk.sendOffer({
                 sender: mySocketId.value,

@@ -35,6 +35,8 @@ export const useWebRtcManyToManyMeeting = () => {
       sender: string;
       receiver: string;
       videoEl: HTMLVideoElement;
+      deskUserUuid: string;
+      remoteDeskUserUuid: string;
     }) => {
       return new WebRTCClass({
         maxBitrate: currentMaxBitrate.value,
@@ -45,6 +47,8 @@ export const useWebRtcManyToManyMeeting = () => {
         videoEl: data.videoEl,
         sender: data.sender,
         receiver: data.receiver,
+        deskUserUuid: data.deskUserUuid,
+        remoteDeskUserUuid: data.remoteDeskUserUuid,
       });
     },
     /**

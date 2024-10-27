@@ -34,6 +34,8 @@ export const useWebRtcRemoteDesk = () => {
       sender: string;
       receiver: string;
       videoEl: HTMLVideoElement;
+      deskUserUuid: string;
+      remoteDeskUserUuid: string;
     }) => {
       console.log({
         maxBitrate: currentMaxBitrate.value,
@@ -49,6 +51,8 @@ export const useWebRtcRemoteDesk = () => {
         videoEl: data.videoEl,
         sender: data.sender,
         receiver: data.receiver,
+        deskUserUuid: data.deskUserUuid,
+        remoteDeskUserUuid: data.remoteDeskUserUuid,
       });
     },
     /**

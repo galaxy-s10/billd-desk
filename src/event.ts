@@ -78,8 +78,8 @@ export const IPC_EVENT = {
 };
 
 export const GLOBAL_SHORTCUT = {
-  // 'Control+A': 'Control+A',
-  // 'Control+C': 'Control+C',
-  // 'Control+V': 'Control+V',
-  // 'Control+S': 'Control+S',
+  // 'CommandOrControl+A': 'CommandOrControl+A',
+  // 'CommandOrControl+C': 'CommandOrControl+C',
+  // 'CommandOrControl+V': 'CommandOrControl+V',
+  // 'CommandOrControl+S': 'CommandOrControl+S',
 };

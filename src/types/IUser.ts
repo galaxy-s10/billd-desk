@@ -1,5 +1,6 @@
 import { IAuth, IRole, IWallet } from '@/interface';
-import { ILiveRoom } from '@/types/ILiveRoom';
+
+import { ILiveRoom } from './ILiveRoom';
 
 export interface IDeskUser {
   id?: number;

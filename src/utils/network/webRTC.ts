@@ -5,12 +5,15 @@ import { LiveLineEnum, MediaTypeEnum } from '@/interface';
 import { AppRootState, useAppStore } from '@/store/app';
 import { useNetworkStore } from '@/store/network';
 import { WsCandidateType, WsMsgTypeEnum } from '@/types/websocket';
-import { getCoturnUrl } from '@/utils/localStorage/app';
+
+import { getCoturnUrl } from '../localStorage/app';
 
 export class WebRTCClass {
   roomId = '';
   sender = '';
   receiver = '';
+  deskUserUuid = '';
+  remoteDeskUserUuid = '';
 
   videoEl: HTMLVideoElement;
 
@@ -44,6 +47,8 @@ export class WebRTCClass {
     isSRS: boolean;
     sender: string;
     receiver: string;
+    deskUserUuid?: string;
+    remoteDeskUserUuid?: string;
     localStream?: MediaStream;
   }) {
     this.roomId = data.roomId;
@@ -51,6 +56,8 @@ export class WebRTCClass {
     // document.body.appendChild(this.videoEl);
     this.sender = data.sender;
     this.receiver = data.receiver;
+    this.deskUserUuid = data.deskUserUuid || '';
+    this.remoteDeskUserUuid = data.remoteDeskUserUuid || '';
     this.localStream = data.localStream;
     if (data.maxBitrate) {
       this.maxBitrate = data.maxBitrate;
@@ -603,6 +610,8 @@ export class WebRTCClass {
         resolutionRatio: -1,
         videoContentHint: '',
         audioContentHint: '',
+        deskUserUuid: this.deskUserUuid,
+        remoteDeskUserUuid: this.remoteDeskUserUuid,
       });
       networkStore.rtcMap.delete(this.receiver);
     } catch (error) {

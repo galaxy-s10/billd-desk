@@ -15,7 +15,7 @@ export default {
 <script lang="ts" setup>
 import { NMessageProvider, NNotificationProvider } from 'naive-ui';
 
-import ContentCpt from '@/components/Message/content/index.vue';
+import ContentCpt from './content/index.vue';
 </script>
 
 <style lang="scss" scoped></style>
