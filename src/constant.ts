@@ -49,7 +49,7 @@ export const WEBSOCKET_URL =
 export const AXIOS_BASEURL =
   process.env.NODE_ENV === 'development'
     ? `/api`
-    : `https://live-api.${prodDomain}`;
+    : `https://api-live.${prodDomain}`;
 
 // ======线上正式=====
 
