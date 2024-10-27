@@ -17,7 +17,7 @@ export default defineConfig(({ mode }) => {
 
   const outputStaticUrl = () => {
     if (isProduction) {
-      return 'https://resource.hsslive.cn/billd-desk/dist/dist/';
+      return 'https://resource.hsslive.cn/billd-desk/dist/';
     } else {
       return './';
     }
@@ -49,7 +49,7 @@ export default defineConfig(({ mode }) => {
       createHtmlPlugin({
         inject: {
           data: {
-            title: pkg.name,
+            title: pkg.productName,
           },
         },
       }),
