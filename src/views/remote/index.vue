@@ -355,8 +355,6 @@ const mySocketId = computed(() => {
 });
 
 onUnmounted(() => {
-  networkStore.removeAllWsAndRtc();
-  handleCloseAll();
   clearInterval(loopBilldDeskUpdateUserTimer.value);
 });
 
@@ -476,10 +474,10 @@ watch(
   (newval) => {
     newval.forEach((item) => {
       if (item.isClose) {
-        window.$notification.warning({
-          content: `${item.sender}远程连接断开`,
-          duration: 2000,
-        });
+        // window.$notification.warning({
+        //   content: `${item.sender}远程连接断开`,
+        //   duration: 2000,
+        // });
         appStore.remoteDesk.delete(item.sender);
         return;
       }
@@ -831,22 +829,25 @@ async function handleConfirm(pwd: string) {
             },
           });
         } else {
-          router.push({
-            name: routerName.webrtc,
-            query: {
-              roomId: cacheStore.remoteDeskUserUuid,
-              deskUserUuid: cacheStore.deskUserUuid,
-              deskUserPassword: cacheStore.deskUserPassword,
-              remoteDeskUserUuid: cacheStore.remoteDeskUserUuid,
-              remoteDeskUserPassword: pwd,
-              receiverId: receiverId.value,
-              maxBitrate: currentMaxBitrate.value,
-              maxFramerate: currentMaxFramerate.value,
-              resolutionRatio: currentResolutionRatio.value,
-              audioContentHint: currentAudioContentHint.value,
-              videoContentHint: currentVideoContentHint.value,
-            },
-          });
+          networkStore.removeAllWsAndRtc();
+          setTimeout(() => {
+            router.push({
+              name: routerName.webrtc,
+              query: {
+                roomId: cacheStore.remoteDeskUserUuid,
+                deskUserUuid: cacheStore.deskUserUuid,
+                deskUserPassword: cacheStore.deskUserPassword,
+                remoteDeskUserUuid: cacheStore.remoteDeskUserUuid,
+                remoteDeskUserPassword: pwd,
+                receiverId: receiverId.value,
+                maxBitrate: currentMaxBitrate.value,
+                maxFramerate: currentMaxFramerate.value,
+                resolutionRatio: currentResolutionRatio.value,
+                audioContentHint: currentAudioContentHint.value,
+                videoContentHint: currentVideoContentHint.value,
+              },
+            });
+          }, 300);
         }
 
         const flag = cacheStore.linkDeviceList.find(
@@ -891,10 +892,10 @@ async function startRemote() {
     window.$message.warning('请输入远程设备代码！');
     return;
   }
-  // if (cacheStore.remoteDeskUserUuid === cacheStore.deskUserUuid) {
-  //   window.$message.warning('不能连接自己！');
-  //   return;
-  // }
+  if (cacheStore.remoteDeskUserUuid === cacheStore.deskUserUuid) {
+    window.$message.warning('不能连接自己！');
+    return;
+  }
   try {
     loading.value = true;
     const res = await fetchFindReceiverByUuid(cacheStore.remoteDeskUserUuid);
@@ -1210,7 +1211,7 @@ function handleDel(sender) {
   .list {
     overflow: scroll;
     margin-top: 10px;
-    height: 190px;
+    height: 170px;
 
     @extend %customScrollbarHide;
     &:hover {

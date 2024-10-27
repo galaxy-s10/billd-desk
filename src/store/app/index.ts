@@ -11,6 +11,7 @@ import { mobileRouterName } from '@/router';
 import { ILiveRoom } from '@/types/ILiveRoom';
 
 export type AppRootState = {
+  isMac: boolean;
   showDebug: boolean;
   version: string;
   updateModalInfo?: {
@@ -123,6 +124,7 @@ export type AppRootState = {
 export const useAppStore = defineStore('app', {
   state: (): AppRootState => {
     return {
+      isMac: false,
       showDebug: false,
       version: '',
       updateModalInfo: undefined,

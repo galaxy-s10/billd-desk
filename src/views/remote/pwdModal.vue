@@ -39,7 +39,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
 
-const hidePwd = ref(false);
+const hidePwd = ref(true);
 const password = ref('');
 const iptRef = ref<HTMLInputElement>();
 

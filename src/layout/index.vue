@@ -3,7 +3,7 @@
     <div
       v-if="useCustomBar"
       class="system-bar"
-      :class="{ 'no-drag': !isMac, drag: isMac }"
+      :class="{ 'no-drag': !appStore.isMac, drag: appStore.isMac }"
       @mousedown="startMove"
       @mouseup="endMove"
       @mousemove="moving"
@@ -128,7 +128,6 @@ const { handleOpenDevTools } = useIpcRendererSend();
 const isMoving = ref<boolean>(false);
 const lastPoint = reactive({ x: 0, y: 0 });
 const useCustomBar = ref(true);
-const isMac = ref(false);
 const clickNum = ref(1);
 
 onMounted(() => {
@@ -147,7 +146,7 @@ async function init() {
   });
   if (res?.code === 0) {
     if (res?.data?.platform === 'darwin') {
-      isMac.value = true;
+      appStore.isMac = true;
     }
   }
 }
@@ -224,7 +223,7 @@ function handleMin() {
 }
 
 const startMove = (e: MouseEvent) => {
-  if (isMac.value) {
+  if (appStore.isMac) {
     return;
   }
   isMoving.value = true;
@@ -233,21 +232,21 @@ const startMove = (e: MouseEvent) => {
 };
 
 const endMove = () => {
-  if (isMac.value) {
+  if (appStore.isMac) {
     return;
   }
   isMoving.value = false;
 };
 
 const handleMouseleave = () => {
-  if (isMac.value) {
+  if (appStore.isMac) {
     return;
   }
   isMoving.value = false;
 };
 
 const moving = (e: MouseEvent) => {
-  if (isMac.value) {
+  if (appStore.isMac) {
     return;
   }
   if (isMoving.value) {

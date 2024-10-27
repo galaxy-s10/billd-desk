@@ -513,7 +513,7 @@ watch(
       clearInterval(loopReconnectTimer.value);
       handleWsMsg();
     } else if (newval === WsConnectStatusEnum.disconnect) {
-      window.$message.warning('disconnect');
+      console.log('disconnect');
     }
   },
   { immediate: true }
@@ -765,19 +765,26 @@ function handleClose() {
   networkStore.removeAllWsAndRtc();
   if (!ipcRenderer) {
     router.push({ name: routerName.remote });
+    setTimeout(() => {
+      windowReload();
+    }, 300);
   }
 }
 
 function handleVideoElSize(videoEl, setWindowBounds = false) {
   if (!videoWrapRef.value) return;
-  const clientWidth = document.documentElement.clientWidth;
-  const clientHeight = document.documentElement.clientHeight;
+  const clientWidth = ipcRenderer
+    ? window.screen.width
+    : document.documentElement.clientWidth;
+  const clientHeight = ipcRenderer
+    ? window.screen.height
+    : document.documentElement.clientHeight;
   const res = computeBox({
     width: videoEl.videoWidth,
     height: videoEl.videoHeight,
-    maxHeight: clientWidth,
+    maxHeight: clientHeight,
     minHeight: 0,
-    maxWidth: clientHeight,
+    maxWidth: clientWidth,
     minWidth: 0,
   });
   videoFullBox({

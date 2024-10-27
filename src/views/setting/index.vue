@@ -160,7 +160,7 @@
                 :key="index"
                 class="client-btn"
                 @click="
-                  handleOpenExternal({
+                  jumpToDownload({
                     windowId: WINDOW_ID_ENUM.remote,
                     url: item.url,
                   })
@@ -291,6 +291,17 @@ watch(
   },
   { immediate: true, deep: true }
 );
+
+function jumpToDownload({ windowId, url }) {
+  if (!url || url === '') {
+    window.$message.info('敬请期待！');
+    return;
+  }
+  handleOpenExternal({
+    windowId,
+    url,
+  });
+}
 
 async function handleDeskVersionCheck() {
   const res = await fetchDeskVersionCheck(appStore.version);
