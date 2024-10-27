@@ -38,7 +38,5 @@
     "ts",
     "tsx",
     "vue"
-  ],
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "oxc.enable": false
+  ]
 }
