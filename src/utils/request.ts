@@ -130,6 +130,5 @@ class MyAxios {
 
 export default new MyAxios({
   baseURL: getAxiosBaseUrl() || AXIOS_BASEURL,
-  // baseURL: '/prodapi',
   timeout: 1000 * 5,
 });

@@ -345,6 +345,7 @@ const rtcLoss = computed(() => {
   return arr.join();
 });
 
+const initVideo = ref(true);
 const clickNum = ref(0);
 const loopGetSettingsTimer = ref();
 const loopReconnectTimer = ref();
@@ -773,20 +774,23 @@ function handleClose() {
 
 function handleVideoElSize(videoEl, setWindowBounds = false) {
   if (!videoWrapRef.value) return;
-  const clientWidth = ipcRenderer
-    ? window.screen.width
-    : document.documentElement.clientWidth;
-  const clientHeight = ipcRenderer
-    ? window.screen.height
-    : document.documentElement.clientHeight;
+  let clientWidth = document.documentElement.clientWidth;
+  let clientHeight = document.documentElement.clientHeight;
+  if (ipcRenderer && initVideo.value) {
+    initVideo.value = false;
+    clientWidth = window.screen.availWidth;
+    clientHeight = window.screen.availHeight;
+  }
+
   const res = computeBox({
     width: videoEl.videoWidth,
     height: videoEl.videoHeight,
     maxHeight: clientHeight,
-    minHeight: 0,
+    minHeight: clientHeight,
     maxWidth: clientWidth,
-    minWidth: 0,
+    minWidth: clientWidth,
   });
+
   videoFullBox({
     wrapSize: {
       width: clientWidth,
@@ -794,6 +798,13 @@ function handleVideoElSize(videoEl, setWindowBounds = false) {
     },
     videoEl,
   });
+  // console.log('tewehdh', {
+  //   res,
+  //   videoWidth: videoEl.videoWidth,
+  //   videoHeight: videoEl.videoHeight,
+  //   clientWidth,
+  //   clientHeight,
+  // });
   if (res.width && res.height && setWindowBounds) {
     ipcRendererSend({
       windowId: windowId.value,
