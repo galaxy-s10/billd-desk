@@ -182,6 +182,7 @@
               当前版本：v{{ appStore.version }}（{{ appStore.lastBuildDate }}）
             </span>
             <span
+              v-if="ipcRenderer"
               class="btn"
               @click="handleDeskVersionCheck"
             >

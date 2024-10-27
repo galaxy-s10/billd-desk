@@ -362,7 +362,7 @@ export type WsBilldDeskBehaviorType = IReqWsFormat<{
   x: number;
   y: number;
   amount: number;
-  keyboardtype: string | number;
+  key: string[] | number[];
 }>;
 
 /** 用户加入直播间 */

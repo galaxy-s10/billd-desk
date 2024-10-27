@@ -49,6 +49,8 @@ function handleClose() {
 
 <style lang="scss" scoped>
 .disable-modal-wrap {
+  position: relative;
+  z-index: 20;
   .mask {
     background-color: rgba($color: #000000, $alpha: 0.3) !important;
 

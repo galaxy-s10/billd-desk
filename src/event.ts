@@ -37,6 +37,7 @@ export const IPC_EVENT = {
   powerMonitorResume: 'powerMonitorResume',
   shellOpenExternal: 'shellOpenExternal',
   globalShortcut: 'globalShortcut',
+  getPlatform: 'getPlatform',
 
   response_commonTest: 'response_commonTest',
   response_powerSaveBlockerStart: 'response_powerSaveBlockerStart',

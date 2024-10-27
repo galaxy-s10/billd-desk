@@ -226,11 +226,11 @@ export const useIpcRendererSend = () => {
     } else if (data.type === BilldDeskBehaviorEnum.releaseButtonLeft) {
       mouseReleaseButtonLeft({ windowId });
     } else if (data.type === BilldDeskBehaviorEnum.keyboardType) {
-      keyboardType({ windowId, key: data.keyboardtype });
+      keyboardType({ windowId, key: data.key });
     } else if (data.type === BilldDeskBehaviorEnum.keyboardPressKey) {
-      keyboardPressKey({ windowId, key: data.keyboardtype });
+      keyboardPressKey({ windowId, key: data.key });
     } else if (data.type === BilldDeskBehaviorEnum.keyboardReleaseKey) {
-      keyboardReleaseKey({ windowId, key: data.keyboardtype });
+      keyboardReleaseKey({ windowId, key: data.key });
     } else if (data.type === BilldDeskBehaviorEnum.scrollDown) {
       mouseScrollDown({ windowId, amount: data.amount });
     } else if (data.type === BilldDeskBehaviorEnum.scrollUp) {

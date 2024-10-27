@@ -27,29 +27,29 @@ export const COTURN_URL = `turn:hk.${prodDomain}`;
 
 // ======本地调试=====
 
-const LOCALHOST_IP = '192.168.1.101:4300';
+// const LOCALHOST_IP = '192.168.1.101:4300';
 
-export const WEBSOCKET_URL =
-  process.env.NODE_ENV === 'development'
-    ? `ws://localhost:4300`
-    : `ws://${LOCALHOST_IP}`;
+// export const WEBSOCKET_URL =
+//   process.env.NODE_ENV === 'development'
+//     ? `ws://localhost:4300`
+//     : `ws://${LOCALHOST_IP}`;
 
-export const AXIOS_BASEURL =
-  process.env.NODE_ENV === 'development' ? `/api` : `http://${LOCALHOST_IP}`;
+// export const AXIOS_BASEURL =
+//   process.env.NODE_ENV === 'development' ? `/api` : `http://${LOCALHOST_IP}`;
 
 // ======本地调试=====
 
 // ======线上正式=====
 
-// export const WEBSOCKET_URL =
-//   process.env.NODE_ENV === 'development'
-//     ? `ws://localhost:4300`
-//     : `wss://srs-pull.${prodDomain}`;
+export const WEBSOCKET_URL =
+  process.env.NODE_ENV === 'development'
+    ? `ws://localhost:4300`
+    : `wss://srs-pull.${prodDomain}`;
 
-// export const AXIOS_BASEURL =
-//   process.env.NODE_ENV === 'development'
-//     ? `/api`
-//     : `https://live-api.${prodDomain}`;
+export const AXIOS_BASEURL =
+  process.env.NODE_ENV === 'development'
+    ? `/api`
+    : `https://live-api.${prodDomain}`;
 
 // ======线上正式=====
 
@@ -141,9 +141,11 @@ export const NUT_KEY_MAP = {
   ControlLeft: Key.LeftControl,
   ControlRight: Key.RightControl,
   MetaLeft: Key.LeftCmd,
-  LeftWin: Key.LeftCmd,
+  LeftCmd: Key.LeftCmd,
   MetaRight: Key.RightCmd,
-  RightWin: Key.RightCmd,
+  RightCmd: Key.RightCmd,
+  LeftWin: Key.LeftWin,
+  RightWin: Key.RightWin,
 };
 
 export const SRS_CB_URL_PARAMS = {

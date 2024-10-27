@@ -17,13 +17,25 @@
         :class="{ show: showDetail }"
       >
         <div
+          class="debug-area"
+          @click="handleOpenDebug"
+        ></div>
+        <div
           class="debug-info"
           v-if="appStore.showDebug"
         >
           <div>
-            <span @click="windowReload">刷新</span>
+            <span
+              class="item"
+              @click="windowReload"
+              >刷新</span
+            >
             <span>，</span>
-            <span @click="handleOpenDevTools({ windowId })">控制台</span>
+            <span
+              class="item"
+              @click="handleOpenDevTools({ windowId })"
+              >控制台</span
+            >
           </div>
 
           <div>
@@ -333,6 +345,7 @@ const rtcLoss = computed(() => {
   return arr.join();
 });
 
+const clickNum = ref(0);
 const loopGetSettingsTimer = ref();
 const loopReconnectTimer = ref();
 const videoSettings = ref<MediaTrackSettings>();
@@ -397,12 +410,74 @@ onUnmounted(() => {
   networkStore.removeAllWsAndRtc();
 });
 
+function handleOpenDebug() {
+  if (clickNum.value < 5) {
+    clickNum.value += 1;
+    setTimeout(() => {
+      clickNum.value = 1;
+    }, 3000);
+  } else {
+    appStore.showDebug = true;
+  }
+}
+
 function handleKeyCombination(event: KeyboardEvent) {
-  if (event.ctrlKey || event.metaKey) {
+  if (isWatchMode.value) return;
+  if (event.ctrlKey) {
     const key = event.key.toLowerCase();
     ENGLISH_LETTER.forEach((item) => {
       if (item === key) {
         console.log(`Ctrl+${key} 被按下`);
+        networkStore.rtcMap
+          .get(receiverId.value)
+          ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
+            requestId: getRandomString(8),
+            msgType: WsMsgTypeEnum.billdDeskBehavior,
+            data: {
+              roomId: roomId.value,
+              sender: mySocketId.value,
+              receiver: receiverId.value,
+              type: BilldDeskBehaviorEnum.keyboardPressKey,
+              key: [
+                NUT_KEY_MAP.ControlLeft,
+                NUT_KEY_MAP[event.code] ||
+                  NUT_KEY_MAP[event.key.toUpperCase()] ||
+                  event.key,
+              ],
+              x: 0,
+              y: 0,
+              amount: 0,
+            },
+          });
+      }
+    });
+  }
+  if (event.metaKey) {
+    const key = event.key.toLowerCase();
+    ENGLISH_LETTER.forEach((item) => {
+      if (item === key) {
+        console.log(`MetaKey+${key} 被按下`);
+        networkStore.rtcMap
+          .get(receiverId.value)
+          ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
+            requestId: getRandomString(8),
+            msgType: WsMsgTypeEnum.billdDeskBehavior,
+            data: {
+              roomId: roomId.value,
+              sender: mySocketId.value,
+              receiver: receiverId.value,
+              type: BilldDeskBehaviorEnum.keyboardPressKey,
+              key: [
+                NUT_KEY_MAP.MetaLeft,
+                NUT_KEY_MAP[event.code] ||
+                  NUT_KEY_MAP[event.key.toUpperCase()] ||
+                  event.key,
+              ],
+              x: 0,
+              y: 0,
+              amount: 0,
+            },
+          });
       }
     });
   }
@@ -410,7 +485,6 @@ function handleKeyCombination(event: KeyboardEvent) {
 
 function handleResize() {
   videoList.value.forEach((item) => {
-    console.log(item);
     handleVideoElSize(item, false);
   });
 }
@@ -626,7 +700,7 @@ function handleMouseWheel(event: WheelEvent) {
           sender: mySocketId.value,
           receiver: receiverId.value,
           type: BilldDeskBehaviorEnum.scrollDown,
-          keyboardtype: 0,
+          key: [0],
           x: 0,
           y: 0,
           amount: Math.abs(event.deltaY),
@@ -643,7 +717,7 @@ function handleMouseWheel(event: WheelEvent) {
           sender: mySocketId.value,
           receiver: receiverId.value,
           type: BilldDeskBehaviorEnum.scrollUp,
-          keyboardtype: 0,
+          key: [0],
           x: 0,
           y: 0,
           amount: Math.abs(event.deltaY),
@@ -661,7 +735,7 @@ function handleMouseWheel(event: WheelEvent) {
           sender: mySocketId.value,
           receiver: receiverId.value,
           type: BilldDeskBehaviorEnum.scrollRight,
-          keyboardtype: 0,
+          key: [0],
           x: 0,
           y: 0,
           amount: Math.abs(event.deltaX),
@@ -678,7 +752,7 @@ function handleMouseWheel(event: WheelEvent) {
           sender: mySocketId.value,
           receiver: receiverId.value,
           type: BilldDeskBehaviorEnum.scrollLeft,
-          keyboardtype: 0,
+          key: [0],
           x: 0,
           y: 0,
           amount: Math.abs(event.deltaX),
@@ -787,6 +861,9 @@ function handleCopy(str) {
 
 function handleKeyDown(event: KeyboardEvent) {
   if (isWatchMode.value) return;
+  if (event.ctrlKey || event.metaKey) {
+    return;
+  }
   networkStore.rtcMap
     .get(receiverId.value)
     ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
@@ -797,10 +874,11 @@ function handleKeyDown(event: KeyboardEvent) {
         sender: mySocketId.value,
         receiver: receiverId.value,
         type: BilldDeskBehaviorEnum.keyboardPressKey,
-        keyboardtype:
+        key: [
           NUT_KEY_MAP[event.code] ||
-          NUT_KEY_MAP[event.key.toUpperCase()] ||
-          event.key,
+            NUT_KEY_MAP[event.key.toUpperCase()] ||
+            event.key,
+        ],
         x: 0,
         y: 0,
         amount: 0,
@@ -810,6 +888,9 @@ function handleKeyDown(event: KeyboardEvent) {
 
 function handleKeyUp(event: KeyboardEvent) {
   if (isWatchMode.value) return;
+  if (event.ctrlKey || event.metaKey) {
+    return;
+  }
   networkStore.rtcMap
     .get(receiverId.value)
     ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
@@ -820,10 +901,11 @@ function handleKeyUp(event: KeyboardEvent) {
         sender: mySocketId.value,
         receiver: receiverId.value,
         type: BilldDeskBehaviorEnum.keyboardReleaseKey,
-        keyboardtype:
+        key: [
           NUT_KEY_MAP[event.code] ||
-          NUT_KEY_MAP[event.key.toUpperCase()] ||
-          event.key,
+            NUT_KEY_MAP[event.key.toUpperCase()] ||
+            event.key,
+        ],
         x: 0,
         y: 0,
         amount: 0,
@@ -842,7 +924,7 @@ function handleDoublelclick() {
         sender: mySocketId.value,
         receiver: receiverId.value,
         type: BilldDeskBehaviorEnum.doubleClick,
-        keyboardtype: 0,
+        key: [0],
         x: 0,
         y: 0,
         amount: 0,
@@ -861,7 +943,7 @@ function handleContextmenu() {
         sender: mySocketId.value,
         receiver: receiverId.value,
         type: BilldDeskBehaviorEnum.rightClick,
-        keyboardtype: 0,
+        key: [0],
         x: 0,
         y: 0,
         amount: 0,
@@ -901,7 +983,7 @@ function handleMouseDown(event: MouseEvent) {
         roomId: roomId.value,
         sender: mySocketId.value,
         receiver: receiverId.value,
-        keyboardtype: 0,
+        key: [0],
         type: BilldDeskBehaviorEnum.pressButtonLeft,
         x,
         y,
@@ -942,7 +1024,7 @@ function handleMouseMove(event: MouseEvent) {
         sender: mySocketId.value,
         receiver: receiverId.value,
         type: BilldDeskBehaviorEnum.mouseMove,
-        keyboardtype: 0,
+        key: [0],
         x,
         y,
         amount: 0,
@@ -980,7 +1062,7 @@ function handleMouseUp(event: MouseEvent) {
         roomId: roomId.value,
         sender: mySocketId.value,
         receiver: receiverId.value,
-        keyboardtype: 0,
+        key: [0],
         type: isLongClick
           ? BilldDeskBehaviorEnum.releaseButtonLeft
           : BilldDeskBehaviorEnum.releaseButtonLeft,
@@ -1016,6 +1098,7 @@ function handleMouseUp(event: MouseEvent) {
 
       user-select: none;
     }
+
     .info {
       position: absolute;
       top: 100%;
@@ -1026,12 +1109,23 @@ function handleMouseUp(event: MouseEvent) {
       width: 800px;
       background-color: white;
       box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      .debug-area {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 30px;
+        height: 30px;
+      }
       .debug-info {
         position: absolute;
         right: 0;
         bottom: 0;
+        z-index: 99;
         padding-right: 5px;
         font-size: 12px;
+        .item {
+          cursor: pointer;
+        }
         .link {
           color: red;
           cursor: pointer;

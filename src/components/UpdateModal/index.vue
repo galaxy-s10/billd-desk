@@ -47,6 +47,8 @@ const emits = defineEmits(['confirm', 'close']);
 
 <style lang="scss" scoped>
 .update-modal-wrap {
+  position: relative;
+  z-index: 20;
   .mask {
     background-color: rgba($color: #000000, $alpha: 0.3) !important;
 
