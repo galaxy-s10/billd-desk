@@ -237,7 +237,7 @@ import {
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
-import { NUT_KEY_MAP, WINDOW_ID_ENUM } from '@/constant';
+import { ENGLISH_LETTER, NUT_KEY_MAP, WINDOW_ID_ENUM } from '@/constant';
 import { IPC_EVENT } from '@/event';
 import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
 import { useRTCParams } from '@/hooks/use-rtcParams';
@@ -259,7 +259,12 @@ import {
   WsConnectStatusEnum,
   WsMsgTypeEnum,
 } from '@/types/websocket';
-import { ipcRendererInvoke, ipcRendererSend, videoFullBox } from '@/utils';
+import {
+  ipcRenderer,
+  ipcRendererInvoke,
+  ipcRendererSend,
+  videoFullBox,
+} from '@/utils';
 
 const route = useRoute();
 const appStore = useAppStore();
@@ -386,9 +391,22 @@ onUnmounted(() => {
   videoWrapRef.value?.removeEventListener('wheel', handleMouseWheel);
   window.removeEventListener('resize', handleResize);
   window.removeEventListener('keydown', handleKeyDown);
+  window.removeEventListener('keydown', handleKeyCombination);
+
   window.removeEventListener('keyup', handleKeyUp);
   networkStore.removeAllWsAndRtc();
 });
+
+function handleKeyCombination(event: KeyboardEvent) {
+  if (event.ctrlKey || event.metaKey) {
+    const key = event.key.toLowerCase();
+    ENGLISH_LETTER.forEach((item) => {
+      if (item === key) {
+        console.log(`Ctrl+${key} 被按下`);
+      }
+    });
+  }
+}
 
 function handleResize() {
   videoList.value.forEach((item) => {
@@ -403,6 +421,7 @@ function init() {
   handleLoopBilldDeskUpdateUserTimer();
   videoWrapRef.value?.addEventListener('wheel', handleMouseWheel);
   window.addEventListener('keydown', handleKeyDown);
+  window.addEventListener('keydown', handleKeyCombination);
   window.addEventListener('keyup', handleKeyUp);
   initWs({
     roomId: roomId.value,
@@ -575,7 +594,7 @@ function handleWsMsg() {
   });
 }
 
-async function handleInitIpcRendererSend() {}
+function handleInitIpcRendererSend() {}
 
 function handleInitIpcRendererOn() {}
 
@@ -591,10 +610,10 @@ function loopGetSettings() {
   }, 1000);
 }
 
-function handleMouseWheel(e: WheelEvent) {
+function handleMouseWheel(event: WheelEvent) {
   if (isWatchMode.value) return;
-  e.preventDefault();
-  if (e.deltaY > 0) {
+  event.preventDefault();
+  if (event.deltaY > 0) {
     networkStore.rtcMap
       .get(receiverId.value)
       ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
@@ -608,10 +627,10 @@ function handleMouseWheel(e: WheelEvent) {
           keyboardtype: 0,
           x: 0,
           y: 0,
-          amount: Math.abs(e.deltaY),
+          amount: Math.abs(event.deltaY),
         },
       });
-  } else if (e.deltaY < 0) {
+  } else if (event.deltaY < 0) {
     networkStore.rtcMap
       .get(receiverId.value)
       ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
@@ -625,11 +644,11 @@ function handleMouseWheel(e: WheelEvent) {
           keyboardtype: 0,
           x: 0,
           y: 0,
-          amount: Math.abs(e.deltaY),
+          amount: Math.abs(event.deltaY),
         },
       });
   }
-  if (e.deltaX > 0) {
+  if (event.deltaX > 0) {
     networkStore.rtcMap
       .get(receiverId.value)
       ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
@@ -643,10 +662,10 @@ function handleMouseWheel(e: WheelEvent) {
           keyboardtype: 0,
           x: 0,
           y: 0,
-          amount: Math.abs(e.deltaX),
+          amount: Math.abs(event.deltaX),
         },
       });
-  } else if (e.deltaX < 0) {
+  } else if (event.deltaX < 0) {
     networkStore.rtcMap
       .get(receiverId.value)
       ?.dataChannelSend<WsBilldDeskBehaviorType['data']>({
@@ -660,7 +679,7 @@ function handleMouseWheel(e: WheelEvent) {
           keyboardtype: 0,
           x: 0,
           y: 0,
-          amount: Math.abs(e.deltaX),
+          amount: Math.abs(event.deltaX),
         },
       });
   }
@@ -668,7 +687,9 @@ function handleMouseWheel(e: WheelEvent) {
 
 function handleClose() {
   networkStore.removeAllWsAndRtc();
-  router.push({ name: routerName.remote });
+  if (!ipcRenderer) {
+    router.push({ name: routerName.remote });
+  }
 }
 
 function handleVideoElSize(videoEl, setWindowBounds = false) {
@@ -762,7 +783,7 @@ function handleCopy(str) {
   window.$message.success('复制成功');
 }
 
-function handleKeyDown(e: KeyboardEvent) {
+function handleKeyDown(event: KeyboardEvent) {
   if (isWatchMode.value) return;
   networkStore.rtcMap
     .get(receiverId.value)
@@ -775,7 +796,9 @@ function handleKeyDown(e: KeyboardEvent) {
         receiver: receiverId.value,
         type: BilldDeskBehaviorEnum.keyboardPressKey,
         keyboardtype:
-          NUT_KEY_MAP[e.code] || NUT_KEY_MAP[e.key.toUpperCase()] || e.key,
+          NUT_KEY_MAP[event.code] ||
+          NUT_KEY_MAP[event.key.toUpperCase()] ||
+          event.key,
         x: 0,
         y: 0,
         amount: 0,
@@ -783,7 +806,7 @@ function handleKeyDown(e: KeyboardEvent) {
     });
 }
 
-function handleKeyUp(e: KeyboardEvent) {
+function handleKeyUp(event: KeyboardEvent) {
   if (isWatchMode.value) return;
   networkStore.rtcMap
     .get(receiverId.value)
@@ -796,7 +819,9 @@ function handleKeyUp(e: KeyboardEvent) {
         receiver: receiverId.value,
         type: BilldDeskBehaviorEnum.keyboardReleaseKey,
         keyboardtype:
-          NUT_KEY_MAP[e.code] || NUT_KEY_MAP[e.key.toUpperCase()] || e.key,
+          NUT_KEY_MAP[event.code] ||
+          NUT_KEY_MAP[event.key.toUpperCase()] ||
+          event.key,
         x: 0,
         y: 0,
         amount: 0,
