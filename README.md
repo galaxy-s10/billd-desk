@@ -30,44 +30,44 @@ BilldDesk远程桌面控制，目前实现了类似ToDesk、向日葵等远程�
 ## 功能
 
 - [x] Web端控制桌面客户端
-- [x] 桌面客户端控制桌面客户端
-- [ ] 桌面客户端控制Web端
-- [ ] Web端控制Web端
 - [ ] Web端查看Web端
+- [x] 桌面客户端控制桌面客户端
+- [x] 桌面客户端查看Web端
 - [x] 连接鉴权
 - [x] 支持Macos系统
 - [x] 支持Windows系统
 - [ ] 支持Linux系统
 - [ ] 文件传输
 - [ ] 移动客户端
+- [ ] 后台管理
+
+目前暂不实现以下功能：
+
+- ❌ Web端控制Web端
+- ❌ 桌面客户端控制Web端
+- ❌ Docker部署
 
 ## 预览
 
 ### 控制端发起远程控制
 
-<img
-      src="https://github.com/user-attachments/assets/8e760673-49b5-48b1-b15b-29963880fa64" 
-      style="width:800px"
-    />
+![https://github.com/user-attachments/assets/8e760673-49b5-48b1-b15b-29963880fa64](https://github.com/user-attachments/assets/8e760673-49b5-48b1-b15b-29963880fa64)
 
-<img
-      src="https://github.com/user-attachments/assets/beb7d43c-5660-4185-96c8-2f2761a11413" 
-      style="width:800px"
-    />
+![https://github.com/user-attachments/assets/beb7d43c-5660-4185-96c8-2f2761a11413](https://github.com/user-attachments/assets/beb7d43c-5660-4185-96c8-2f2761a11413)
 
 ### 控制端正在控制被控端
 
-<img
-    src="https://github.com/user-attachments/assets/4cc167f5-70ac-47bc-a226-564a2f69c2f1"
-    style="width:800px"
-  />
+![https://github.com/user-attachments/assets/4cc167f5-70ac-47bc-a226-564a2f69c2f1](https://github.com/user-attachments/assets/4cc167f5-70ac-47bc-a226-564a2f69c2f1)
 
 ### 被控端
 
-<img
-    src="https://github.com/user-attachments/assets/b1482a29-ca11-4ed8-b78e-49815a556bfe"
-    style="width:800px"
-  />
+![https://github.com/user-attachments/assets/b1482a29-ca11-4ed8-b78e-49815a556bfe](https://github.com/user-attachments/assets/b1482a29-ca11-4ed8-b78e-49815a556bfe)
+
+## 接口文档
+
+线上接口：[https://desk-api.hsslive.cn](https://desk-api.hsslive.cn)
+
+接口文档：todo
 
 ## 本地启动
 
@@ -80,7 +80,7 @@ pnpm i
 > 更新 billd 相关依赖：
 
 ```bash
-pnpm i billd-utils@latest billd-scss@latest billd-html-webpack-plugin@latest
+pnpm i billd-deploy@latest billd-utils@latest billd-scss@latest billd-html-webpack-plugin@latest
 ```
 
 - 运行
@@ -97,31 +97,43 @@ npm run build
 
 - 打包windows包
 
-```
+```bash
 npm run build:win
 ```
 
 - 打包macos包
 
-```
+```bash
 npm run build:mac
 ```
 
 - 打包linux包
 
-```
+```bash
 npm run build:linux
 ```
+
+## 性能测试
+
+主要测试各个端之间远程时候的延迟。
+
+> TODO
+
+## 视频教程
+
+b站合集：[BilldDesk开源远程桌面控制](https://space.bilibili.com/381307133/channel/collectiondetail?sid=4106361&ctype=0)
+
+WebRTC课程：[https://www.hsslive.cn/article/151](https://www.hsslive.cn/article/151)
 
 ## 常见问题
 
 ### rebuild
 
-```sh
+```bash
 npm config set registry https://registry.npmmirror.com
 ```
 
-```sh
+```bash
 ./node_modules/.bin/electron-rebuild
 ```
 
