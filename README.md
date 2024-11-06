@@ -193,6 +193,10 @@ npm config set registry https://registry.npmmirror.com
    ```
 3. 在node_modules/electron目录下执行node install
 
+## 交流群🔥
+
+![WechatIMG1417](https://github.com/user-attachments/assets/d0743ee0-4545-4618-863e-13c40f717119)
+
 ## 兼容性
 
 - [x] Windows
