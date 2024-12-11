@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://live.hsslive.cn/remoteDesktop" target="_blank">
+  <a href="https://desk.hsslive.cn" target="_blank">
     <img
       width="200"
       src="https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/img/logo.png?raw=true"
@@ -10,9 +10,21 @@
 <h1 align="center">
   BilldDesk
 </h1>
+
 <p align="center">
  基于WebRTC + Vue3 + Electron + Nodejs搭建的远程桌面
 </p>
+
+<div align="center">
+
+![stars](https://img.shields.io/github/stars/billd-project/desk)
+![forks](https://img.shields.io/github/forks/billd-project/desk)
+
+![version](https://img.shields.io/github/package-json/v/billd-project/desk)
+![License](https://img.shields.io/github/license/billd-project/desk)
+![language](https://img.shields.io/github/languages/top/billd-project/desk)
+
+</div>
 
 ## 简介
 
@@ -37,6 +49,7 @@ BilldDesk远程桌面控制，目前实现了类似ToDesk、向日葵等远程�
 - [x] 支持Macos系统
 - [x] 支持Windows系统
 - [ ] 支持Linux系统
+- [x] 组合键
 - [ ] 文件传输
 - [ ] 移动客户端
 - [ ] 后台管理
@@ -193,12 +206,21 @@ npm config set registry https://registry.npmmirror.com
    ```
 3. 在node_modules/electron目录下执行node install
 
-## 交流群🔥
-
-![WechatIMG1417](https://github.com/user-attachments/assets/d0743ee0-4545-4618-863e-13c40f717119)
-
 ## 兼容性
 
 - [x] Windows
 - [x] Macos
 - [ ] Linux
+
+## 交流
+
+- 暂不开放官方交流群
+- 遇到有问题，请提[Issue](https://github.com/billd-project/desk/issues)
+
+## 商务合作
+
+- [付费咨询](https://live.hsslive.cn/support)
+
+## 私有化部署
+
+- [付费咨询](https://live.hsslive.cn/support)
