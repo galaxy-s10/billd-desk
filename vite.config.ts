@@ -22,6 +22,7 @@ export default defineConfig(({ mode }) => {
       return './';
     }
   };
+
   return {
     base: outputStaticUrl(),
     css: {
