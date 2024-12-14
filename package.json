@@ -1,13 +1,13 @@
 {
   "name": "billd-desk",
   "version": "0.0.168",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/galaxy-s10/billd-desk"
   },
   "license": "MIT",
   "author": "shuisheng <2274751790@qq.com>",
+  "type": "module",
   "main": "electron-dist/index.cjs",
   "scripts": {
     "build:beta": "cross-env VITE_APP_RELEASE_PROJECT_ISWEB=true vite build",
