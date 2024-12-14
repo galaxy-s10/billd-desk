@@ -1,12 +1,13 @@
 import path from 'path';
 
 import vue from '@vitejs/plugin-vue';
-import BilldHtmlWebpackPlugin, { logData } from 'billd-html-webpack-plugin';
-import AutoImport from 'unplugin-auto-import/vite';
+import { BilldHtmlWebpackPlugin, logData } from 'billd-html-webpack-plugin';
+import autoImport from 'unplugin-auto-import/vite';
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
-import Components from 'unplugin-vue-components/vite';
+import unpluginVueComponents from 'unplugin-vue-components/vite';
 import { defineConfig } from 'vite';
 import checker from 'vite-plugin-checker';
+import eslint from 'vite-plugin-eslint2';
 import { createHtmlPlugin } from 'vite-plugin-html';
 
 import pkg from './package.json';
@@ -73,30 +74,26 @@ export default defineConfig(({ mode }) => {
       checker({
         // typescript: true,
         vueTsc: true,
-        eslint: {
-          lintCommand: 'eslint "./src/**/*.{ts,tsx}"', // for example, lint .ts & .tsx
-        },
+        // eslint: {
+        //   lintCommand: 'eslint "./src/**/*.{ts,tsx}"', // for example, lint .ts & .tsx
+        // },
       }),
-      // eslint({
-      //   failOnError: false,
-      //   failOnWarning: false,
-      //   cache: false,
-      // }),
-      AutoImport({
+      eslint({}),
+      autoImport({
         imports: [
           {
             'naive-ui': ['useMessage', 'useNotification'],
           },
         ],
       }),
-      Components({
+      unpluginVueComponents({
         resolvers: [NaiveUiResolver()],
       }),
       new BilldHtmlWebpackPlugin({ env: 'vite4' }).config,
     ],
     define: {
       'process.env': {
-        BilldHtmlWebpackPlugin: logData(),
+        BilldHtmlWebpackPlugin: logData(null),
         NODE_ENV: JSON.stringify(isProduction ? 'production' : 'development'),
         PUBLIC_PATH: outputStaticUrl(),
         VUE_APP_RELEASE_PROJECT_NAME: JSON.stringify(

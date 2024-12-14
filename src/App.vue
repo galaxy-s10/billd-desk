@@ -19,7 +19,6 @@ import { useAppStore } from '@/store/app';
 import { usePiniaCacheStore } from '@/store/cache';
 import { ipcRenderer } from '@/utils';
 
-console.log(111);
 const appStore = useAppStore();
 const cacheStore = usePiniaCacheStore();
 

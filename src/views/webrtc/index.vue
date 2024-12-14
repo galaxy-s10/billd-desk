@@ -798,13 +798,7 @@ function handleVideoElSize(videoEl, setWindowBounds = false) {
     },
     videoEl,
   });
-  // console.log('tewehdh', {
-  //   res,
-  //   videoWidth: videoEl.videoWidth,
-  //   videoHeight: videoEl.videoHeight,
-  //   clientWidth,
-  //   clientHeight,
-  // });
+
   if (res.width && res.height && setWindowBounds) {
     ipcRendererSend({
       windowId: windowId.value,
