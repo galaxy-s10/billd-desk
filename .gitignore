@@ -2,4 +2,7 @@ node_modules
 dist
 components.d.ts
 .DS_Store
+.eslintcache
 deploy/index.js
+electron-release
+electron-dist

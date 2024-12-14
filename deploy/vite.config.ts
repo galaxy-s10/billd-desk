@@ -6,7 +6,6 @@ import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
 import Components from 'unplugin-vue-components/vite';
 import { defineConfig } from 'vite';
 import checker from 'vite-plugin-checker';
-import electron from 'vite-plugin-electron/simple';
 import { createHtmlPlugin } from 'vite-plugin-html';
 
 import pkg from './package.json';
@@ -62,24 +61,6 @@ export default defineConfig(({ mode }) => {
           data: {
             // @ts-ignore
             title: pkg.productName,
-          },
-        },
-      }),
-      electron({
-        main: {
-          entry: 'electron-main/index.ts', // 主进程文件
-          vite: {
-            build: {
-              outDir: 'electron-dist',
-            },
-          },
-        },
-        preload: {
-          input: 'electron-main/preload.ts',
-          vite: {
-            build: {
-              outDir: 'electron-dist',
-            },
           },
         },
       }),

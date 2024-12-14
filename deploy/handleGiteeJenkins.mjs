@@ -7,7 +7,7 @@ import trash from 'trash';
 
 const allFile = [];
 const ignore = ['.DS_Store', '.git', 'node_modules', 'dist'];
-const localDir = '/Users/huangshuisheng/Desktop/hss/galaxy-s10/billd-desk';
+const localDir = '/Users/huangshuisheng/Desktop/hss/galaxy-s10/desk';
 const giteeDir = '/Users/huangshuisheng/Desktop/hss/jenkins/billd-desk';
 
 const dir = fs.readdirSync(localDir).filter((item) => {
@@ -71,6 +71,25 @@ async function clearOld() {
   await Promise.all(queue);
 }
 
+const newPkgStr = fs.readFileSync(
+  path.resolve(localDir, 'package.json'),
+  'utf-8'
+);
+const viteConfigStr = fs.readFileSync(
+  path.resolve(localDir, './deploy/vite.config.ts'),
+  'utf-8'
+);
+const tsconfigStr = fs.readFileSync(
+  path.resolve(localDir, './deploy/tsconfig.json'),
+  'utf-8'
+);
+const newPkg = JSON.parse(newPkgStr);
+delete newPkg['devDependencies']['@electron-toolkit/preload'];
+delete newPkg['devDependencies']['@electron/rebuild'];
+delete newPkg['devDependencies']['electron'];
+delete newPkg['devDependencies']['electron-builder'];
+delete newPkg['devDependencies']['electron-icon-builder'];
+
 if (process.cwd().indexOf('jenkins') !== -1) {
   console.log('当前目录错误');
 } else {
@@ -80,6 +99,21 @@ if (process.cwd().indexOf('jenkins') !== -1) {
     const gitignoreTxt =
       'node_modules\ndist\ncomponents.d.ts\n.eslintcache\n.DS_Store\n';
     fs.writeFileSync(path.resolve(giteeDir, './.gitignore'), gitignoreTxt);
+    fs.writeFileSync(
+      path.resolve(giteeDir, 'package.json'),
+      // @ts-ignore
+      JSON.stringify({ ...newPkg }, {}, 2)
+    );
+    fs.writeFileSync(
+      path.resolve(giteeDir, 'vite.config.ts'),
+      // @ts-ignore
+      viteConfigStr
+    );
+    fs.writeFileSync(
+      path.resolve(giteeDir, 'tsconfig.json'),
+      // @ts-ignore
+      tsconfigStr
+    );
     execSync(`pnpm i`, { cwd: giteeDir });
     execSync(`git add .`, { cwd: giteeDir });
     execSync(`git commit -m 'feat: ${new Date().toLocaleString()}'`, {

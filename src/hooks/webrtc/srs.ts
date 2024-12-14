@@ -39,7 +39,7 @@ export const useWebRtcSrs = () => {
         maxBitrate: currentMaxBitrate.value,
         maxFramerate: currentMaxFramerate.value,
         resolutionRatio: currentResolutionRatio.value,
-        isSRS: false,
+        isSRS: true,
         roomId: roomId.value,
         videoEl: data.videoEl,
         sender: data.sender,
