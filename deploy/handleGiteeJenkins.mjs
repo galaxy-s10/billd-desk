@@ -49,7 +49,7 @@ function putFile() {
       // 数组的最后一个一定是文件，因此不需要判断它是不是目录
       if (index !== arr.length - 1) {
         const flag = fs.existsSync(item);
-         
+
         !flag && fs.mkdirSync(item);
       }
     });
@@ -97,8 +97,17 @@ if (process.cwd().indexOf('jenkins') !== -1) {
   clearOld().then(() => {
     findFile(dir);
     putFile();
-    const gitignoreTxt =
-      'node_modules\ndist\ncomponents.d.ts\n.eslintcache\n.DS_Store\n';
+    const gitignoreArr = [
+      'node_modules',
+      'electron-release',
+      'electron-dist',
+      'dist',
+      'components.d.ts',
+      'auto-imports.d.ts',
+      '.eslintcache',
+      '.DS_Store',
+    ];
+    const gitignoreTxt = gitignoreArr.join('\n');
     fs.writeFileSync(path.resolve(giteeDir, './.gitignore'), gitignoreTxt);
     fs.writeFileSync(
       path.resolve(giteeDir, 'package.json'),
