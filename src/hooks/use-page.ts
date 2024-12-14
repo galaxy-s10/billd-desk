@@ -18,7 +18,6 @@ export const usePage = () => {
       paginationReactive.page = page;
     },
     prefix: ({ itemCount }) => {
-      // eslint-disable-next-line
       return t('common.pageTotal', { total: itemCount });
       // return `一共${itemCount}条数据`;
     },

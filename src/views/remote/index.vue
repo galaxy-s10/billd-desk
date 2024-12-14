@@ -43,17 +43,17 @@
         <div class="label">远程控制设备</div>
         <div class="info">
           <div
-            class="ipt-wrap"
             v-on-click-outside="handleClickOutside"
+            class="ipt-wrap"
           >
             <div
-              class="ipt-top"
               :ref="arrowDownRef"
+              class="ipt-top"
             >
               <input
+                v-model="cacheStore.remoteDeskUserUuid"
                 type="text"
                 class="ipt"
-                v-model="cacheStore.remoteDeskUserUuid"
                 :placeholder="'请输入远程设备代码'"
                 maxlength="8"
               />
@@ -65,14 +65,14 @@
             </div>
             <div class="ipt-bottom">
               <div
-                class="link-device-list"
                 v-if="showLinkDeviceList"
                 ref="linkDeviceListRef"
+                class="link-device-list"
               >
                 <div
-                  class="link-device-item"
                   v-for="(item, index) in cacheStore.linkDeviceList"
                   :key="index"
+                  class="link-device-item"
                   @click="changeRemoteDeskUserUuid(item)"
                 >
                   <div class="left">{{ item.remoteDeskUserUuid }}</div>
@@ -84,8 +84,8 @@
                   </div>
                 </div>
                 <div
-                  class="null"
                   v-if="!cacheStore.linkDeviceList.length"
+                  class="null"
                 >
                   暂无记录
                 </div>
@@ -183,13 +183,13 @@
       </template>
 
       <div
-        class="list"
         v-else
+        class="list"
       >
         <div
-          class="item"
           v-for="(item, key) in appStore.remoteDesk"
           :key="key"
+          class="item"
         >
           <span>正在被{{ item[1].deskUserUuid }}控制</span>
           <span
@@ -203,8 +203,8 @@
     </div>
 
     <div
-      class="debug-info"
       v-if="appStore.showDebug"
+      class="debug-info"
     >
       <div>
         <span>窗口Id：</span>
@@ -236,8 +236,8 @@
       <div>
         <span>调试地址：</span>
         <input
-          type="text"
           v-model="debugUrl"
+          type="text"
         />
         <button @click="changeDebugUrl">确定</button>
       </div>

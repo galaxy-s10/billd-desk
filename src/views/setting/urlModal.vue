@@ -14,10 +14,10 @@
           <div class="label">wss：</div>
           <div class="ipt-wrap">
             <input
+              ref="iptRef"
+              v-model="wssUrl"
               type="text"
               class="ipt"
-              v-model="wssUrl"
-              ref="iptRef"
               placeholder="请输入wss地址"
             />
           </div>
@@ -26,10 +26,10 @@
           <div class="label">axios：</div>
           <div class="ipt-wrap">
             <input
+              ref="iptRef"
+              v-model="axiosBaseUrl"
               type="text"
               class="ipt"
-              v-model="axiosBaseUrl"
-              ref="iptRef"
               placeholder="请输入axios地址"
             />
           </div>
@@ -38,10 +38,10 @@
           <div class="label">coturn：</div>
           <div class="ipt-wrap">
             <input
+              ref="iptRef"
+              v-model="coturnUrl"
               type="text"
               class="ipt"
-              v-model="coturnUrl"
-              ref="iptRef"
               placeholder="请输入coturn地址"
             />
           </div>

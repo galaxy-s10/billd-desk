@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- eslint-disable -->
     <textarea
       ref="inviteInfo"
       class="invite-info"
@@ -7,8 +8,8 @@
 BilldDesk:
 设备代码:{{ cacheStore.deskUserUuid }}
 临时密码:{{ cacheStore.deskUserPassword }}
-</textarea
-    >
+    </textarea>
+    <!--eslint-enable-->
   </div>
 </template>
 

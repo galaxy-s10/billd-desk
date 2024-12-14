@@ -9,9 +9,9 @@
         class="link-device-list"
       >
         <div
-          class="link-device-item"
           v-for="(item, index) in cacheStore.linkDeviceList"
           :key="index"
+          class="link-device-item"
         >
           <div class="left">{{ item.remoteDeskUserUuid }}</div>
           <div class="right">

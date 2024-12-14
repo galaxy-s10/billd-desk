@@ -14,9 +14,8 @@ export interface MyAxiosPromise<T = any>
   }> {}
 
 interface MyAxiosInstance extends Axios {
-  // eslint-disable-next-line
   (config: AxiosRequestConfig): MyAxiosPromise;
-  // eslint-disable-next-line
+
   (url: string, config?: AxiosRequestConfig): MyAxiosPromise;
 }
 
@@ -33,7 +32,6 @@ class MyAxios {
       (cfg) => {
         const token = getToken();
         if (token) {
-          // eslint-disable-next-line
           cfg.headers.Authorization = `Bearer ${token}`;
         }
         return cfg;
@@ -113,7 +111,7 @@ class MyAxios {
 
   post<T = any>(
     url: string,
-    data?: {} | undefined,
+    data?: object | undefined,
     config?: AxiosRequestConfig
   ): MyAxiosPromise<T> {
     return this.instance.post(url, data, config);
@@ -121,7 +119,7 @@ class MyAxios {
 
   put<T = any>(
     url: string,
-    data?: {} | undefined,
+    data?: object | undefined,
     config?: AxiosRequestConfig
   ): MyAxiosPromise<T> {
     return this.instance.put(url, data, config);

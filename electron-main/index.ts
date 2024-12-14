@@ -15,9 +15,9 @@ import {
 
 import { IPC_EVENT } from '../src/event';
 import { WINDOW_ID_ENUM } from '../src/pure-constant';
-import { IIpcRendererData } from '../src/pure-interface';
 
-import { nutjsTs } from './types';
+import type { nutjsTs } from './types';
+import type { IIpcRendererData } from '../src/pure-interface';
 
 const nutjs: nutjsTs = require('@nut-tree-fork/nut-js');
 
@@ -97,7 +97,7 @@ async function createWindow({
     webPreferences: {
       devTools: true,
       // nodeIntegration: true, // 在网页中集成Node
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, 'preload.mjs'),
     },
     frame,
   });
@@ -181,7 +181,7 @@ function main() {
     webPreferences: {
       // devTools: true,
       // nodeIntegration: true, // 在网页中集成Node
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, 'preload.mjs'),
     },
     frame: false,
   });

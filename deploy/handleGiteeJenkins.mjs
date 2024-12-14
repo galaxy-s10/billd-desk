@@ -3,6 +3,7 @@
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+
 import trash from 'trash';
 
 const allFile = [];
@@ -48,7 +49,7 @@ function putFile() {
       // 数组的最后一个一定是文件，因此不需要判断它是不是目录
       if (index !== arr.length - 1) {
         const flag = fs.existsSync(item);
-        // eslint-disable-next-line
+         
         !flag && fs.mkdirSync(item);
       }
     });

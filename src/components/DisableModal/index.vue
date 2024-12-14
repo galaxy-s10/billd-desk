@@ -6,6 +6,7 @@
         <div class="title">提示</div>
         <div></div>
       </div>
+      <!-- eslint-disable -->
       <div
         class="update-content"
         v-html="
@@ -14,6 +15,7 @@
           )?.msg
         "
       ></div>
+      <!--eslint-enable-->
       <div class="other">
         <div>发布时间：{{ appStore.updateModalInfo?.updateDate }}</div>
       </div>

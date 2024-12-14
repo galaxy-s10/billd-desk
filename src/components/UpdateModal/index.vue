@@ -10,10 +10,12 @@
           @click="emits('close')"
         ></div>
       </div>
+      <!-- eslint-disable -->
       <div
         class="update-content"
         v-html="appStore.updateModalInfo?.updateContent"
       ></div>
+      <!--eslint-enable-->
       <div class="other">
         <div>版本号：{{ appStore.updateModalInfo?.show_version }}</div>
         <div>更新时间：{{ appStore.updateModalInfo?.updateDate }}</div>

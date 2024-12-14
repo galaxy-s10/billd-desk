@@ -193,8 +193,8 @@
       </div>
     </div>
     <UrlModalCpt
-      @close="showUrlModalCpt = false"
       v-if="showUrlModalCpt"
+      @close="showUrlModalCpt = false"
     ></UrlModalCpt>
   </div>
 </template>

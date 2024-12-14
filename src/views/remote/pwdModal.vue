@@ -13,11 +13,11 @@
       <div class="err-msg">{{ errMsg }}</div>
       <div class="ipt-wrap">
         <input
+          ref="iptRef"
+          v-model="password"
           :type="hidePwd ? 'password' : 'text'"
           class="ipt"
           maxlength="12"
-          v-model="password"
-          ref="iptRef"
           placeholder="请输入连接密码"
         />
         <div

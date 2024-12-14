@@ -65,8 +65,8 @@
       @click="handleOpenDebug"
     ></div>
     <div
-      class="debug-area-wrap"
       v-if="appStore.showDebug"
+      class="debug-area-wrap"
     >
       <div
         class="item"

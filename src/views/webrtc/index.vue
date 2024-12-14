@@ -1,9 +1,9 @@
 <template>
   <div class="webrtc-wrap">
     <div
+      ref="dragEl"
       class="drag"
       :style="style"
-      ref="dragEl"
     >
       <span
         class="txt"
@@ -21,8 +21,8 @@
           @click="handleOpenDebug"
         ></div>
         <div
-          class="debug-info"
           v-if="appStore.showDebug"
+          class="debug-info"
         >
           <div>
             <span
@@ -219,8 +219,8 @@
     </div>
 
     <div
-      class="remote-video"
       ref="videoWrapRef"
+      class="remote-video"
       :class="{ 'hide-cursor': !showCursor, watch: isWatchMode }"
       @mousedown="handleMouseDown"
       @mousemove="handleMouseMove"
@@ -230,8 +230,8 @@
     ></div>
 
     <div
-      class="loading"
       v-if="loading"
+      class="loading"
     >
       正在连接...
     </div>

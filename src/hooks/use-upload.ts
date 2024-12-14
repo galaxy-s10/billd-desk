@@ -61,7 +61,6 @@ export const useUpload = async ({
       let flag = false;
       timer = setInterval(async () => {
         try {
-          // eslint-disable-next-line @typescript-eslint/no-shadow
           const { code, data, message } = await fetchUploadProgress({
             hash,
             prefix,

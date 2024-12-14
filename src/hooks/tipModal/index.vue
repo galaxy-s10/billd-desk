@@ -7,8 +7,8 @@
       :title="title"
       :mask-closable="maskClosable"
       :hidden-close="hiddenClose"
-      @close="handleCancel()"
       :width="width"
+      @close="handleCancel()"
     >
       <div ref="domRef"></div>
       <template v-if="typeof content === 'string'">{{ content }}</template>

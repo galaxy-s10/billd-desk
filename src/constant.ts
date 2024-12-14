@@ -1,7 +1,7 @@
 export * from '@/pure-constant';
 import { Key } from '@nut-tree-fork/shared';
 
-import { BilldHtmlWebpackPluginLog } from '@/interface';
+import type { BilldHtmlWebpackPluginLog } from '@/interface';
 import { prodDomain } from '@/spec-config';
 
 export const PROJECT_GITHUB = `https://github.com/galaxy-s10/billd-desk-electron`;

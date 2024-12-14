@@ -10,7 +10,6 @@ import App from './App.vue';
 
 const messageEl = document.createElement('div');
 document.body.appendChild(messageEl);
-
 const app = createApp(App);
 const message = createApp(Message);
 

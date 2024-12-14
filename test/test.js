@@ -8,7 +8,7 @@
  *    3.2如果localVersion不小于newVersion，则代表当前是最新版本，不用更新
  * 4.判断noiceVersion，localVersion小于这个版本的就提示更新
  */
-let versionInfo = {
+const versionInfo = {
   // 是否检查更新，1就代表检查更新
   checkUpdate: 1,
   // 最低版本
@@ -50,7 +50,7 @@ let versionInfo = {
  * 前端判断status，status=1的话，则判断isUpdate、forceUpdate，download，下载对应的包
  * 前端判断status，status=2的话，则代表这个版本禁用，提示statusDesc
  */
-let front = {
+const front = {
   // 是否提示更新，1:提示; 2:不提示
   isUpdate: 1,
   // 是否强制更新，1:强制; 2:不强制

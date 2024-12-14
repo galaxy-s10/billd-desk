@@ -495,7 +495,7 @@ export class WebRTCClass {
     });
   };
 
-  dataChannelSend = <T extends unknown>({
+  dataChannelSend = <T>({
     // 写成<T extends unknown>而不是<T>是为了避免eslint将箭头函数的<T>后面的内容识别成jsx语法
     msgType,
     requestId,

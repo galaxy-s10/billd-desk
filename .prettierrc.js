@@ -1,16 +1,17 @@
 console.log(
   '\x1B[0;37;44m INFO \x1B[0m',
-  '\x1B[0;;34m ' +
-    `读取了: ${__filename.slice(__dirname.length + 1)}` +
-    ' \x1B[0m'
+  '\x1B[0;;34m ' + `读取了: prettier配置文件` + ' \x1B[0m'
 );
 
-module.exports = {
+/**
+ * @see https://prettier.io/docs/en/configuration.html
+ * @type {import("prettier").Config}
+ */
+const config = {
   bracketSpacing: true, // 默认为true。即要求：{ foo: bar }；可改为false，即要求{foo: bar}
   singleQuote: true, // 默认为false。即要求：const a = "1"；可改为true，即要求const a = '1'
   semi: true, // 默认值true，即要求在所有代码语句的末尾添加分号；可改为false，即要求仅在可能导致 ASI 失败的行的开头添加分号。
   singleAttributePerLine: true, // 默认false。即在HTML、Vue和JSX中不要每行强制执行单个属性；可改为true，即要求每行强制执行单个属性。
-
   /**
    * jsxBracketSameLine
    * 注意是多行，如果是类似这种：<a>1</a>，基本不会触发换行，因此也就不会触发这个bracketSameLine
@@ -44,3 +45,5 @@ module.exports = {
   tabWidth: 2, // 指定每个缩进级别的空格数。
   // parser: 'babel', // 指定要使用的解析器。Prettier 会自动从输入文件路径推断解析器，因此您不必更改此设置。
 };
+
+export default config;
