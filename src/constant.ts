@@ -14,8 +14,11 @@ export const AUTHOR_INFO = {
 };
 
 export const COMMON_URL = {
-  privatizationDeployment: 'https://live.hsslive.cn/privatizationDeployment',
+  privatizationDeployment: 'https://desk.hsslive.cn/privatizationDeployment',
+  payCoursesArticle: `https://www.hsslive.cn/article/151`,
 };
+
+export const PROJECT_NAME = 'billd-desk';
 
 // @ts-ignore
 export const APP_BUILD_INFO = process.env

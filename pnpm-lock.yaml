@@ -33,7 +33,7 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0
       billd-deploy:
-        specifier: ^1.0.26
+        specifier: ^1.1.0
         version: 1.1.0(@types/node@20.4.1)(esbuild@0.15.18)(sass@1.63.6)(terser@5.27.0)
       billd-html-webpack-plugin:
         specifier: ^1.2.0
@@ -42,14 +42,14 @@ importers:
         specifier: ^0.0.8
         version: 0.0.8
       billd-utils:
-        specifier: ^0.0.22
-        version: 0.0.22(tslib@2.6.2)(typescript@5.7.2)
+        specifier: ^0.0.25
+        version: 0.0.25(tslib@2.6.2)(typescript@5.7.2)
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
       naive-ui:
         specifier: ^2.34.4
-        version: 2.34.4(vue@3.5.13(typescript@5.7.2))
+        version: 2.40.3(vue@3.5.13(typescript@5.7.2))
       pinia:
         specifier: ^2.1.6
         version: 2.1.6(typescript@5.7.2)(vue@3.5.13(typescript@5.7.2))
@@ -861,13 +861,13 @@ packages:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
 
-  '@css-render/plugin-bem@0.15.12':
-    resolution: {integrity: sha512-Lq2jSOZn+wYQtsyaFj6QRz2EzAnd3iW5fZeHO1WSXQdVYwvwGX0ZiH3X2JQgtgYLT1yeGtrwrqJdNdMEUD2xTw==}
+  '@css-render/plugin-bem@0.15.14':
+    resolution: {integrity: sha512-QK513CJ7yEQxm/P3EwsI+d+ha8kSOcjGvD6SevM41neEMxdULE+18iuQK6tEChAWMOQNQPLG/Rw3Khb69r5neg==}
     peerDependencies:
-      css-render: ~0.15.12
+      css-render: ~0.15.14
 
-  '@css-render/vue3-ssr@0.15.12':
-    resolution: {integrity: sha512-AQLGhhaE0F+rwybRCkKUdzBdTEM/5PZBYy+fSYe1T9z9+yxMuV/k7ZRqa4M69X+EI1W8pa4kc9Iq2VjQkZx4rg==}
+  '@css-render/vue3-ssr@0.15.14':
+    resolution: {integrity: sha512-//8027GSbxE9n3QlD73xFY6z4ZbHbvrOVB7AO6hsmrEzGbg+h2A09HboUyDgu+xsmj7JnvJD39Irt+2D0+iV8g==}
     peerDependencies:
       vue: ^3.0.11
 
@@ -2271,8 +2271,8 @@ packages:
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
 
-  '@types/katex@0.14.0':
-    resolution: {integrity: sha512-+2FW2CcT0K3P+JMR8YG846bmDwplKUTsWgT2ENwdQ1UdVfRk3GQrh6Mi4sTopy30gI8Uau5CEqHTDZ6YvWIUPA==}
+  '@types/katex@0.16.7':
+    resolution: {integrity: sha512-HMwFiRujE5PjrgwHQ25+bsLJgowjGjm5Z8FVSf0N6PwgJrwxH0QxzHYDcKsTfV3wva0vzrpqMTJS2jXPr5BMEQ==}
 
   '@types/keyv@3.1.4':
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
@@ -2919,8 +2919,8 @@ packages:
   billd-scss@0.0.8:
     resolution: {integrity: sha512-42gyDYnmRICjqrzk3qbqVygpvjpMu/2rMk41x8HyWLOf457EkXyCiAAFrFR2XM3/c6PHWbtD+IhP8MHUV6JeyA==}
 
-  billd-utils@0.0.22:
-    resolution: {integrity: sha512-koOfFzbzSkw6gMYyOKNMzAJHYMhUWHr3swPW48rT7PwZMvBkAtH93bHEVuDCwariWrSwxCGIqozOzp5YaeePqQ==}
+  billd-utils@0.0.25:
+    resolution: {integrity: sha512-Pp8ivF15L93ZG0vA1hqAqaDwzxesKYam6tEO0DcDjKHGVR6ylVl/ASsHlniR5hbvp4XFhBiKJ0oMwJvab9GFiQ==}
 
   binary-extensions@2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
@@ -3438,8 +3438,8 @@ packages:
     peerDependencies:
       postcss: ^8.4
 
-  css-render@0.15.12:
-    resolution: {integrity: sha512-eWzS66patiGkTTik+ipO9qNGZ+uNuGyTmnz6/+EJIiFg8+3yZRpnMwgFo8YdXhQRsiePzehnusrxVvugNjXzbw==}
+  css-render@0.15.14:
+    resolution: {integrity: sha512-9nF4PdUle+5ta4W5SyZdLCCmFd37uVimSjg1evcTqKJCyvCEEj12WKzOSBNak6r4im4J4iYXKH1OWpUV5LBYFg==}
 
   css-select@4.3.0:
     resolution: {integrity: sha512-wPpOYtnsVontu2mODhA19JrqWxNsfdatRKd64kmpRbQgh1KtItko5sTnEpPdpSaJszTOhEMlF/RPz28qj4HqhQ==}
@@ -3486,14 +3486,13 @@ packages:
     resolution: {integrity: sha512-t/Ygsytq+R995EJ5PZlD4Cu56sWa8InXySaViRzw9apusqsOO2bQP+SbYzAhR0pFKoB+43lYy8rWban9JSuXnA==}
     engines: {node: '>= 0.4'}
 
-  date-fns-tz@1.3.8:
-    resolution: {integrity: sha512-qwNXUFtMHTTU6CFSFjoJ80W8Fzzp24LntbjFFBgL/faqds4e5mo9mftoRLgr3Vi1trISsg4awSpYVsOQCRnapQ==}
+  date-fns-tz@3.2.0:
+    resolution: {integrity: sha512-sg8HqoTEulcbbbVXeg84u5UnlsQa8GS5QXMqjjYIhS4abEVVKIUwe0/l/UhrZdKaL/W5eWZNlbTeEIiOXTcsBQ==}
     peerDependencies:
-      date-fns: '>=2.0.0'
+      date-fns: ^3.0.0 || ^4.0.0
 
-  date-fns@2.30.0:
-    resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
-    engines: {node: '>=0.11'}
+  date-fns@3.6.0:
+    resolution: {integrity: sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==}
 
   date-format@4.0.14:
     resolution: {integrity: sha512-39BOQLs9ZjKh0/patS9nrT8wc3ioX3/eA/zgbKNopnF2wCqJEoxywwwElATYvRsXdnOxA/OQeQoFZ3rFjVajhg==}
@@ -5566,8 +5565,8 @@ packages:
   mz@2.7.0:
     resolution: {integrity: sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==}
 
-  naive-ui@2.34.4:
-    resolution: {integrity: sha512-aPG8PDfhSzIzn/jSC9y3Jb3Pe2wHJ7F0cFV1EWlbImSrZECeUmoc+fIcOSWbizoztkKfaUAeKwYdMl09MKkj1g==}
+  naive-ui@2.40.3:
+    resolution: {integrity: sha512-TpgYfOg0SNlG4HHhTdFnFcPc1trZiX3r10Pn6biyEgRoi6ZC5qbsY8xgKsqQuG4nWj2PHLT8pPVEkt2pKOlxag==}
     peerDependencies:
       vue: ^3.0.0
 
@@ -7512,8 +7511,8 @@ packages:
       typescript:
         optional: true
 
-  vueuc@0.4.58:
-    resolution: {integrity: sha512-Wnj/N8WbPRSxSt+9ji1jtDHPzda5h2OH/0sFBhvdxDRuyCZbjGg3/cKMaKqEoe+dErTexG2R+i6Q8S/Toq1MYg==}
+  vueuc@0.4.64:
+    resolution: {integrity: sha512-wlJQj7fIwKK2pOEoOq4Aro8JdPOGpX8aWQhV8YkTW9OgWD2uj2O8ANzvSsIGjx7LTOc7QbS7sXdxHi6XvRnHPA==}
     peerDependencies:
       vue: ^3.0.11
 
@@ -7811,7 +7810,7 @@ snapshots:
       '@babel/core': 7.24.0
       '@babel/helper-compilation-targets': 7.23.6
       '@babel/helper-plugin-utils': 7.24.0
-      debug: 4.3.4
+      debug: 4.4.0
       lodash.debounce: 4.0.8
       resolve: 1.22.8
     transitivePeerDependencies:
@@ -7822,7 +7821,7 @@ snapshots:
       '@babel/core': 7.24.0
       '@babel/helper-compilation-targets': 7.23.6
       '@babel/helper-plugin-utils': 7.22.5
-      debug: 4.3.4
+      debug: 4.4.0
       lodash.debounce: 4.0.8
       resolve: 1.22.8
     transitivePeerDependencies:
@@ -8543,11 +8542,11 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@css-render/plugin-bem@0.15.12(css-render@0.15.12)':
+  '@css-render/plugin-bem@0.15.14(css-render@0.15.14)':
     dependencies:
-      css-render: 0.15.12
+      css-render: 0.15.14
 
-  '@css-render/vue3-ssr@0.15.12(vue@3.5.13(typescript@5.7.2))':
+  '@css-render/vue3-ssr@0.15.14(vue@3.5.13(typescript@5.7.2))':
     dependencies:
       vue: 3.5.13(typescript@5.7.2)
 
@@ -8884,7 +8883,7 @@ snapshots:
       node-gyp: 9.4.1
       ora: 5.4.1
       read-binary-file-arch: 1.0.6
-      semver: 7.5.4
+      semver: 7.6.3
       tar: 6.2.0
       yargs: 17.7.2
     transitivePeerDependencies:
@@ -9980,7 +9979,7 @@ snapshots:
 
   '@types/json5@0.0.29': {}
 
-  '@types/katex@0.14.0': {}
+  '@types/katex@0.16.7': {}
 
   '@types/keyv@3.1.4':
     dependencies:
@@ -10139,7 +10138,7 @@ snapshots:
       debug: 4.3.4
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.5.4
+      semver: 7.6.3
       tsutils: 3.21.0(typescript@5.7.2)
     optionalDependencies:
       typescript: 5.7.2
@@ -10171,7 +10170,7 @@ snapshots:
       '@typescript-eslint/typescript-estree': 5.62.0(typescript@5.7.2)
       eslint: 9.17.0(jiti@1.21.6)
       eslint-scope: 5.1.1
-      semver: 7.5.4
+      semver: 7.6.3
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -10548,7 +10547,7 @@ snapshots:
       bowser: 1.9.4
       copy-to: 2.0.1
       dateformat: 2.2.0
-      debug: 4.3.4
+      debug: 4.4.0
       destroy: 1.2.0
       end-or-error: 1.0.1
       get-ready: 1.0.0
@@ -10876,7 +10875,7 @@ snapshots:
       inquirer: 8.2.5
       node-ssh: 13.2.0
       qiniu: 7.14.0
-      semver: 7.5.4
+      semver: 7.6.3
     transitivePeerDependencies:
       - '@swc/core'
       - '@types/node'
@@ -10911,7 +10910,7 @@ snapshots:
 
   billd-scss@0.0.8: {}
 
-  billd-utils@0.0.22(tslib@2.6.2)(typescript@5.7.2):
+  billd-utils@0.0.25(tslib@2.6.2)(typescript@5.7.2):
     dependencies:
       '@babel/core': 7.24.0
       '@babel/plugin-transform-runtime': 7.23.7(@babel/core@7.24.0)
@@ -11564,7 +11563,7 @@ snapshots:
     dependencies:
       postcss: 8.4.49
 
-  css-render@0.15.12:
+  css-render@0.15.14:
     dependencies:
       '@emotion/hash': 0.8.0
       csstype: 3.0.11
@@ -11625,13 +11624,11 @@ snapshots:
       es-errors: 1.3.0
       is-data-view: 1.0.2
 
-  date-fns-tz@1.3.8(date-fns@2.30.0):
+  date-fns-tz@3.2.0(date-fns@3.6.0):
     dependencies:
-      date-fns: 2.30.0
+      date-fns: 3.6.0
 
-  date-fns@2.30.0:
-    dependencies:
-      '@babel/runtime': 7.23.8
+  date-fns@3.6.0: {}
 
   date-format@4.0.14: {}
 
@@ -12886,7 +12883,7 @@ snapshots:
       es6-error: 4.1.1
       matcher: 3.0.0
       roarr: 2.15.4
-      semver: 7.5.4
+      semver: 7.6.3
       serialize-error: 7.0.1
     optional: true
 
@@ -13696,7 +13693,7 @@ snapshots:
   log4js@6.9.1:
     dependencies:
       date-format: 4.0.14
-      debug: 4.3.4
+      debug: 4.4.0
       flatted: 3.2.9
       rfdc: 1.4.1
       streamroller: 3.1.5
@@ -13953,17 +13950,18 @@ snapshots:
       object-assign: 4.1.1
       thenify-all: 1.6.0
 
-  naive-ui@2.34.4(vue@3.5.13(typescript@5.7.2)):
+  naive-ui@2.40.3(vue@3.5.13(typescript@5.7.2)):
     dependencies:
-      '@css-render/plugin-bem': 0.15.12(css-render@0.15.12)
-      '@css-render/vue3-ssr': 0.15.12(vue@3.5.13(typescript@5.7.2))
-      '@types/katex': 0.14.0
+      '@css-render/plugin-bem': 0.15.14(css-render@0.15.14)
+      '@css-render/vue3-ssr': 0.15.14(vue@3.5.13(typescript@5.7.2))
+      '@types/katex': 0.16.7
       '@types/lodash': 4.14.202
       '@types/lodash-es': 4.17.12
       async-validator: 4.2.5
-      css-render: 0.15.12
-      date-fns: 2.30.0
-      date-fns-tz: 1.3.8(date-fns@2.30.0)
+      css-render: 0.15.14
+      csstype: 3.1.3
+      date-fns: 3.6.0
+      date-fns-tz: 3.2.0(date-fns@3.6.0)
       evtd: 0.2.4
       highlight.js: 11.8.0
       lodash: 4.17.21
@@ -13973,7 +13971,7 @@ snapshots:
       vdirs: 0.1.8(vue@3.5.13(typescript@5.7.2))
       vooks: 0.2.12(vue@3.5.13(typescript@5.7.2))
       vue: 3.5.13(typescript@5.7.2)
-      vueuc: 0.4.58(vue@3.5.13(typescript@5.7.2))
+      vueuc: 0.4.64(vue@3.5.13(typescript@5.7.2))
 
   nan@2.22.0:
     optional: true
@@ -14943,7 +14941,7 @@ snapshots:
   rollup-plugin-esbuild@4.10.3(esbuild@0.15.18)(rollup@2.79.1):
     dependencies:
       '@rollup/pluginutils': 4.2.1
-      debug: 4.3.4
+      debug: 4.4.0
       es-module-lexer: 0.9.3
       esbuild: 0.15.18
       joycon: 3.1.1
@@ -15333,7 +15331,7 @@ snapshots:
   streamroller@3.1.5:
     dependencies:
       date-format: 4.0.14
-      debug: 4.3.4
+      debug: 4.4.0
       fs-extra: 8.1.0
     transitivePeerDependencies:
       - supports-color
@@ -16101,11 +16099,11 @@ snapshots:
     optionalDependencies:
       typescript: 5.7.2
 
-  vueuc@0.4.58(vue@3.5.13(typescript@5.7.2)):
+  vueuc@0.4.64(vue@3.5.13(typescript@5.7.2)):
     dependencies:
-      '@css-render/vue3-ssr': 0.15.12(vue@3.5.13(typescript@5.7.2))
+      '@css-render/vue3-ssr': 0.15.14(vue@3.5.13(typescript@5.7.2))
       '@juggle/resize-observer': 3.4.0
-      css-render: 0.15.12
+      css-render: 0.15.14
       evtd: 0.2.4
       seemly: 0.3.8
       vdirs: 0.1.8(vue@3.5.13(typescript@5.7.2))
@@ -16136,7 +16134,7 @@ snapshots:
       '@webassemblyjs/wasm-parser': 1.11.6
       acorn: 8.14.0
       acorn-import-assertions: 1.9.0(acorn@8.14.0)
-      browserslist: 4.23.0
+      browserslist: 4.24.3
       chrome-trace-event: 1.0.3
       enhanced-resolve: 5.15.0
       es-module-lexer: 1.4.1

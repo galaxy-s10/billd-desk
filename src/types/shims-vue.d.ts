@@ -9,6 +9,7 @@ declare module '*.vue' {
 interface Window {
   electronAPI: any;
   $message: import('naive-ui/es/message/src/MessageProvider').MessageApiInjection;
+  $modal: import('naive-ui/es/modal/src/ModalProvider').ModalApiInjection;
   $notification: import('naive-ui/es/notification/index').NotificationProviderInst;
   // $notification: import('naive-ui/es/notification/index').NotificationApiInjection;
   TXLivePusher: any;

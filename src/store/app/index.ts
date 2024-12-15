@@ -7,7 +7,6 @@ import {
   LiveRenderEnum,
   MediaTypeEnum,
 } from '@/interface';
-import { mobileRouterName } from '@/router';
 import { ILiveRoom } from '@/types/ILiveRoom';
 
 export type AppRootState = {
@@ -144,11 +143,7 @@ export const useAppStore = defineStore('app', {
         pipMode: false,
       },
       normalVolume: 70,
-      navList: [
-        { routeName: mobileRouterName.h5, name: '频道' },
-        { routeName: mobileRouterName.h5Rank, name: '排行' },
-        { routeName: mobileRouterName.h5Profile, name: '我的' },
-      ],
+      navList: [],
       allTrack: [],
       liveLine: LiveLineEnum.hls,
       liveRoomInfo: undefined,
