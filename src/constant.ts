@@ -14,7 +14,7 @@ export const AUTHOR_INFO = {
 };
 
 export const COMMON_URL = {
-  privatizationDeployment: 'https://desk.hsslive.cn/privatizationDeployment',
+  privatizationDeployment: 'https://desk.hsslive.cn/#/privatizationDeployment',
   payCoursesArticle: `https://www.hsslive.cn/article/151`,
 };
 
