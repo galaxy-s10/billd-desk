@@ -1,6 +1,6 @@
 {
   "name": "billd-desk",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Vue3 + WebRTC + Electron搭建的远程桌面",
   "keywords": [
     "billd",
