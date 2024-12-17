@@ -116,6 +116,7 @@ if (process.cwd().indexOf('galaxy-s10') !== -1) {
       // @ts-ignore
       JSON.stringify({ ...newPkg }, {}, 2)
     );
+    execSync(`git rm -r --cached .`, { cwd: freeDir });
     execSync(`pnpm i`, { cwd: freeDir });
     execSync(`git add .`, { cwd: freeDir });
     execSync(`git commit -m 'feat: 优化-${new Date().toLocaleString()}'`, {

@@ -22,7 +22,7 @@ export default defineConfig(({ mode }) => {
   const outputStaticUrl = () => {
     if (isWeb) {
       if (isProduction) {
-        return 'https://resource.hsslive.cn/billd-desk/dist/';
+        return 'https://resource.hsslive.cn/billd-desk/client/dist/';
       } else {
         return './';
       }
