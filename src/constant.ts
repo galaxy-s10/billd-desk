@@ -4,7 +4,7 @@ import { Key } from '@nut-tree-fork/shared';
 import type { BilldHtmlWebpackPluginLog } from '@/interface';
 import { prodDomain } from '@/spec-config';
 
-export const PROJECT_GITHUB = `https://github.com/galaxy-s10/billd-desk-electron`;
+export const PROJECT_GITHUB = `https://github.com/galaxy-s10/billd-desk`;
 export const WEB_DESK_URL = `https://desk.hsslive.cn`;
 
 export const AUTHOR_INFO = {

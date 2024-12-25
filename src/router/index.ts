@@ -22,6 +22,7 @@ export const routerName = {
   webrtc: 'webrtc',
   deviceManage: 'deviceManage',
   setting: 'setting',
+  hi: 'hi',
   privatizationDeployment: 'privatizationDeployment',
 
   pull: 'pull',
@@ -52,6 +53,11 @@ export const defaultRoutes: RouteRecordRaw[] = [
         name: routerName.setting,
         path: '/setting',
         component: () => import('@/views/setting/index.vue'),
+      },
+      {
+        name: routerName.hi,
+        path: '/hi',
+        component: () => import('@/views/hi/index.vue'),
       },
     ],
   },
