@@ -39,6 +39,8 @@ export const IPC_EVENT = {
   globalShortcut: 'globalShortcut',
   getPlatform: 'getPlatform',
   writeFile: 'writeFile',
+  powerBoot: 'powerBoot',
+  powerBootStatus: 'powerBootStatus',
 
   response_commonTest: 'response_commonTest',
   response_powerSaveBlockerStart: 'response_powerSaveBlockerStart',

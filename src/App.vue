@@ -30,7 +30,7 @@ import { ipcRenderer } from '@/utils';
 const appStore = useAppStore();
 const cacheStore = usePiniaCacheStore();
 
-const { handlesetAlwaysOnTop } = useIpcRendererSend();
+const { handlesetAlwaysOnTop, handlesetPowerBootStatus } = useIpcRendererSend();
 const themeOverrides: GlobalThemeOverrides = {
   common: {
     primaryColor: '#ffd700',
@@ -45,6 +45,14 @@ onMounted(() => {
   handlesetAlwaysOnTop({
     windowId: WINDOW_ID_ENUM.remote,
     flag: cacheStore.isAlwaysOnTop,
+  });
+  handlesetPowerBootStatus({
+    windowId: WINDOW_ID_ENUM.remote,
+  }).then((res) => {
+    console.log('res', res);
+    if (res.code === 0) {
+      cacheStore.powerBoot = res.data.open;
+    }
   });
   getClient();
   if (ipcRenderer) {

@@ -8,3 +8,4 @@ deploy/index.js
 deploy/index.cjs
 electron-release
 electron-dist
+build/output/

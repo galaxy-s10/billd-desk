@@ -15,7 +15,7 @@
   mac: {
     target: ['dmg'],
     artifactName: '${productName}-mac-${platform}-${version}-${arch}-installer.${ext}',
-    icon: 'build/icons/icon.incs',
+    icon: 'build/output/icons/icon.icns',
   },
   linux: {
     artifactName: '${productName}-linux-${platform}-${version}-${arch}-installer.${ext}',
@@ -34,7 +34,7 @@
         arch: ['x64'],
       },
     ],
-    icon: 'build/icons/icon.ico',
+    icon: 'build/output/icons/icon.ico',
   },
   // https://www.electron.build/generated/nsisoptions
   nsis: {
@@ -48,7 +48,7 @@
     removeDefaultUninstallWelcomePage: false,
     // deleteAppDataOnUninstall，仅限一键安装程序。卸载时是否删除应用程序数据。
     deleteAppDataOnUninstall: false,
-    // installerIcon: 'build/icons/icon.ico',
-    // uninstallerIcon: 'build/icons/icon.ico',
+    // installerIcon: 'build/output/icons/icon.ico',
+    // uninstallerIcon: 'build/output/icons/icon.ico',
   },
 }
