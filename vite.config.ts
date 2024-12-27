@@ -27,11 +27,7 @@ export default defineConfig(({ mode }) => {
         return './';
       }
     } else {
-      if (isProduction) {
-        return 'dist';
-      } else {
-        return './';
-      }
+      return './';
     }
   };
 

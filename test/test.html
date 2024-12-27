@@ -9,4 +9,55 @@
     <title>Document</title>
   </head>
   <body></body>
+  <script>
+    // 自定义编码方法
+    function encodeData(stringData, binaryData) {
+      // 使用 TextEncoder 编码字符串
+      const encoder = new TextEncoder();
+      const stringBytes = encoder.encode(stringData);
+
+      // 创建一个包含字符串和二进制数据的 ArrayBuffer
+      const totalSize = stringBytes.length + binaryData.byteLength;
+      const arrayBuffer = new ArrayBuffer(totalSize);
+      const uint8View = new Uint8Array(arrayBuffer);
+
+      // 将字符串字节写入 ArrayBuffer
+      uint8View.set(stringBytes, 0);
+
+      // 将二进制数据写入 ArrayBuffer
+      uint8View.set(new Uint8Array(binaryData), stringBytes.length);
+
+      return arrayBuffer;
+    }
+
+    // 自定义解码方法
+    function decodeData(arrayBuffer) {
+      const uint8View = new Uint8Array(arrayBuffer);
+
+      // 使用 TextDecoder 解码字符串
+      const stringLength = uint8View.find((byte) => byte === 0); // 找到第一个零字节
+      const stringBytes = uint8View.slice(0, stringLength);
+      const decoder = new TextDecoder();
+      const decodedString = decoder.decode(stringBytes);
+      console.log('stringLength', stringLength);
+      // 获取二进制数据
+      const binaryData = uint8View.slice(stringLength + 1); // 跳过零字节
+
+      return { decodedString, binaryData };
+    }
+
+    // 示例用法
+    // const myString = 'Hello';
+    const myString = JSON.stringify({ d: 123, a: 'ds' });
+    const myBinaryData = new Uint8Array([]); // 需要添加的二进制数据
+
+    // 编码数据
+    const encodedBuffer = encodeData(myString, myBinaryData);
+    console.log(encodedBuffer); // 输出 ArrayBuffer
+
+    // 解码数据
+    const { decodedString, binaryData } = decodeData(encodedBuffer);
+    console.log(decodedString); // 输出: Hello
+    // console.log(new Uint8Array(binaryData)); // 输出: Uint8Array(5) [ 1, 2, 3, 4, 5 ]
+  </script>
 </html>

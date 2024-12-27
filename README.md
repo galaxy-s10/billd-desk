@@ -7,12 +7,24 @@
     />
   </a>
 </p>
+
 <h1 align="center">
   BilldDesk
 </h1>
+
 <p align="center">
  基于WebRTC + Vue3 + Electron + Nodejs搭建的远程桌面
 </p>
+
+<div align="center">
+![stars](https://img.shields.io/github/stars/galaxy-s10/billd-desk)
+![forks](https://img.shields.io/github/forks/galaxy-s10/billd-desk)
+
+![version](https://img.shields.io/github/package-json/v/galaxy-s10/billd-desk)
+![License](https://img.shields.io/github/license/galaxy-s10/billd-desk)
+![language](https://img.shields.io/github/languages/top/galaxy-s10/billd-desk)
+
+</div>
 
 ## 简介
 
@@ -20,32 +32,26 @@ BilldDesk远程桌面控制，目前实现了类似ToDesk、向日葵等远程�
 
 ## 生态
 
-| 名称           | 仓库                                                                     | star & fork                                                                                                                                                                                                                                                                                                         | 线上地址                                           |
-| -------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| 远程桌面网页端 | [billd-desk](https://github.com/galaxy-s10/billd-desk)                   | [![github](https://img.shields.io/github/stars/galaxy-s10/billd-desk?label=star&logo=GitHub)](https://github.com/galaxy-s10/billd-desk) [![github](https://img.shields.io/github/forks/galaxy-s10/billd-desk?label=fork&logo=GitHub)](https://github.com/galaxy-s10/billd-desk)                                     | [https://desk.hsslive.cn](https://desk.hsslive.cn) |
-| 远程桌面客户端 | [billd-desk-electron](https://github.com/galaxy-s10/billd-desk-electron) | [![github](https://img.shields.io/github/stars/galaxy-s10/billd-desk-electron?label=star&logo=GitHub)](https://github.com/galaxy-s10/billd-desk-electron) [![github](https://img.shields.io/github/forks/galaxy-s10/billd-desk-electron?label=fork&logo=GitHub)](https://github.com/galaxy-s10/billd-desk-electron) |                                                    |
-| 远程桌面移动端 | [billd-desk-flutter](https://github.com/galaxy-s10/billd-desk-flutter)   | [![github](https://img.shields.io/github/stars/galaxy-s10/billd-desk-flutter?label=star&logo=GitHub)](https://github.com/galaxy-s10/billd-desk-flutter) [![github](https://img.shields.io/github/forks/galaxy-s10/billd-desk-flutter?label=fork&logo=GitHub)](https://github.com/galaxy-s10/billd-desk-flutter)     |                                                    |
-| 远程桌面服务端 | [billd-desk-server](https://github.com/galaxy-s10/billd-desk-server)     | [![github](https://img.shields.io/github/stars/galaxy-s10/billd-desk-server?label=star&logo=GitHub)](https://github.com/galaxy-s10/billd-desk-server) [![github](https://img.shields.io/github/forks/galaxy-s10/billd-desk-server?label=fork&logo=GitHub)](https://github.com/galaxy-s10/billd-desk-server)         |                                                    |
+| 名称                | 仓库                                                         | star & fork                                                  | 线上地址/下载地址                                            |
+| ------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 远程桌面网页/客户端 | [billd-desk](https://github.com/galaxy-s10/billd-desk)       | [![github](https://img.shields.io/github/stars/galaxy-s10/billd-desk?label=star&logo=GitHub)](https://github.com/galaxy-s10/billd-desk) [![github](https://img.shields.io/github/forks/galaxy-s10/billd-desk?label=fork&logo=GitHub)](https://github.com/galaxy-s10/billd-desk) | [https://desk.hsslive.cn](https://desk.hsslive.cn)           |
+| 远程桌面后台        | [billd-desk-admin](https://github.com/galaxy-s10/billd-desk-admin) | [![github](https://img.shields.io/github/stars/galaxy-s10/billd-desk-admin?label=star&logo=GitHub)](https://github.com/galaxy-s10/billd-desk) [![github](https://img.shields.io/github/forks/galaxy-s10/billd-desk-admin?label=fork&logo=GitHub)](https://github.com/galaxy-s10/billd-desk-admin) | [https://desk-admin.hsslive.cn](https://desk-admin.hsslive.cn) |
+| 远程桌面移动端      | [billd-desk-flutter](https://github.com/galaxy-s10/billd-desk-flutter) | [![github](https://img.shields.io/github/stars/galaxy-s10/billd-desk-flutter?label=star&logo=GitHub)](https://github.com/galaxy-s10/billd-desk-flutter) [![github](https://img.shields.io/github/forks/galaxy-s10/billd-desk-flutter?label=fork&logo=GitHub)](https://github.com/galaxy-s10/billd-desk-flutter) | TODO                                                         |
+| 远程桌面服务端      | [billd-desk-server](https://github.com/galaxy-s10/billd-desk-server) | [![github](https://img.shields.io/github/stars/galaxy-s10/billd-desk-server?label=star&logo=GitHub)](https://github.com/galaxy-s10/billd-desk-server) [![github](https://img.shields.io/github/forks/galaxy-s10/billd-desk-server?label=fork&logo=GitHub)](https://github.com/galaxy-s10/billd-desk-server) | [https://desk-api.hsslive.cn](https://desk-api.hsslive.cn)   |
 
 ## 功能
 
 - [x] Web端控制桌面客户端
-- [ ] Web端查看Web端
 - [x] 桌面客户端控制桌面客户端
-- [x] 桌面客户端查看Web端
+- [x] Web端控制Web端（仅观看）
+- [x] 桌面客户端控制Web端（仅观看）
 - [x] 连接鉴权
 - [x] 支持Macos系统
 - [x] 支持Windows系统
-- [ ] 支持Linux系统
-- [ ] 文件传输
+- [x] 支持Linux系统（未实际验证）
+- [x] 文件传输
 - [ ] 移动客户端
 - [ ] 后台管理
-
-目前暂不实现以下功能：
-
-- ❌ Web端控制Web端
-- ❌ 桌面客户端控制Web端
-- ❌ Docker部署
 
 ## 预览
 
@@ -62,6 +68,10 @@ BilldDesk远程桌面控制，目前实现了类似ToDesk、向日葵等远程�
 ### 被控端
 
 ![https://github.com/user-attachments/assets/b1482a29-ca11-4ed8-b78e-49815a556bfe](https://github.com/user-attachments/assets/b1482a29-ca11-4ed8-b78e-49815a556bfe)
+
+### 文件传输
+
+![https://github.com/user-attachments/assets/fc9d5f94-e716-46ce-b17d-a39c394521a3](https://github.com/user-attachments/assets/fc9d5f94-e716-46ce-b17d-a39c394521a3)
 
 ## 接口文档
 
@@ -123,8 +133,6 @@ npm run build:linux
 
 b站合集：[BilldDesk开源远程桌面控制](https://space.bilibili.com/381307133/channel/collectiondetail?sid=4106361&ctype=0)
 
-WebRTC课程：[https://www.hsslive.cn/article/151](https://www.hsslive.cn/article/151)
-
 ## 常见问题
 
 ### rebuild
@@ -152,8 +160,8 @@ npm config set registry https://registry.npmmirror.com
      force: process.env.force_no_cache === 'true',
      cacheRoot: process.env.electron_config_cache,
      checksums:
-       process.env.electron_use_remote_checksums ??
-       process.env.npm_config_electron_use_remote_checksums
+       (process.env.electron_use_remote_checksums ??
+       process.env.npm_config_electron_use_remote_checksums)
          ? undefined
          : require('./checksums.json'),
      platform,
@@ -173,8 +181,8 @@ npm config set registry https://registry.npmmirror.com
      force: process.env.force_no_cache === 'true',
      cacheRoot: process.env.electron_config_cache,
      checksums:
-       process.env.electron_use_remote_checksums ??
-       process.env.npm_config_electron_use_remote_checksums
+       (process.env.electron_use_remote_checksums ??
+       process.env.npm_config_electron_use_remote_checksums)
          ? undefined
          : require('./checksums.json'),
      platform,
@@ -193,12 +201,12 @@ npm config set registry https://registry.npmmirror.com
    ```
 3. 在node_modules/electron目录下执行node install
 
-## 交流群🔥
-
-![WechatIMG1417](https://github.com/user-attachments/assets/d0743ee0-4545-4618-863e-13c40f717119)
-
 ## 兼容性
 
 - [x] Windows
 - [x] Macos
-- [ ] Linux
+- [x] Linux
+
+## billd-desk-pro
+
+简介：[https://github.com/billd-project/](https://github.com/billd-project/)

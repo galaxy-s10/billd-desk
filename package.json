@@ -1,6 +1,6 @@
 {
   "name": "billd-desk",
-  "version": "0.1.0",
+  "version": "0.1.16",
   "description": "基于Vue3 + WebRTC + Electron搭建的远程桌面",
   "keywords": [
     "billd",
@@ -51,7 +51,7 @@
   "dependencies": {},
   "devDependencies": {
     "@electron-toolkit/preload": "^3.0.0",
-    "@electron/rebuild": "^3.6.0",
+    "@electron/rebuild": "^3.7.1",
     "@eslint/js": "^9.10.0",
     "@types/node": "^20.4.1",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
@@ -63,7 +63,7 @@
     "commitizen": "^4.3.1",
     "cross-env": "^7.0.3",
     "electron": "^33.2.1",
-    "electron-builder": "^25.1.8",
+    "electron-builder": "^24.12.0",
     "electron-icon-builder": "^2.0.1",
     "eslint": "^9.10.0",
     "eslint-config-prettier": "^9.1.0",
@@ -72,6 +72,7 @@
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-vue": "^9.28.0",
+    "node-abi": "^3.71.0",
     "postcss-preset-env": "^10.1.2",
     "prettier": "^3.4.2",
     "rimraf": "^6.0.1",
