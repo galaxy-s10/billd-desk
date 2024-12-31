@@ -46,17 +46,17 @@ onMounted(() => {
     windowId: WINDOW_ID_ENUM.remote,
     flag: cacheStore.isAlwaysOnTop,
   });
-  handlesetPowerBootStatus({
-    windowId: WINDOW_ID_ENUM.remote,
-  }).then((res) => {
-    console.log('res', res);
-    if (res.code === 0) {
-      cacheStore.powerBoot = res.data.open;
-    }
-  });
+
   getClient();
   if (ipcRenderer) {
     handleDeskVersionCheck();
+    handlesetPowerBootStatus({
+      windowId: WINDOW_ID_ENUM.remote,
+    }).then((res) => {
+      if (res.code === 0) {
+        cacheStore.powerBoot = res.data.open;
+      }
+    });
   }
 });
 

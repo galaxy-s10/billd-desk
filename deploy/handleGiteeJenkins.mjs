@@ -125,8 +125,8 @@ if (process.cwd().indexOf('jenkins') !== -1) {
       // @ts-ignore
       tsconfigStr
     );
-    execSync(`git rm -r --cached .`, { cwd: giteeDir });
     execSync(`pnpm i`, { cwd: giteeDir });
+    execSync(`git rm -r --cached .`, { cwd: giteeDir });
     execSync(`git add .`, { cwd: giteeDir });
     execSync(`git commit -m 'feat: ${new Date().toLocaleString()}'`, {
       cwd: giteeDir,
