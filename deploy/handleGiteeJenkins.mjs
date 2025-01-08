@@ -7,7 +7,14 @@ import path from 'node:path';
 import trash from 'trash';
 
 const allFile = [];
-const ignore = ['.DS_Store', '.git', 'node_modules', 'dist'];
+const ignore = [
+  '.DS_Store',
+  '.git',
+  'node_modules',
+  'dist',
+  'electron-dist',
+  'electron-release',
+];
 const localDir =
   '/Users/huangshuisheng/Desktop/hss/billd-project/billd-desk-pro';
 const giteeDir = '/Users/huangshuisheng/Desktop/hss/jenkins/billd-desk';
