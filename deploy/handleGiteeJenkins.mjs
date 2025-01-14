@@ -133,7 +133,7 @@ if (process.cwd().indexOf('jenkins') !== -1) {
       tsconfigStr
     );
     fs.writeFileSync(
-      path.resolve(giteeDir, 'deploy/deploy.json'),
+      path.resolve(giteeDir, 'deploy/jenkins.json'),
       // @ts-ignore
       JSON.stringify({
         buildDate: new Date().toLocaleString(),

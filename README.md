@@ -27,6 +27,15 @@
 
 </div>
 
+## 📢 省流 📢
+
+2025年起，billd-desk项目的所有仓库将进入dev状态，如果你需要获取线上生产环境的代码，有以下两种方式：
+
+1. 请花些时间查看之前提交的代码：[https://github.com/galaxy-s10/billd-desk/commits/master/](https://github.com/galaxy-s10/billd-desk/commits/master/)。
+2. 订阅 [billd-project](https://github.com/billd-project)，价格：[https://desk.hsslive.cn/#/price](https://desk.hsslive.cn/#/price)
+
+历史原因：参考 [billd-live的历史原因](https://github.com/galaxy-s10/billd-live?tab=readme-ov-file#-%E7%9C%81%E6%B5%81-)
+
 ## 简介
 
 BilldDesk远程桌面控制，目前实现了类似ToDesk、向日葵等远程桌面的功能。
@@ -53,7 +62,7 @@ BilldDesk远程桌面控制，目前实现了类似ToDesk、向日葵等远程�
 - [x] 支持Linux系统（未实际测试）
 - [x] 文件传输
 - [x] 开机自启
-- [ ] 锁屏保活
+- [x] 锁屏保活
 - [ ] 移动客户端（Flutter）
 - [ ] 后台管理
 
@@ -79,9 +88,7 @@ BilldDesk远程桌面控制，目前实现了类似ToDesk、向日葵等远程�
 
 ## 接口文档
 
-线上接口：[https://desk-api.hsslive.cn](https://desk-api.hsslive.cn)
-
-接口文档：todo
+接口文档：[https://apifox.com/apidoc/shared-a8ba9715-7730-432d-896c-97f983050795](https://apifox.com/apidoc/shared-a8ba9715-7730-432d-896c-97f983050795)
 
 ## 本地启动
 
@@ -132,10 +139,6 @@ npm run build:linux
 主要测试各个端之间远程时候的延迟。
 
 > TODO
-
-## 视频教程
-
-b站合集：[BilldDesk开源远程桌面控制](https://space.bilibili.com/381307133/channel/collectiondetail?sid=4106361&ctype=0)
 
 ## 常见问题
 
@@ -215,6 +218,12 @@ npm config set registry https://registry.npmmirror.com
 - [x] Macos
 - [x] Linux
 
-## billd-desk-pro
+## 贡献者
 
-简介：[https://github.com/billd-project/](https://github.com/billd-project/)
+  <a href="https://github.com/galaxy-s10/billd-desk/graphs/contributors" target="_blank">
+    <img
+      width="200"
+      src="https://contrib.rocks/image?repo=galaxy-s10/billd-desk"
+      alt="BilldDesk logo"
+    />
+  </a>
