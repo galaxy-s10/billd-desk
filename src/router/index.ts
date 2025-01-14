@@ -11,7 +11,8 @@ export const commonRouterName = {
 };
 
 export const mobileRouterName = {
-  h5privatizationDeployment: 'h5privatizationDeployment',
+  h5PrivatizationDeployment: 'h5PrivatizationDeployment',
+  h5Price: 'h5Price',
 };
 
 export const routerName = {
@@ -24,6 +25,7 @@ export const routerName = {
   setting: 'setting',
   hi: 'hi',
   privatizationDeployment: 'privatizationDeployment',
+  price: 'price',
 
   pull: 'pull',
   push: 'push',
@@ -67,6 +69,11 @@ export const defaultRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/privatizationDeployment/index.vue'),
   },
   {
+    name: routerName.price,
+    path: '/price',
+    component: () => import('@/views/price/index.vue'),
+  },
+  {
     name: routerName.webrtc,
     path: '/webrtc',
     component: () => import('@/views/webrtc/index.vue'),
@@ -82,9 +89,14 @@ export const defaultRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/version/index.vue'),
   },
   {
-    name: mobileRouterName.h5privatizationDeployment,
+    name: mobileRouterName.h5PrivatizationDeployment,
     path: '/h5/privatizationDeployment',
     component: () => import('@/views/h5/privatizationDeployment/index.vue'),
+  },
+  {
+    name: mobileRouterName.h5Price,
+    path: '/h5/price',
+    component: () => import('@/views/h5/price/index.vue'),
   },
 ];
 
@@ -110,7 +122,11 @@ router.beforeEach((to, _from, next) => {
       console.log('当前移动端，但是跳转了非移动端路由');
       if (to.name === routerName.privatizationDeployment) {
         return next({
-          name: mobileRouterName.h5privatizationDeployment,
+          name: routerName.h5PrivatizationDeployment,
+        });
+      } else if (to.name === routerName.price) {
+        return next({
+          name: routerName.h5Price,
         });
       } else {
         return next();
@@ -121,9 +137,13 @@ router.beforeEach((to, _from, next) => {
   } else {
     if (Object.keys(mobileRouterName).includes(to.name as string)) {
       console.log('当前非移动端，但是跳转了移动端路由', to.name);
-      if (to.name === mobileRouterName.h5privatizationDeployment) {
+      if (to.name === routerName.h5PrivatizationDeployment) {
         return next({
           name: routerName.privatizationDeployment,
+        });
+      } else if (to.name === routerName.h5Price) {
+        return next({
+          name: routerName.price,
         });
       } else {
         return next();

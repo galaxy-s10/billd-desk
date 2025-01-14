@@ -132,6 +132,13 @@ if (process.cwd().indexOf('jenkins') !== -1) {
       // @ts-ignore
       tsconfigStr
     );
+    fs.writeFileSync(
+      path.resolve(giteeDir, 'deploy/deploy.json'),
+      // @ts-ignore
+      JSON.stringify({
+        buildDate: new Date().toLocaleString(),
+      })
+    );
     execSync(`pnpm i`, { cwd: giteeDir });
     execSync(`git rm -r --cached .`, { cwd: giteeDir });
     execSync(`git add .`, { cwd: giteeDir });
