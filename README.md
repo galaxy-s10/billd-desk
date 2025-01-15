@@ -31,7 +31,7 @@
 
 2025年起，billd-desk项目的所有仓库将进入dev状态，如果你需要获取线上生产环境的代码，有以下两种方式：
 
-1. 请花些时间查看之前提交的代码：[https://github.com/galaxy-s10/billd-desk/commits/master/](https://github.com/galaxy-s10/billd-desk/commits/master/)。
+1. 请花些时间查看之前提交的代码：[https://github.com/galaxy-s10/billd-desk/commits/main/](https://github.com/galaxy-s10/billd-desk/commits/main/)。
 2. 订阅 [billd-project](https://github.com/billd-project)，价格：[https://desk.hsslive.cn/#/price](https://desk.hsslive.cn/#/price)
 
 历史原因：参考 [billd-live的历史原因](https://github.com/galaxy-s10/billd-live?tab=readme-ov-file#-%E7%9C%81%E6%B5%81-)
