@@ -6,7 +6,9 @@ import autoImport from 'unplugin-auto-import/vite';
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
 import unpluginVueComponents from 'unplugin-vue-components/vite';
 import { defineConfig } from 'vite';
+import prefetchPlugin from 'vite-plugin-bundle-prefetch';
 import checker from 'vite-plugin-checker';
+// import electron from 'vite-plugin-electron/simple';
 import eslint from 'vite-plugin-eslint2';
 import { createHtmlPlugin } from 'vite-plugin-html';
 
@@ -57,6 +59,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       // legacy(),
       // isProduction && legacy(),
+      prefetchPlugin(),
       vue(),
       createHtmlPlugin({
         inject: {
@@ -66,9 +69,27 @@ export default defineConfig(({ mode }) => {
           },
         },
       }),
-      // renderer({
-      //   resolve: {
-      //     '@nut-tree/nut-js': { type: 'cjs' },
+      // electron({
+      //   main: {
+      //     entry: 'electron-main/index.ts', // 主进程文件
+      //     vite: {
+      //       build: {
+      //         outDir: 'electron-dist',
+      //         lib: {
+      //           entry: 'electron-main/index.ts', // 主进程文件
+      //           formats: ['cjs'],
+      //           fileName: () => '[name].cjs',
+      //         },
+      //       },
+      //     },
+      //   },
+      //   preload: {
+      //     input: 'electron-main/preload.ts',
+      //     vite: {
+      //       build: {
+      //         outDir: 'electron-dist',
+      //       },
+      //     },
       //   },
       // }),
       checker({

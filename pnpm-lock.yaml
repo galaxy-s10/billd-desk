@@ -177,6 +177,9 @@ importers:
       vite:
         specifier: ^6.0.3
         version: 6.0.3(@types/node@20.4.1)(jiti@1.21.6)(sass@1.63.6)(terser@5.27.0)
+      vite-plugin-bundle-prefetch:
+        specifier: ^0.0.4
+        version: 0.0.4
       vite-plugin-checker:
         specifier: ^0.8.0
         version: 0.8.0(eslint@9.17.0(jiti@1.21.6))(optionator@0.9.3)(typescript@5.7.2)(vite@6.0.3(@types/node@20.4.1)(jiti@1.21.6)(sass@1.63.6)(terser@5.27.0))(vue-tsc@2.1.10(typescript@5.7.2))
@@ -1144,8 +1147,8 @@ packages:
     resolution: {integrity: sha512-Qkzpg2s9GnVV2I2BjRksUi43U5e6+zaQMcjoJy0C+C5oxaKl+fmckGDQFtRpZpZV0NQekuZZ+tGz7EA9TVnQtQ==}
     engines: {node: '>=12'}
 
-  '@electron/node-gyp@git+https://git@github.com:electron/node-gyp.git#06b29aafb7708acef8b3669835c8a7857ebc92d2':
-    resolution: {commit: 06b29aafb7708acef8b3669835c8a7857ebc92d2, repo: git@github.com:electron/node-gyp.git, type: git}
+  '@electron/node-gyp@https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2':
+    resolution: {tarball: https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2}
     version: 10.2.0-electron.1
     engines: {node: '>=12.13.0'}
     hasBin: true
@@ -7352,6 +7355,9 @@ packages:
     resolution: {integrity: sha512-ZZKSmDAEFOijERBLkmYfJ+vmk3w+7hOLYDNkRCuRuMJGEmqYNCNLyBBFwWKVMhfwaEF3WOd0Zlw86U/WC/+nYw==}
     engines: {'0': node >=0.6.0}
 
+  vite-plugin-bundle-prefetch@0.0.4:
+    resolution: {integrity: sha512-k+oOOsMX6Lol/BNpBoyx+g1je9KJHCu5tZfg8pK8jQ6CxNt9RHUMZ7hemwBZEg/6vtaqW80SQC8BM9EdfF/Diw==}
+
   vite-plugin-checker@0.8.0:
     resolution: {integrity: sha512-UA5uzOGm97UvZRTdZHiQVYFnd86AVn8EVaD4L3PoVzxH+IZSfaAw14WGFwX9QS23UW3lV/5bVKZn6l0w+q9P0g==}
     engines: {node: '>=14.16'}
@@ -8909,7 +8915,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@electron/node-gyp@git+https://git@github.com:electron/node-gyp.git#06b29aafb7708acef8b3669835c8a7857ebc92d2':
+  '@electron/node-gyp@https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2':
     dependencies:
       env-paths: 2.2.1
       exponential-backoff: 3.1.1
@@ -8985,7 +8991,7 @@ snapshots:
 
   '@electron/rebuild@3.7.1':
     dependencies:
-      '@electron/node-gyp': git+https://git@github.com:electron/node-gyp.git#06b29aafb7708acef8b3669835c8a7857ebc92d2
+      '@electron/node-gyp': https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2
       '@malept/cross-spawn-promise': 2.0.0
       chalk: 4.1.2
       debug: 4.4.0
@@ -16161,6 +16167,8 @@ snapshots:
       assert-plus: 1.0.0
       core-util-is: 1.0.2
       extsprintf: 1.3.0
+
+  vite-plugin-bundle-prefetch@0.0.4: {}
 
   vite-plugin-checker@0.8.0(eslint@9.17.0(jiti@1.21.6))(optionator@0.9.3)(typescript@5.7.2)(vite@6.0.3(@types/node@20.4.1)(jiti@1.21.6)(sass@1.63.6)(terser@5.27.0))(vue-tsc@2.1.10(typescript@5.7.2)):
     dependencies:
