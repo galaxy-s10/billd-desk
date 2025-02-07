@@ -17,6 +17,13 @@
     artifactName: '${productName}-mac-${platform}-${version}-${arch}-installer.${ext}',
     icon: 'build/output/icons/icon.icns',
   },
+  protocols: [
+    // for macOS - 用于在主机注册指定协议
+    {
+      name: 'BilldDesk',
+      schemes: ['BilldDesk'],
+    },
+  ],
   linux: {
     artifactName: '${productName}-linux-${platform}-${version}-${arch}-installer.${ext}',
     // amd是x64

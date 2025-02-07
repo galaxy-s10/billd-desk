@@ -79,6 +79,7 @@ export const IPC_EVENT = {
   response_globalShortcut: 'response_globalShortcut',
   response_open_about: 'response_open_about',
   response_open_version: 'response_open_version',
+  response_open_url: 'response_open_url',
 };
 
 export const GLOBAL_SHORTCUT = {

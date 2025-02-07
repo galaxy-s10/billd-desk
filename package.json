@@ -1,6 +1,6 @@
 {
   "name": "billd-desk",
-  "version": "0.1.46",
+  "version": "0.1.50",
   "description": "基于Vue3 + WebRTC + Electron + Nodejs搭建的远程桌面",
   "keywords": [
     "billd",
@@ -82,6 +82,7 @@
     "vite": "^6.0.3",
     "vite-plugin-bundle-prefetch": "^0.0.4",
     "vite-plugin-checker": "^0.8.0",
+    "vite-plugin-chunk-split": "^0.5.0",
     "vite-plugin-commonjs": "^0.10.1",
     "vite-plugin-electron": "^0.28.2",
     "vite-plugin-electron-renderer": "^0.14.5",

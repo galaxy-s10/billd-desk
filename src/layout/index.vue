@@ -61,6 +61,12 @@
       <RouterView></RouterView>
     </div>
     <div
+      v-if="teststr !== ''"
+      class="teststr"
+    >
+      {{ teststr }}
+    </div>
+    <div
       class="debug-area"
       @click="handleOpenDebug"
     ></div>
@@ -129,6 +135,7 @@ const isMoving = ref<boolean>(false);
 const lastPoint = reactive({ x: 0, y: 0 });
 const useCustomBar = ref(true);
 const clickNum = ref(1);
+const teststr = ref('');
 
 onMounted(() => {
   if (!ipcRenderer) {
@@ -150,6 +157,11 @@ async function init() {
     }
   }
 }
+
+ipcRendererOn(IPC_EVENT.response_open_url, (_event, data: IIpcRendererData) => {
+  console.log('response_open_url', data);
+  teststr.value = JSON.stringify(data);
+});
 
 ipcRendererOn(
   IPC_EVENT.response_open_about,
@@ -391,6 +403,12 @@ $sidebar-width: 160px;
   .view {
     box-sizing: border-box;
     width: calc(100vw - $sidebar-width);
+  }
+  .teststr {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 300;
   }
   .debug-area {
     position: fixed;

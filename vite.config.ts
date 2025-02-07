@@ -8,6 +8,7 @@ import unpluginVueComponents from 'unplugin-vue-components/vite';
 import { defineConfig } from 'vite';
 import prefetchPlugin from 'vite-plugin-bundle-prefetch';
 import checker from 'vite-plugin-checker';
+import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
 import electron from 'vite-plugin-electron/simple';
 import eslint from 'vite-plugin-eslint2';
 import { createHtmlPlugin } from 'vite-plugin-html';
@@ -59,6 +60,19 @@ export default defineConfig(({ mode }) => {
     plugins: [
       // legacy(),
       // isProduction && legacy(),
+      chunkSplitPlugin({
+        // 指定拆包策略
+        // customSplitting: {
+        //   // `vue` and `vue-router` 会被打包到一个名为`vue-vendor`的 chunk 里面(包括它们的一些依赖，如 object-assign)
+        //   'vue-vendor': [/vue/],
+        //   'vue-router-vendor': [/vue-router/],
+        //   'av-cliper-vendor': [/@webav\/av-cliper/],
+        //   // 源码中 utils 目录的代码都会打包进 `utils` 这个 chunk 中
+        //   // utils: [/src\/utils/],
+        //   views: [/src\/views/],
+        //   compoents: [/src\/compoents/],
+        // },
+      }),
       prefetchPlugin(),
       vue(),
       createHtmlPlugin({
