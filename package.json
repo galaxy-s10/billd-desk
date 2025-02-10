@@ -30,6 +30,7 @@
     "build:mac": "standard-version && vite build && electron-builder --mac",
     "build:mw": "standard-version && vite build && electron-builder --mac --win",
     "build:prod": "cross-env VITE_APP_RELEASE_PROJECT_ISWEB=true vite build",
+    "build:web": "cross-env VITE_APP_RELEASE_PROJECT_ISWEB=true vite build",
     "build:win": "standard-version && vite build && electron-builder --win",
     "copy": "ts-node ./deploy/handleGiteeJenkins.mjs",
     "cz": "cz",
