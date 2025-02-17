@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.51](https://github.com/billd-project/billd-desk-pro/compare/v0.1.50...v0.1.51) (2025-02-13)
+
+
+### Features
+
+* 浏览器打开客户端 ([a505f90](https://github.com/billd-project/billd-desk-pro/commit/a505f90d12ab374370199f7f300ce68417ac8d57))
+* 同步仓库 ([341b578](https://github.com/billd-project/billd-desk-pro/commit/341b5786a5d3ff9486ecd6bd3f9b45a1d3a3e3a1))
+
 ### [0.1.50](https://github.com/billd-project/billd-desk-pro/compare/v0.1.49...v0.1.50) (2025-02-05)
 
 ### [0.1.49](https://github.com/billd-project/billd-desk-pro/compare/v0.1.48...v0.1.49) (2025-02-05)

@@ -2,7 +2,6 @@ export * from '@/pure-constant';
 import { Key } from '@nut-tree-fork/shared';
 
 import type { BilldHtmlWebpackPluginLog } from '@/interface';
-import { prodDomain } from '@/spec-config';
 
 export const PROJECT_GITHUB = `https://github.com/galaxy-s10/billd-desk`;
 export const WEB_DESK_URL = `https://desk.hsslive.cn`;
@@ -15,6 +14,7 @@ export const AUTHOR_INFO = {
 
 export const COMMON_URL = {
   privatizationDeployment: 'https://desk.hsslive.cn/#/privatizationDeployment',
+  price: 'https://desk.hsslive.cn/#/price',
   hi: 'https://desk.hsslive.cn/#/hi',
   payCoursesArticle: `https://www.hsslive.cn/article/151`,
 };
@@ -26,39 +26,6 @@ export const APP_BUILD_INFO = process.env
   .BilldHtmlWebpackPlugin as BilldHtmlWebpackPluginLog;
 
 export const NODE_ENV = process.env.NODE_ENV;
-
-export const COTURN_URL = `turn:hk.${prodDomain}`;
-
-// ======本地调试=====
-
-// const LOCALHOST_IP = '10.10.20.29:4300';
-
-// export const WEBSOCKET_URL =
-//   process.env.NODE_ENV === 'development'
-//     ? `ws://localhost:4300`
-//     : `ws://${LOCALHOST_IP}`;
-
-// export const AXIOS_BASEURL =
-//   process.env.NODE_ENV === 'development' ? `/api` : `http://${LOCALHOST_IP}`;
-
-// ======本地调试=====
-
-// ======线上正式=====
-
-export const WEBSOCKET_URL =
-  process.env.NODE_ENV === 'development'
-    ? `ws://localhost:4300`
-    : `wss://desk-api.${prodDomain}`;
-
-export const AXIOS_BASEURL =
-  process.env.NODE_ENV === 'development'
-    ? `/api`
-    : `https://desk-api.${prodDomain}`;
-
-// ======线上正式=====
-
-export const COOKIE_DOMAIN =
-  process.env.NODE_ENV === 'development' ? undefined : `.${prodDomain}`;
 
 export const THEME_COLOR = '#ffd700';
 
@@ -152,14 +119,6 @@ export const NUT_KEY_MAP = {
   RightWin: Key.RightWin,
 };
 
-export const SRS_CB_URL_PARAMS = {
-  publishKey: 'pushkey',
-  publishType: 'pushtype',
-  userToken: 'usertoken',
-  userId: 'userid',
-  randomId: 'randomid',
-};
-
 // 全局的cookie的key
 export const COOKIE_KEY = {
   thirdLoginInfo: 'thirdLoginInfo',
@@ -175,5 +134,5 @@ export const LS_KEY = {
   token: 'token',
   axiosBaseUrl: 'axiosBaseUrl',
   wssUrl: 'wssUrl',
-  coturnUrl: 'coturnUrl',
+  turnUrl: 'turnUrl',
 };

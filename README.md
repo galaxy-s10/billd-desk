@@ -1,9 +1,9 @@
 <p align="center">
-  <a href="https://live.hsslive.cn/remoteDesktop" target="_blank">
+  <a href="https://desk.hsslive.cn" target="_blank">
     <img
       width="200"
       src="https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/img/logo.png?raw=true"
-      alt="Billd-Desk logo"
+      alt="BilldDesk logo"
     />
   </a>
 </p>
@@ -94,7 +94,9 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 
 ### billd-desk(pro)
 
-- 安装依赖（建议使用 node 版本：v18.19.0）
+#### 安装依赖
+
+> 建议使用 node 版本：v18.19.0
 
 ```bash
 pnpm i
@@ -106,37 +108,53 @@ pnpm i
 pnpm i billd-deploy@latest billd-utils@latest billd-scss@latest billd-html-webpack-plugin@latest
 ```
 
-- 运行
+#### 运行
+
+> 配置文件：**`src/spec-config.ts`**，请在该文件填写对应的信息。
 
 ```bash
 npm run dev
 ```
 
-- 打包 web
+#### 打包
+
+> 打包时会先使用[`standard-version`](https://github.com/conventional-changelog/standard-version#readme)进行发版，请确保当前项目初始化了git，否则打包会失败。
+
+- web
+
+> 打包成功后，资源输出在`dist`目录
 
 ```bash
 npm run build:web
 ```
 
-- 打包 windows、macos、linux 包
+- windows、macos、linux 包
+
+> 打包成功后，资源输出在`electron-release`目录
 
 ```bash
 npm run build
 ```
 
-- 打包 windows 包
+- windows 包
+
+> 打包成功后，资源输出在`electron-release`目录
 
 ```bash
 npm run build:win
 ```
 
-- 打包 macos 包
+- macos 包
+
+> 打包成功后，资源输出在`electron-release`目录
 
 ```bash
 npm run build:mac
 ```
 
-- 打包 linux 包
+- linux 包
+
+> 打包成功后，资源输出在`electron-release`目录
 
 ```bash
 npm run build:linux
@@ -144,7 +162,9 @@ npm run build:linux
 
 ### billd-desk-server(pro)
 
-- 安装依赖（建议使用 node 版本：v18.19.0）
+#### 安装依赖
+
+> 建议使用 node 版本：v18.19.0
 
 ```bash
 pnpm i
@@ -156,19 +176,28 @@ pnpm i
 pnpm i billd-utils@latest billd-html-webpack-plugin@latest
 ```
 
-> 本地必须要有 docker、ffmpeg 环境！
+#### 运行
+
+> 本地必须要有 docker 环境！
 >
-> 项目启动后，会在项目的 src/secret/目录下生成 secret.ts 文件，请填写里面的信息，MYSQL_CONFIG、REDIS_CONFIG 必填！
+> 项目启动后，会在项目的 src/secret/目录下生成 secret-beta、secret-dev、secret-prod 文件，请填写里面的信息，MYSQL_CONFIG、REDIS_CONFIG 必填！
+
+1. 初始化docker容器
 
 ```bash
-# 1.初始化docker容器
-pnpm run docker:dev
+npm run docker:dev
+```
 
-# 2.初始化数据库（可选，只需要执行一次）
-pnpm run mysql:dev
+2. 初始化数据库，这个命令只需要执行一次，执行后就会自动创建数据库和数据库表。
 
-# 3.运行（5300端口）
-pnpm run dev
+```bash
+npm run mysql:dev
+```
+
+3. 运行，默认运行在5300端口
+
+```bash
+npm run dev
 ```
 
 ## 性能测试
