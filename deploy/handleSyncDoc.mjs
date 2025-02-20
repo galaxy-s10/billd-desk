@@ -3,16 +3,29 @@ import fs from 'node:fs';
 import path from 'node:path';
 import trash from 'trash';
 
-async function main() {
-  await trash(
-    '/Users/huangshuisheng/Desktop/hss/billd-project/billd-desk-server-pro/docs/'
-  );
-  await trash(
-    '/Users/huangshuisheng/Desktop/hss/billd-project/billd-desk-server-pro/README.md'
-  );
+const deskDir =
+  '/Users/huangshuisheng/Desktop/hss/billd-project/billd-desk-pro/';
 
-  const docDir =
-    '/Users/huangshuisheng/Desktop/hss/billd-project/billd-desk-pro/docs/';
+const deskAdminDir =
+  '/Users/huangshuisheng/Desktop/hss/billd-project/billd-desk-admin-pro/';
+const deskServerDir =
+  '/Users/huangshuisheng/Desktop/hss/billd-project/billd-desk-server-pro/';
+
+async function main() {
+  const deskDocDir = deskDir + 'docs/';
+  const deskServerDocDir = deskServerDir + 'docs/';
+  const deskAdminDocDir = deskAdminDir + 'docs/';
+
+  await trash(deskServerDocDir);
+  await trash(deskAdminDocDir);
+
+  await trash(deskServerDir + 'README.md');
+  await trash(deskAdminDir + 'README.md');
+
+  const README = fs.readFileSync(deskDir + '/README.md', 'utf-8');
+
+  fs.writeFileSync(deskServerDir + '/README.md', README);
+  fs.writeFileSync(deskAdminDir + '/README.md', README);
 
   function getDirAllFile(dirPath) {
     const allFile = [];
@@ -33,28 +46,23 @@ async function main() {
     return allFile;
   }
 
-  const allfileArr = getDirAllFile(docDir);
+  const allfileArr = getDirAllFile(deskDocDir);
 
-  allfileArr.forEach((url) => {
-    const str = fs.readFileSync(url, 'utf-8');
-    const desk = url.replace('billd-desk-pro', 'billd-desk-server-pro');
-    const deskdir = path.dirname(desk);
-    // 检查并创建目录
-    if (!fs.existsSync(deskdir)) {
-      fs.mkdirSync(deskdir, { recursive: true });
-    }
-    fs.writeFileSync(desk, str);
-  });
-
-  const README = fs.readFileSync(
-    '/Users/huangshuisheng/Desktop/hss/billd-project/billd-desk-pro/README.md',
-    'utf-8'
-  );
-
-  fs.writeFileSync(
-    '/Users/huangshuisheng/Desktop/hss/billd-project/billd-desk-pro/README.md',
-    README
-  );
+  function copyToDest(fileArr, destDir) {
+    fileArr.forEach((url) => {
+      const str = fs.readFileSync(url, 'utf-8');
+      const txt1 = url.replace(deskDocDir, '');
+      const desk = destDir + txt1;
+      const deskdir = path.dirname(desk);
+      // 检查并创建目录
+      if (!fs.existsSync(deskdir)) {
+        fs.mkdirSync(deskdir, { recursive: true });
+      }
+      fs.writeFileSync(desk, str);
+    });
+  }
+  copyToDest(allfileArr, deskServerDocDir);
+  copyToDest(allfileArr, deskAdminDocDir);
 }
 
 main();
