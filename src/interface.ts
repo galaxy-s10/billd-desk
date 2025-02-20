@@ -6,6 +6,36 @@ import {
 } from '@/types/ILiveRoom';
 import { IUser } from '@/types/IUser';
 
+export enum SwitchEnum {
+  yes,
+  no,
+}
+
+export enum GlobalMsgTypeEnum {
+  user = 'user',
+  system = 'system',
+  activity = 'activity',
+  notification = 'notification',
+}
+
+export interface IGlobalMsg {
+  id?: number;
+  user_id?: number;
+  client_ip?: string;
+  type?: GlobalMsgTypeEnum;
+  show?: SwitchEnum;
+  priority?: number;
+  title?: string;
+  content?: string;
+  remark?: string;
+
+  user?: IUser;
+
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
+}
+
 export interface IFlvStatistics {
   url: string;
   hasRedirect: boolean;

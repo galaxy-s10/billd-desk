@@ -2,7 +2,8 @@
 
 ## 安装依赖
 
-> 建议使用 node 版本：v18.19.0
+> 使用 node 版本：v18.19.0，建议18版本
+> 使用 pnpm 版本：9.1.3，建议9版本
 
 ```bash
 pnpm i
@@ -17,9 +18,7 @@ pnpm i billd-utils@latest billd-html-webpack-plugin@latest
 ## 运行
 
 > 1. 项目使用到了 mysql 和 redis，他们都是用 docker 来启动的。
->
 > 2. 项目启动后，会在项目的 src/secret/目录下生成 secret-beta、secret-dev、secret-prod 文件，请填写里面的信息，MYSQL_CONFIG、REDIS_CONFIG 必填！
->
 > 3. 配置文件：**`src/spec-config.ts`**，请填写里面的信息。
 
 1. 初始化 docker 容器

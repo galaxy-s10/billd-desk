@@ -98,17 +98,17 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 
 ## 本地启动
 
-- [x] billd-desk(pro) 查看 [start-client.md](doc/start-client.md)
+- [x] billd-desk(pro) 查看 [start-client.md](docs/start-client.md)
 
-- [x] billd-desk-server(pro) 查看 [start-server.md](doc/start-server.md)
+- [x] billd-desk-server(pro) 查看 [start-server.md](docs/start-server.md)
 
 ## 性能测试
 
-查看 [benchmarking.md](doc/benchmarking.md)
+查看 [benchmarking.md](docs/benchmarking.md)
 
 ## 常见问题
 
-查看 [faq.md](doc/faq.md)
+查看 [faq.md](docs/faq.md)
 
 ## 兼容性
 

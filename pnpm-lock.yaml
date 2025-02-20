@@ -36,8 +36,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0(@types/node@20.4.1)(esbuild@0.15.18)(sass@1.63.6)(terser@5.27.0)
       billd-html-webpack-plugin:
-        specifier: ^1.2.0
-        version: 1.2.0(@types/node@20.4.1)(esbuild@0.15.18)(sass@1.63.6)(terser@5.27.0)
+        specifier: ^1.2.1
+        version: 1.2.1(@types/node@20.4.1)(esbuild@0.15.18)(sass@1.63.6)(terser@5.27.0)
       billd-scss:
         specifier: ^0.0.8
         version: 0.0.8
@@ -1147,8 +1147,8 @@ packages:
     resolution: {integrity: sha512-Qkzpg2s9GnVV2I2BjRksUi43U5e6+zaQMcjoJy0C+C5oxaKl+fmckGDQFtRpZpZV0NQekuZZ+tGz7EA9TVnQtQ==}
     engines: {node: '>=12'}
 
-  '@electron/node-gyp@https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2':
-    resolution: {tarball: https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2}
+  '@electron/node-gyp@git+https://git@github.com:electron/node-gyp.git#06b29aafb7708acef8b3669835c8a7857ebc92d2':
+    resolution: {commit: 06b29aafb7708acef8b3669835c8a7857ebc92d2, repo: git@github.com:electron/node-gyp.git, type: git}
     version: 10.2.0-electron.1
     engines: {node: '>=12.13.0'}
     hasBin: true
@@ -2953,8 +2953,8 @@ packages:
   billd-deploy@1.2.0:
     resolution: {integrity: sha512-23gMc+EM/GP9UljnF3fkz6M4OXQqAGBIE7NYu1N6NobufkHmslEzj2316ywKXwwnsXmicXuJHyGOVviM0GTWIQ==}
 
-  billd-html-webpack-plugin@1.2.0:
-    resolution: {integrity: sha512-tm7StNOw2t1BcdnZW+eFhaj4Nb8JYMz9/XkW9qe0nBzzpYfBdzScmbMnxGV81/1l1/W0DUerxrH/Znr1pS+HOw==}
+  billd-html-webpack-plugin@1.2.1:
+    resolution: {integrity: sha512-mcdvJHDV4tulkwfsc7luzQr8dMWpKpGo740TJa8W/dhMwyByPruzAH85mzx49BGbA3iPsD6dGKI7/8CYIbQSIQ==}
 
   billd-scss@0.0.8:
     resolution: {integrity: sha512-42gyDYnmRICjqrzk3qbqVygpvjpMu/2rMk41x8HyWLOf457EkXyCiAAFrFR2XM3/c6PHWbtD+IhP8MHUV6JeyA==}
@@ -7906,7 +7906,7 @@ snapshots:
     dependencies:
       '@babel/core': 7.24.0
       '@babel/helper-compilation-targets': 7.23.6
-      '@babel/helper-plugin-utils': 7.22.5
+      '@babel/helper-plugin-utils': 7.24.0
       debug: 4.4.0
       lodash.debounce: 4.0.8
       resolve: 1.22.8
@@ -8917,7 +8917,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@electron/node-gyp@https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2':
+  '@electron/node-gyp@git+https://git@github.com:electron/node-gyp.git#06b29aafb7708acef8b3669835c8a7857ebc92d2':
     dependencies:
       env-paths: 2.2.1
       exponential-backoff: 3.1.1
@@ -8993,7 +8993,7 @@ snapshots:
 
   '@electron/rebuild@3.7.1':
     dependencies:
-      '@electron/node-gyp': https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2
+      '@electron/node-gyp': git+https://git@github.com:electron/node-gyp.git#06b29aafb7708acef8b3669835c8a7857ebc92d2
       '@malept/cross-spawn-promise': 2.0.0
       chalk: 4.1.2
       debug: 4.4.0
@@ -11042,7 +11042,7 @@ snapshots:
   billd-deploy@1.2.0(@types/node@20.4.1)(esbuild@0.15.18)(sass@1.63.6)(terser@5.27.0):
     dependencies:
       ali-oss: 6.22.0
-      billd-html-webpack-plugin: 1.2.0(@types/node@20.4.1)(esbuild@0.15.18)(sass@1.63.6)(terser@5.27.0)
+      billd-html-webpack-plugin: 1.2.1(@types/node@20.4.1)(esbuild@0.15.18)(sass@1.63.6)(terser@5.27.0)
       cos-nodejs-sdk-v5: 2.14.6
       esdk-obs-nodejs: 3.24.3
       inquirer: 8.2.5
@@ -11064,7 +11064,7 @@ snapshots:
       - uglify-js
       - webpack-cli
 
-  billd-html-webpack-plugin@1.2.0(@types/node@20.4.1)(esbuild@0.15.18)(sass@1.63.6)(terser@5.27.0):
+  billd-html-webpack-plugin@1.2.1(@types/node@20.4.1)(esbuild@0.15.18)(sass@1.63.6)(terser@5.27.0):
     dependencies:
       vite: 4.4.0(@types/node@20.4.1)(sass@1.63.6)(terser@5.27.0)
       webpack: 5.90.0(esbuild@0.15.18)
