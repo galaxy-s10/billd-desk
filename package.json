@@ -45,8 +45,8 @@
     "preview": "vite preview",
     "release": "standard-version",
     "release-version": "npm run release -- --release-as 1.0.0",
-    "sync-repo": "ts-node ./deploy/handleSyncPublic.mjs",
-    "sync-doc": "ts-node ./deploy/handleSyncDoc.mjs"
+    "sync-doc": "ts-node ./deploy/handleSyncDoc.mjs",
+    "sync-public": "ts-node ./deploy/handleSyncPublic.mjs"
   },
   "config": {},
   "dependencies": {},

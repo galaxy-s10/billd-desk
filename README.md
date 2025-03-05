@@ -27,14 +27,10 @@
 
 </div>
 
-## 📢 省流 📢
+## 🎉🎉🎉
 
-2025 年起，billd-desk 项目的所有仓库将进入 dev 状态，如果你需要获取线上生产环境的代码，有以下两种方式：
-
-1. 请花些时间查看之前提交的代码：[https://github.com/galaxy-s10/billd-desk/commits/master/](https://github.com/galaxy-s10/billd-desk/commits/master/)。
-2. 订阅 [billd-project](https://github.com/billd-project)，价格：[https://desk.hsslive.cn/#/price](https://desk.hsslive.cn/#/price)
-
-历史原因：参考 [billd-live 的历史原因](https://github.com/galaxy-s10/billd-live?tab=readme-ov-file#-%E7%9C%81%E6%B5%81-)
+- 2025 年起，billd-desk-prod 项目的所有仓库将进入 prod 状态！
+- 2025 年起，billd-desk 项目的所有仓库将进入 dev 状态！
 
 ## 简介
 
