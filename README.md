@@ -29,7 +29,7 @@
 
 ## 🎉🎉🎉
 
-- 2025 年起，billd-desk-prod 项目的所有仓库将进入 prod 状态！
+- 2025 年起，billd-desk-pro 项目的所有仓库将进入 prod 状态！
 - 2025 年起，billd-desk 项目的所有仓库将进入 dev 状态！
 
 ## 简介
