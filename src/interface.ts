@@ -356,3 +356,22 @@ export interface ILiveUser {
     userInfo?: IUser;
   };
 }
+
+export enum ClientEnvEnum {
+  android = 'android',
+  ios = 'ios',
+  ipad = 'ipad',
+  web = 'web',
+  web_mobile = 'web_mobile',
+  web_pc = 'web_pc',
+  windows = 'windows',
+  macos = 'macos',
+  linux = 'linux',
+}
+
+export enum ClientAppEnum {
+  billd_live = 'billd_live',
+  billd_live_admin = 'billd_live_admin',
+  billd_desk = 'billd_desk',
+  billd_desk_admin = 'billd_desk_admin',
+}

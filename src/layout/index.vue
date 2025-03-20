@@ -3,7 +3,10 @@
     <div
       v-if="useCustomBar"
       class="system-bar"
-      :class="{ 'no-drag': !appStore.isMac, drag: appStore.isMac }"
+      :class="{
+        'no-drag': appStore.platform !== 'mac',
+        drag: appStore.platform === 'mac',
+      }"
       @mousedown="startMove"
       @mouseup="endMove"
       @mousemove="moving"
@@ -153,7 +156,13 @@ async function init() {
   });
   if (res?.code === 0) {
     if (res?.data?.platform === 'darwin') {
-      appStore.isMac = true;
+      appStore.platform = 'mac';
+    } else if (res?.data?.platform === 'linux') {
+      appStore.platform = 'linux';
+    } else if (res?.data?.platform === 'win32') {
+      appStore.platform = 'win';
+    } else {
+      appStore.platform = res?.data?.platform;
     }
   }
 }
@@ -235,7 +244,7 @@ function handleMin() {
 }
 
 const startMove = (e: MouseEvent) => {
-  if (appStore.isMac) {
+  if (appStore.platform === 'mac') {
     return;
   }
   isMoving.value = true;
@@ -244,21 +253,21 @@ const startMove = (e: MouseEvent) => {
 };
 
 const endMove = () => {
-  if (appStore.isMac) {
+  if (appStore.platform === 'mac') {
     return;
   }
   isMoving.value = false;
 };
 
 const handleMouseleave = () => {
-  if (appStore.isMac) {
+  if (appStore.platform === 'mac') {
     return;
   }
   isMoving.value = false;
 };
 
 const moving = (e: MouseEvent) => {
-  if (appStore.isMac) {
+  if (appStore.platform === 'mac') {
     return;
   }
   if (isMoving.value) {

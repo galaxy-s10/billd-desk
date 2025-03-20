@@ -1,6 +1,6 @@
 {
   "name": "billd-desk",
-  "version": "0.1.51",
+  "version": "0.1.66",
   "description": "基于Vue3 + WebRTC + Electron + Nodejs搭建的远程桌面",
   "keywords": [
     "billd",
@@ -34,7 +34,6 @@
     "build:prod": "cross-env VITE_APP_RELEASE_PROJECT_ISWEB=true vite build",
     "build:web": "cross-env VITE_APP_RELEASE_PROJECT_ISWEB=true vite build",
     "build:win": "npm run release && vite build && electron-builder --win",
-    "copy": "ts-node ./deploy/handleGiteeJenkins.mjs",
     "cz": "cz",
     "deploy:beta": "node ./deploy/index.cjs --beta",
     "deploy:prod": "node ./deploy/index.cjs --prod",
@@ -45,6 +44,7 @@
     "preview": "vite preview",
     "release": "standard-version",
     "release-version": "npm run release -- --release-as 1.0.0",
+    "sync-codeup": "ts-node ./deploy/handleSyncCodeup.mjs",
     "sync-doc": "ts-node ./deploy/handleSyncDoc.mjs",
     "sync-public": "ts-node ./deploy/handleSyncPublic.mjs"
   },
@@ -63,7 +63,7 @@
     "@vue/eslint-config-typescript": "^11.0.3",
     "commitizen": "^4.3.1",
     "cross-env": "^7.0.3",
-    "electron": "^33.2.1",
+    "electron": "^35.0.2",
     "electron-builder": "^24.12.0",
     "electron-icon-builder": "^2.0.1",
     "eslint": "^9.10.0",

@@ -13,8 +13,8 @@
      force: process.env.force_no_cache === 'true',
      cacheRoot: process.env.electron_config_cache,
      checksums:
-       process.env.electron_use_remote_checksums ??
-       process.env.npm_config_electron_use_remote_checksums
+       (process.env.electron_use_remote_checksums ??
+       process.env.npm_config_electron_use_remote_checksums)
          ? undefined
          : require('./checksums.json'),
      platform,
@@ -34,8 +34,8 @@
      force: process.env.force_no_cache === 'true',
      cacheRoot: process.env.electron_config_cache,
      checksums:
-       process.env.electron_use_remote_checksums ??
-       process.env.npm_config_electron_use_remote_checksums
+       (process.env.electron_use_remote_checksums ??
+       process.env.npm_config_electron_use_remote_checksums)
          ? undefined
          : require('./checksums.json'),
      platform,
@@ -67,3 +67,9 @@ npm config set registry https://registry.npmmirror.com
 ## rebuild 时 cpu-feature 报错
 
 直接删了 node_modules 的 cpu-feature，然后重新 rebuild
+
+## windows下，desktopCapturer.getSources获取不到自身窗口
+
+- 最开始Issue：https://github.com/electron/electron/issues/36037
+- 升级到最新版35.0.2解决：https://github.com/electron/electron/pull/45000
+- 好家伙，隔了两年才修复哈哈哈。

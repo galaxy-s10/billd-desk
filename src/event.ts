@@ -28,6 +28,7 @@ export const IPC_EVENT = {
   setWindowPosition: 'setWindowPosition',
   getWindowPosition: 'getWindowPosition',
   getScreenStream: 'getScreenStream',
+  getWindowStream: 'getWindowStream',
   setAlwaysOnTop: 'setAlwaysOnTop',
   scaleFactor: 'scaleFactor',
   workAreaSize: 'workAreaSize',
@@ -41,6 +42,8 @@ export const IPC_EVENT = {
   writeFile: 'writeFile',
   powerBoot: 'powerBoot',
   powerBootStatus: 'powerBootStatus',
+  windowManager: 'windowManager',
+  getAllWindowName: 'getAllWindowName',
 
   response_commonTest: 'response_commonTest',
   response_powerSaveBlockerStart: 'response_powerSaveBlockerStart',
@@ -80,6 +83,7 @@ export const IPC_EVENT = {
   response_open_about: 'response_open_about',
   response_open_version: 'response_open_version',
   response_open_url: 'response_open_url',
+  response_getAllWindowName: 'response_getAllWindowName',
 };
 
 export const GLOBAL_SHORTCUT = {

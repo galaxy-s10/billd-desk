@@ -3,9 +3,12 @@
     <n-message-provider :max="3">
       <n-modal-provider>
         <n-dialog-provider>
-          <router-view></router-view>
-          <NaiveModal />
-          <NaiveMessage />
+          <n-notification-provider>
+            <router-view></router-view>
+            <NaiveModal />
+            <NaiveMessage />
+            <NaiveNotification />
+          </n-notification-provider>
         </n-dialog-provider>
       </n-modal-provider>
     </n-message-provider>
@@ -30,7 +33,11 @@ import { ipcRenderer } from '@/utils';
 const appStore = useAppStore();
 const cacheStore = usePiniaCacheStore();
 
-const { handlesetAlwaysOnTop, handlesetPowerBootStatus } = useIpcRendererSend();
+const {
+  handleSetAlwaysOnTop,
+  handleSetPowerBootStatus,
+  handleGetAllWindowName,
+} = useIpcRendererSend();
 const themeOverrides: GlobalThemeOverrides = {
   common: {
     primaryColor: '#ffd700',
@@ -42,15 +49,19 @@ onMounted(() => {
   console.log('当前地址栏', location.href);
   appStore.version = APP_BUILD_INFO.pkgVersion;
   appStore.lastBuildDate = APP_BUILD_INFO.lastBuildDate;
-  handlesetAlwaysOnTop({
+
+  handleSetAlwaysOnTop({
     windowId: WINDOW_ID_ENUM.remote,
     flag: cacheStore.isAlwaysOnTop,
   });
 
   getClient();
   if (ipcRenderer) {
+    handleGetAllWindowName({
+      windowId: WINDOW_ID_ENUM.remote,
+    });
     handleDeskVersionCheck();
-    handlesetPowerBootStatus({
+    handleSetPowerBootStatus({
       windowId: WINDOW_ID_ENUM.remote,
     }).then((res) => {
       if (res.code === 0) {
