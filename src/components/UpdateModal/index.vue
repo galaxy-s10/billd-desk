@@ -22,12 +22,7 @@
       </div>
       <div
         class="btn"
-        @click="
-          handleOpenExternal({
-            windowId: WINDOW_ID_ENUM.remote,
-            url: appStore.updateModalInfo?.download.macos_dmg,
-          })
-        "
+        @click="handleUpdate"
       >
         立即更新
       </div>
@@ -37,14 +32,36 @@
 
 <script lang="ts" setup>
 import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
+import { ClientEnvEnum } from '@/interface';
 import { WINDOW_ID_ENUM } from '@/pure-constant';
 import { useAppStore } from '@/store/app';
+import { getClientEnv } from '@/utils';
 
 const appStore = useAppStore();
 
 const { handleOpenExternal } = useIpcRendererSend();
 
 const emits = defineEmits(['confirm', 'close']);
+
+function handleUpdate() {
+  if (appStore.updateModalInfo) {
+    let url = '';
+    const val = getClientEnv();
+    if (val === ClientEnvEnum.windows) {
+      url = appStore.updateModalInfo.download.window_64_exe;
+    } else if (val === ClientEnvEnum.macos) {
+      url = appStore.updateModalInfo.download.macos_dmg;
+    } else if (val === ClientEnvEnum.linux) {
+      url = appStore.updateModalInfo.download.linux_64_deb;
+    }
+    handleOpenExternal({
+      windowId: WINDOW_ID_ENUM.remote,
+      url,
+    });
+  } else {
+    window.$message.warning('没有更新信息');
+  }
+}
 </script>
 
 <style lang="scss" scoped>

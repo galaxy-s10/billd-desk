@@ -26,6 +26,7 @@ export const routerName = {
   hi: 'hi',
   privatizationDeployment: 'privatizationDeployment',
   price: 'price',
+  invite: 'invite',
 
   pull: 'pull',
   push: 'push',
@@ -87,6 +88,11 @@ export const defaultRoutes: RouteRecordRaw[] = [
     name: routerName.version,
     path: '/version',
     component: () => import('@/views/version/index.vue'),
+  },
+  {
+    name: routerName.invite,
+    path: '/invite',
+    component: () => import('@/views/invite/index.vue'),
   },
   {
     name: mobileRouterName.h5PrivatizationDeployment,

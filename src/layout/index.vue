@@ -4,8 +4,8 @@
       v-if="useCustomBar"
       class="system-bar"
       :class="{
-        'no-drag': appStore.platform !== 'mac',
-        drag: appStore.platform === 'mac',
+        'no-drag': platform !== ClientEnvEnum.macos,
+        drag: platform === ClientEnvEnum.macos,
       }"
       @mousedown="startMove"
       @mouseup="endMove"
@@ -117,10 +117,11 @@ import { useRoute, useRouter } from 'vue-router';
 import { WINDOW_ID_ENUM } from '@/constant';
 import { IPC_EVENT } from '@/event';
 import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
-import { IIpcRendererData } from '@/interface';
+import { ClientEnvEnum, IIpcRendererData } from '@/interface';
 import { routerName } from '@/router';
 import { useAppStore } from '@/store/app';
 import {
+  getClientEnv,
   ipcRenderer,
   ipcRendererInvoke,
   ipcRendererOn,
@@ -139,37 +140,13 @@ const lastPoint = reactive({ x: 0, y: 0 });
 const useCustomBar = ref(true);
 const clickNum = ref(1);
 const teststr = ref('');
+const platform = ref<ClientEnvEnum>();
 
 onMounted(() => {
   if (!ipcRenderer) {
     useCustomBar.value = false;
   }
-  init();
-});
-
-async function init() {
-  const res = await ipcRendererInvoke({
-    windowId: WINDOW_ID_ENUM.remote,
-    channel: IPC_EVENT.getPlatform,
-    requestId: getRandomString(8),
-    data: {},
-  });
-  if (res?.code === 0) {
-    if (res?.data?.platform === 'darwin') {
-      appStore.platform = 'mac';
-    } else if (res?.data?.platform === 'linux') {
-      appStore.platform = 'linux';
-    } else if (res?.data?.platform === 'win32') {
-      appStore.platform = 'win';
-    } else {
-      appStore.platform = res?.data?.platform;
-    }
-  }
-}
-
-ipcRendererOn(IPC_EVENT.response_open_url, (_event, data: IIpcRendererData) => {
-  console.log('response_open_url', data);
-  teststr.value = JSON.stringify(data);
+  platform.value = getClientEnv();
 });
 
 ipcRendererOn(
@@ -244,7 +221,7 @@ function handleMin() {
 }
 
 const startMove = (e: MouseEvent) => {
-  if (appStore.platform === 'mac') {
+  if (platform.value === ClientEnvEnum.macos) {
     return;
   }
   isMoving.value = true;
@@ -253,21 +230,21 @@ const startMove = (e: MouseEvent) => {
 };
 
 const endMove = () => {
-  if (appStore.platform === 'mac') {
+  if (platform.value === ClientEnvEnum.macos) {
     return;
   }
   isMoving.value = false;
 };
 
 const handleMouseleave = () => {
-  if (appStore.platform === 'mac') {
+  if (platform.value === ClientEnvEnum.macos) {
     return;
   }
   isMoving.value = false;
 };
 
 const moving = (e: MouseEvent) => {
-  if (appStore.platform === 'mac') {
+  if (platform.value === ClientEnvEnum.macos) {
     return;
   }
   if (isMoving.value) {
