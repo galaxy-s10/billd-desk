@@ -84,29 +84,31 @@ export default defineConfig(({ mode }) => {
           },
         },
       }),
-      electron({
-        main: {
-          entry: 'electron-main/index.ts', // 主进程文件
-          vite: {
-            build: {
-              outDir: 'electron-dist',
-              lib: {
-                entry: 'electron-main/index.ts', // 主进程文件
-                formats: ['cjs'],
-                fileName: () => '[name].cjs',
+      isWeb
+        ? false
+        : electron({
+            main: {
+              entry: 'electron-main/index.ts', // 主进程文件
+              vite: {
+                build: {
+                  outDir: 'electron-dist',
+                  lib: {
+                    entry: 'electron-main/index.ts', // 主进程文件
+                    formats: ['cjs'],
+                    fileName: () => '[name].cjs',
+                  },
+                },
               },
             },
-          },
-        },
-        preload: {
-          input: 'electron-main/preload.ts',
-          vite: {
-            build: {
-              outDir: 'electron-dist',
+            preload: {
+              input: 'electron-main/preload.ts',
+              vite: {
+                build: {
+                  outDir: 'electron-dist',
+                },
+              },
             },
-          },
-        },
-      }),
+          }),
       checker({
         // typescript: true,
         vueTsc: true,
@@ -126,7 +128,7 @@ export default defineConfig(({ mode }) => {
         resolvers: [naiveUiResolver()],
       }),
       new BilldHtmlWebpackPlugin({ env: 'vite4' }).config,
-    ],
+    ].filter(Boolean),
     define: {
       'process.env': {
         BilldHtmlWebpackPlugin: logData(null),

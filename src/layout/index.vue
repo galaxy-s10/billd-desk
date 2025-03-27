@@ -74,7 +74,7 @@
       @click="handleOpenDebug"
     ></div>
     <div
-      v-if="appStore.showDebug"
+      v-if="0"
       class="debug-area-wrap"
     >
       <div
@@ -114,6 +114,7 @@ import { getRandomString, windowReload } from 'billd-utils';
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+import { fetchDeskVersionCheck } from '@/api/deskVersion';
 import { WINDOW_ID_ENUM } from '@/constant';
 import { IPC_EVENT } from '@/event';
 import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
@@ -132,7 +133,7 @@ const appStore = useAppStore();
 const router = useRouter();
 const route = useRoute();
 
-const { handleOpenDevTools } = useIpcRendererSend();
+const { handleOpenDevTools, handleSetAlwaysOnTop } = useIpcRendererSend();
 
 // 窗口当前的位置 + 鼠标当前的相对位置 - 鼠标以前的相对位置
 const isMoving = ref<boolean>(false);
@@ -150,9 +151,27 @@ onMounted(() => {
 });
 
 ipcRendererOn(
+  IPC_EVENT.response_closeWindowed,
+  (_event, data: IIpcRendererData) => {
+    console.log('response_closeWindowed', data);
+    if (data.data?.windowId === WINDOW_ID_ENUM.about) {
+      appStore.createAboutWindows = false;
+    }
+  }
+);
+
+ipcRendererOn(
   IPC_EVENT.response_open_about,
   (_event, data: IIpcRendererData) => {
     console.log('response_open_about', data);
+    if (appStore.createAboutWindows) {
+      handleSetAlwaysOnTop({
+        windowId: WINDOW_ID_ENUM.about,
+        flag: true,
+      });
+      return;
+    }
+    appStore.createAboutWindows = true;
     ipcRendererSend({
       windowId: 0,
       channel: IPC_EVENT.createWindow,
@@ -172,22 +191,17 @@ ipcRendererOn(
 
 ipcRendererOn(
   IPC_EVENT.response_open_version,
-  (_event, data: IIpcRendererData) => {
+  async (_event, data: IIpcRendererData) => {
     console.log('response_open_version', data);
-    ipcRendererSend({
-      windowId: 0,
-      channel: IPC_EVENT.createWindow,
-      requestId: getRandomString(8),
-      data: {
-        windowId: WINDOW_ID_ENUM.version,
-        width: 300,
-        height: 300,
-        route: routerName.version,
-        query: {},
-        useWorkAreaSize: false,
-        frame: true,
-      },
-    });
+    const res = await fetchDeskVersionCheck(appStore.version);
+    if (res.code === 200 && res.data) {
+      appStore.updateModalInfo = res.data;
+      if (appStore.updateModalInfo?.checkUpdate === 2) {
+        window.$message.success('当前不需要更新');
+      } else if (appStore.updateModalInfo?.isUpdate === 2) {
+        window.$message.success('当前是最新版本');
+      }
+    }
   }
 );
 

@@ -76,10 +76,10 @@ const newPkgStr = fs.readFileSync(
   path.resolve(localDir, 'package.json'),
   'utf-8'
 );
-const viteConfigStr = fs.readFileSync(
-  path.resolve(localDir, './deploy/vite.config.ts'),
-  'utf-8'
-);
+// const viteConfigStr = fs.readFileSync(
+//   path.resolve(localDir, './deploy/vite.config.ts'),
+//   'utf-8'
+// );
 const tsconfigStr = fs.readFileSync(
   path.resolve(localDir, './deploy/tsconfig.json'),
   'utf-8'
@@ -113,7 +113,7 @@ if (process.cwd().indexOf('codeup') !== -1) {
       path.resolve(targetDir, 'package.json'),
       JSON.stringify({ ...newPkg }, Object.create({}), 2)
     );
-    fs.writeFileSync(path.resolve(targetDir, 'vite.config.ts'), viteConfigStr);
+    // fs.writeFileSync(path.resolve(targetDir, 'vite.config.ts'), viteConfigStr);
     fs.writeFileSync(path.resolve(targetDir, 'tsconfig.json'), tsconfigStr);
     fs.writeFileSync(
       path.resolve(targetDir, 'deploy/jenkins.json'),

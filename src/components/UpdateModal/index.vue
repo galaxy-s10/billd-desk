@@ -46,13 +46,50 @@ const emits = defineEmits(['confirm', 'close']);
 function handleUpdate() {
   if (appStore.updateModalInfo) {
     let url = '';
+    let errmsg = '';
     const val = getClientEnv();
     if (val === ClientEnvEnum.windows) {
-      url = appStore.updateModalInfo.download.window_64_exe;
+      if (appStore.arch === 'arm') {
+        url = appStore.updateModalInfo.download.download_windows_arm_exe || '';
+      } else if (appStore.arch === 'arm64') {
+        url =
+          appStore.updateModalInfo.download.download_windows_arm64_exe || '';
+      } else if (appStore.arch === 'x64') {
+        url = appStore.updateModalInfo.download.download_windows_x64_exe || '';
+      } else {
+        errmsg = `未适配${val}(${appStore.arch})架构`;
+      }
     } else if (val === ClientEnvEnum.macos) {
-      url = appStore.updateModalInfo.download.macos_dmg;
+      if (appStore.arch === 'arm') {
+        url = appStore.updateModalInfo.download.download_macos_arm_dmg || '';
+      } else if (appStore.arch === 'arm64') {
+        url = appStore.updateModalInfo.download.download_macos_arm64_dmg || '';
+      } else if (appStore.arch === 'x64') {
+        url = appStore.updateModalInfo.download.download_macos_x64_dmg || '';
+      } else {
+        errmsg = `未适配${val}(${appStore.arch})架构`;
+      }
     } else if (val === ClientEnvEnum.linux) {
-      url = appStore.updateModalInfo.download.linux_64_deb;
+      if (appStore.arch === 'arm') {
+        url =
+          appStore.updateModalInfo.download.download_linux_arm_appimage || '';
+      } else if (appStore.arch === 'arm64') {
+        url =
+          appStore.updateModalInfo.download.download_linux_arm64_appimage || '';
+      } else if (appStore.arch === 'x64') {
+        url =
+          appStore.updateModalInfo.download.download_linux_x64_appimage || '';
+      } else {
+        errmsg = `未适配${val}(${appStore.arch})架构`;
+      }
+    }
+    if (errmsg !== '') {
+      window.$message.warning(errmsg);
+      return;
+    }
+    if (url === '') {
+      window.$message.warning('未配置url');
+      return;
     }
     handleOpenExternal({
       windowId: WINDOW_ID_ENUM.remote,

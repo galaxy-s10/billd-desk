@@ -48,45 +48,9 @@ export interface IFlvStatistics {
   droppedFrames: number;
 }
 
-export enum LiveLineEnum {
-  rtc = 'rtc',
-  hls = 'hls',
-  flv = 'flv',
-}
-
 export enum LiveRenderEnum {
   video = 'video',
   canvas = 'canvas',
-}
-
-export interface IServerInfo {
-  project_name: string;
-  project_env: string;
-  updated_at: string;
-  server: {
-    uname: string;
-    redisVersion: string;
-    mysqlVersion: string;
-    nginxVersion: string;
-    dockerVersion: string;
-    pm2Version: string;
-    nodeVersion: string;
-    npmVersion: string;
-    pnpmVersion: string;
-  };
-  billd: {
-    pkgName: string;
-    pkgVersion: string;
-    pkgRepository: string;
-    commitSubject: string;
-    commitBranch: string;
-    committerDate: string;
-    commitHash: string;
-    committerName: string;
-    committerEmail: string;
-    lastBuildDate: string;
-    nodeVersion: string;
-  };
 }
 
 export enum RankTypeEnum {
@@ -209,14 +173,30 @@ export interface IDeskVersion {
   disable?: number;
   /** 禁用消息 */
   disable_msg?: number;
-  download_macos_dmg?: string;
-  download_window_64_exe?: string;
-  download_window_32_exe?: string;
-  download_window_arm_exe?: string;
-  download_linux_64_deb?: string;
-  download_linux_64_tar?: string;
+  /** macos 32位ARM */
+  download_macos_arm_dmg?: string;
+  /** macos 64位ARM */
+  download_macos_arm64_dmg?: string;
+  /** macos 64位X86，X86是x86_64 或 amd64的别名  */
+  download_macos_x64_dmg?: string;
+  /** windows 32位ARM */
+  download_windows_arm_exe?: string;
+  /** windows 64位ARM */
+  download_windows_arm64_exe?: string;
+  /** windows 64位X86，X86是x86_64 或 amd64的别名 */
+  download_windows_x64_exe?: string;
+  /** linux 32位ARM */
+  download_linux_arm_appimage?: string;
+  /** linux 64位ARM */
+  download_linux_arm64_appimage?: string;
+  /** linux 64位X86，X86是x86_64 或 amd64的别名 */
+  download_linux_x64_appimage?: string;
+  /** linux deb 32位ARM */
   download_linux_arm_deb?: string;
-  download_linux_arm_tar?: string;
+  /** linux deb 64位ARM */
+  download_linux_arm64_deb?: string;
+  /** linux deb 64位X86，X86是x86_64 或 amd64的别名 */
+  download_linux_x64_deb?: string;
   remark?: string;
 
   created_at?: string;
@@ -274,7 +254,7 @@ export interface IArea {
 export interface IAreaLiveRoom {
   id?: number;
   area_id?: number;
-  live_room_id?: number;
+  room_id?: number;
   /** 分区信息 */
   area?: IUser;
   /** 直播间信息 */
@@ -309,7 +289,7 @@ export interface ILive extends ISrsPublishStream {
 
   socket_id?: string;
   user_id?: number;
-  live_room_id?: number;
+  room_id?: number;
   live_room_is_show?: LiveRoomIsShowEnum;
   live_room_status?: LiveRoomStatusEnum;
   /** 1开启;2关闭 */

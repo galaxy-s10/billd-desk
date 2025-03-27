@@ -16,6 +16,7 @@
 </template>
 
 <script lang="ts" setup>
+import { getRandomString } from 'billd-utils';
 import { GlobalThemeOverrides, NConfigProvider } from 'naive-ui';
 import { onMounted } from 'vue';
 
@@ -24,11 +25,20 @@ import {
   fetchDeskVersionCheck,
   fetchDeskVersionLatest,
 } from '@/api/deskVersion';
-import { APP_BUILD_INFO, WINDOW_ID_ENUM } from '@/constant';
+import { WINDOW_ID_ENUM } from '@/constant';
+import { IPC_EVENT } from '@/event';
 import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
 import { useAppStore } from '@/store/app';
 import { usePiniaCacheStore } from '@/store/cache';
-import { ipcRenderer } from '@/utils';
+import {
+  getClientEnv,
+  getPlatform,
+  ipcRenderer,
+  ipcRendererInvoke,
+  ipcRendererSend,
+} from '@/utils';
+
+import { fetchInviteCreate, fetchInviteKeepAlive } from './api/inivte';
 
 const appStore = useAppStore();
 const cacheStore = usePiniaCacheStore();
@@ -45,10 +55,69 @@ const themeOverrides: GlobalThemeOverrides = {
   },
 };
 
-onMounted(() => {
+function handleRemoveGlobalLoading() {
+  const el = document.querySelector('.b-global-loading') as HTMLDivElement;
+  el.style.display = 'none';
+}
+
+onMounted(async () => {
   console.log('当前地址栏', location.href);
-  appStore.version = APP_BUILD_INFO.pkgVersion;
-  appStore.lastBuildDate = APP_BUILD_INFO.lastBuildDate;
+
+  ipcRendererSend({
+    windowId: WINDOW_ID_ENUM.remote,
+    channel: IPC_EVENT.workAreaSize,
+    requestId: getRandomString(8),
+    data: {},
+  });
+
+  const res1 = await ipcRendererInvoke({
+    windowId: WINDOW_ID_ENUM.remote,
+    channel: IPC_EVENT.getArch,
+    requestId: getRandomString(8),
+    data: {},
+  });
+  if (res1?.code === 0) {
+    appStore.arch = res1.data.arch;
+  }
+
+  const res2 = await ipcRendererInvoke({
+    windowId: WINDOW_ID_ENUM.remote,
+    channel: IPC_EVENT.scaleFactor,
+    requestId: getRandomString(8),
+    data: {},
+  });
+  if (res2?.code === 0) {
+    if (getPlatform() !== 'darwin') {
+      appStore.scaleFactor = res2.data.scaleFactor;
+    }
+  }
+
+  const re3 = await ipcRendererInvoke({
+    windowId: WINDOW_ID_ENUM.remote,
+    channel: IPC_EVENT.getPrimaryDisplaySize,
+    requestId: getRandomString(8),
+    data: {},
+  });
+  if (re3?.code === 0) {
+    appStore.primaryDisplaySize.width = re3.data.width;
+    appStore.primaryDisplaySize.height = re3.data.height;
+  }
+  const appInfo = process.env.BilldHtmlWebpackPlugin as any;
+  const res = await fetchInviteCreate({
+    roomId: cacheStore.deskUserUuid,
+    uuid: cacheStore.deskUserUuid,
+    pwd: cacheStore.deskUserPassword,
+    client_env: getClientEnv(),
+    client_version: appInfo?.pkgVersion,
+  });
+  if (res.code === 200) {
+    appStore.inviteId = res.data.id;
+  }
+  setInterval(() => {
+    fetchInviteKeepAlive({ id: appStore.inviteId });
+  }, 1000 * 5);
+
+  handleRemoveGlobalLoading();
 
   handleSetAlwaysOnTop({
     windowId: WINDOW_ID_ENUM.remote,
@@ -56,6 +125,7 @@ onMounted(() => {
   });
 
   getClient();
+
   if (ipcRenderer) {
     handleGetAllWindowName({
       windowId: WINDOW_ID_ENUM.remote,

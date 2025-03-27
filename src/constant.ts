@@ -19,8 +19,6 @@ export const COMMON_URL = {
   payCoursesArticle: `https://www.hsslive.cn/article/151`,
 };
 
-export const PROJECT_NAME = 'billd-desk';
-
 // @ts-ignore
 export const APP_BUILD_INFO = process.env
   .BilldHtmlWebpackPlugin as BilldHtmlWebpackPluginLog;
@@ -32,42 +30,7 @@ export const THEME_COLOR = '#ffd700';
 export const PRODUCT_NAME = 'BilldDesk';
 
 export const NUT_KEY_MAP = {
-  A: Key.A,
-  B: Key.B,
-  C: Key.C,
-  D: Key.D,
-  E: Key.E,
-  F: Key.F,
-  G: Key.G,
-  H: Key.H,
-  I: Key.I,
-  J: Key.J,
-  K: Key.K,
-  L: Key.L,
-  M: Key.M,
-  N: Key.N,
-  O: Key.O,
-  P: Key.P,
-  Q: Key.Q,
-  R: Key.R,
-  S: Key.S,
-  T: Key.T,
-  U: Key.U,
-  V: Key.V,
-  W: Key.W,
-  X: Key.X,
-  Y: Key.Y,
-  Z: Key.Z,
-  0: Key.Num0,
-  1: Key.Num1,
-  2: Key.Num2,
-  3: Key.Num3,
-  4: Key.Num4,
-  5: Key.Num5,
-  6: Key.Num6,
-  7: Key.Num7,
-  8: Key.Num8,
-  9: Key.Num9,
+  Escape: Key.Escape, // esc
   Fn: Key.Fn,
   F1: Key.F1,
   F2: Key.F2,
@@ -93,30 +56,91 @@ export const NUT_KEY_MAP = {
   F22: Key.F22,
   F23: Key.F23,
   F24: Key.F24,
-  Delete: Key.Delete,
-  Enter: Key.Enter,
-  Space: Key.Space,
-  Backspace: Key.Backspace,
-  ShiftLeft: Key.LeftShift,
-  ShiftRight: Key.RightShift,
-  AltLeft: Key.LeftAlt,
-  AltRight: Key.RightAlt,
+
+  '`': Key.Grave, // 波浪号
+  1: Key.Num1,
+  2: Key.Num2,
+  3: Key.Num3,
+  4: Key.Num4,
+  5: Key.Num5,
+  6: Key.Num6,
+  7: Key.Num7,
+  8: Key.Num8,
+  9: Key.Num9,
+  0: Key.Num0,
+  '-': Key.Minus, // 减号
+  '+': Key.Equal, // 等号
+  Backspace: Key.Backspace, // 删除
+
   Tab: Key.Tab,
-  Backquote: Key.Quote,
-  Backslash: Key.Backslash,
+  Q: Key.Q,
+  W: Key.W,
+  E: Key.E,
+  R: Key.R,
+  T: Key.T,
+  Y: Key.Y,
+  U: Key.U,
+  I: Key.I,
+  O: Key.O,
+  P: Key.P,
+  '[': Key.LeftBracket, // 左方括号
+  ']': Key.RightBracket, // 右方括号
+  '\\': Key.Backslash, // 反斜杠
+  Delete: Key.Delete, // del
+
+  CapsLock: Key.CapsLock, // 大小写切换
+  A: Key.A,
+  S: Key.S,
+  D: Key.D,
+  F: Key.F,
+  G: Key.G,
+  H: Key.H,
+  J: Key.J,
+  K: Key.K,
+  L: Key.L,
+  ';': Key.Semicolon, // 分号
+  "'": Key.Quote, // 引号
+  Enter: Key.Enter, // 回车enter
+
+  Shift: Key.LeftShift, // 左边的shift
+  Z: Key.Z,
+  X: Key.X,
+  C: Key.C,
+  V: Key.V,
+  B: Key.B,
+  N: Key.N,
+  M: Key.M,
+  ',': Key.Comma, // 逗号
+  '.': Key.Period, // 句号
+  '/': Key.Slash, // 斜杠
+  // Shift: Key.RightShift, // 右边的shift
+
+  fn: 'fn',
+  Control: Key.LeftControl,
+  Alt: Key.LeftAlt,
+  Meta: Key.LeftCmd,
+  ' ': Key.Space,
+  // Meta: Key.RightCmd,
+  // Alt: Key.RightAlt,
+  // Control: Key.RightControl,
+
   ArrowUp: Key.Up,
   ArrowDown: Key.Down,
   ArrowLeft: Key.Left,
   ArrowRight: Key.Right,
-  CapsLock: Key.CapsLock,
-  ControlLeft: Key.LeftControl,
-  ControlRight: Key.RightControl,
-  MetaLeft: Key.LeftCmd,
-  LeftCmd: Key.LeftCmd,
-  MetaRight: Key.RightCmd,
-  RightCmd: Key.RightCmd,
-  LeftWin: Key.LeftWin,
-  RightWin: Key.RightWin,
+
+  // 右侧小键盘
+  Home: Key.Home,
+  End: Key.End,
+  Insert: Key.Insert,
+  Print: Key.Print,
+  PageUp: Key.PageUp,
+  PageDown: Key.PageDown,
+  Pause: Key.Pause,
+  ScrollLock: Key.ScrollLock,
+
+  // 没用到
+  // RightCmd: Key.RightCmd,
 };
 
 // 全局的cookie的key

@@ -85,11 +85,6 @@ export const defaultRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/about/index.vue'),
   },
   {
-    name: routerName.version,
-    path: '/version',
-    component: () => import('@/views/version/index.vue'),
-  },
-  {
     name: routerName.invite,
     path: '/invite',
     component: () => import('@/views/invite/index.vue'),

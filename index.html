@@ -12,6 +12,49 @@
       content="width=device-width, initial-scale=1.0"
     />
     <title><%= title %></title>
+    <style>
+      .b-global-loading {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .b-global-loading .loader {
+        display: inline-block;
+        box-sizing: border-box;
+        width: 200px;
+        height: 16px;
+        border: 1px solid #eee;
+        border-radius: 4px;
+        background-color: #fff;
+        background-image: linear-gradient(
+          45deg,
+          #ffd700 25%,
+          transparent 25%,
+          transparent 50%,
+          #ffd700 50%,
+          #ffd700 75%,
+          transparent 75%,
+          transparent
+        );
+        background-size: 1em 1em;
+        font-size: 30px;
+        animation: barStripe 0.8s linear infinite;
+      }
+
+      @keyframes barStripe {
+        0% {
+          background-position: 1em 0;
+        }
+        100% {
+          background-position: 0 0;
+        }
+      }
+    </style>
   </head>
   <body>
     <div id="app"></div>
@@ -19,5 +62,8 @@
       type="module"
       src="/src/main.ts"
     ></script>
+    <div class="b-global-loading">
+      <span class="loader"></span>
+    </div>
   </body>
 </html>
