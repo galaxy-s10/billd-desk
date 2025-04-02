@@ -32,8 +32,7 @@
 <script lang="ts" setup>
 import { getRandomString } from 'billd-utils';
 
-import { IPC_EVENT } from '@/event';
-import { WINDOW_ID_ENUM } from '@/pure-constant';
+import { IPC_EVENT, WINDOW_ID_MAP } from '@/pure-constant';
 import { useAppStore } from '@/store/app';
 import { ipcRendererSend } from '@/utils';
 
@@ -41,7 +40,7 @@ const appStore = useAppStore();
 
 function handleClose() {
   ipcRendererSend({
-    windowId: WINDOW_ID_ENUM.remote,
+    windowId: WINDOW_ID_MAP.remote,
     channel: IPC_EVENT.closeAllWindow,
     requestId: getRandomString(8),
     data: {},

@@ -25,9 +25,9 @@ import {
   fetchDeskVersionCheck,
   fetchDeskVersionLatest,
 } from '@/api/deskVersion';
-import { WINDOW_ID_ENUM } from '@/constant';
-import { IPC_EVENT } from '@/event';
+import { fetchInviteCreate } from '@/api/inivte';
 import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
+import { IPC_EVENT, WINDOW_ID_MAP } from '@/pure-constant';
 import { useAppStore } from '@/store/app';
 import { usePiniaCacheStore } from '@/store/cache';
 import {
@@ -37,8 +37,6 @@ import {
   ipcRendererInvoke,
   ipcRendererSend,
 } from '@/utils';
-
-import { fetchInviteCreate, fetchInviteKeepAlive } from './api/inivte';
 
 const appStore = useAppStore();
 const cacheStore = usePiniaCacheStore();
@@ -62,16 +60,17 @@ function handleRemoveGlobalLoading() {
 
 onMounted(async () => {
   console.log('当前地址栏', location.href);
+  handleRemoveGlobalLoading();
 
   ipcRendererSend({
-    windowId: WINDOW_ID_ENUM.remote,
+    windowId: WINDOW_ID_MAP.remote,
     channel: IPC_EVENT.workAreaSize,
     requestId: getRandomString(8),
     data: {},
   });
 
   const res1 = await ipcRendererInvoke({
-    windowId: WINDOW_ID_ENUM.remote,
+    windowId: WINDOW_ID_MAP.remote,
     channel: IPC_EVENT.getArch,
     requestId: getRandomString(8),
     data: {},
@@ -81,7 +80,7 @@ onMounted(async () => {
   }
 
   const res2 = await ipcRendererInvoke({
-    windowId: WINDOW_ID_ENUM.remote,
+    windowId: WINDOW_ID_MAP.remote,
     channel: IPC_EVENT.scaleFactor,
     requestId: getRandomString(8),
     data: {},
@@ -93,7 +92,7 @@ onMounted(async () => {
   }
 
   const re3 = await ipcRendererInvoke({
-    windowId: WINDOW_ID_ENUM.remote,
+    windowId: WINDOW_ID_MAP.remote,
     channel: IPC_EVENT.getPrimaryDisplaySize,
     requestId: getRandomString(8),
     data: {},
@@ -113,14 +112,9 @@ onMounted(async () => {
   if (res.code === 200) {
     appStore.inviteId = res.data.id;
   }
-  setInterval(() => {
-    fetchInviteKeepAlive({ id: appStore.inviteId });
-  }, 1000 * 5);
-
-  handleRemoveGlobalLoading();
 
   handleSetAlwaysOnTop({
-    windowId: WINDOW_ID_ENUM.remote,
+    windowId: WINDOW_ID_MAP.remote,
     flag: cacheStore.isAlwaysOnTop,
   });
 
@@ -128,11 +122,11 @@ onMounted(async () => {
 
   if (ipcRenderer) {
     handleGetAllWindowName({
-      windowId: WINDOW_ID_ENUM.remote,
+      windowId: WINDOW_ID_MAP.remote,
     });
     handleDeskVersionCheck();
     handleSetPowerBootStatus({
-      windowId: WINDOW_ID_ENUM.remote,
+      windowId: WINDOW_ID_MAP.remote,
     }).then((res) => {
       if (res.code === 0) {
         cacheStore.powerBoot = res.data.open;

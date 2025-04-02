@@ -74,7 +74,7 @@
       @click="handleOpenDebug"
     ></div>
     <div
-      v-if="0"
+      v-if="appStore.showDebug || NODE_ENV === 'development'"
       class="debug-area-wrap"
     >
       <div
@@ -85,7 +85,7 @@
       </div>
       <div
         class="item"
-        @click="handleOpenDevTools({ windowId: WINDOW_ID_ENUM.remote })"
+        @click="handleOpenDevTools({ windowId: WINDOW_ID_MAP.remote })"
       >
         控制台
       </div>
@@ -115,10 +115,11 @@ import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { fetchDeskVersionCheck } from '@/api/deskVersion';
-import { WINDOW_ID_ENUM } from '@/constant';
-import { IPC_EVENT } from '@/event';
+import { NODE_ENV } from '@/constant';
 import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
-import { ClientEnvEnum, IIpcRendererData } from '@/interface';
+import { ClientEnvEnum } from '@/interface';
+import { IPC_EVENT, WINDOW_ID_MAP } from '@/pure-constant';
+import { IIpcRendererData } from '@/pure-interface';
 import { routerName } from '@/router';
 import { useAppStore } from '@/store/app';
 import {
@@ -154,7 +155,7 @@ ipcRendererOn(
   IPC_EVENT.response_closeWindowed,
   (_event, data: IIpcRendererData) => {
     console.log('response_closeWindowed', data);
-    if (data.data?.windowId === WINDOW_ID_ENUM.about) {
+    if (data.data?.windowId === WINDOW_ID_MAP.about) {
       appStore.createAboutWindows = false;
     }
   }
@@ -166,7 +167,7 @@ ipcRendererOn(
     console.log('response_open_about', data);
     if (appStore.createAboutWindows) {
       handleSetAlwaysOnTop({
-        windowId: WINDOW_ID_ENUM.about,
+        windowId: WINDOW_ID_MAP.about,
         flag: true,
       });
       return;
@@ -177,7 +178,7 @@ ipcRendererOn(
       channel: IPC_EVENT.createWindow,
       requestId: getRandomString(8),
       data: {
-        windowId: WINDOW_ID_ENUM.about,
+        windowId: WINDOW_ID_MAP.about,
         width: 550,
         height: 380,
         route: routerName.about,
@@ -218,7 +219,7 @@ function handleOpenDebug() {
 
 function handleClose() {
   ipcRendererSend({
-    windowId: WINDOW_ID_ENUM.remote,
+    windowId: WINDOW_ID_MAP.remote,
     channel: IPC_EVENT.closeAllWindow,
     requestId: getRandomString(8),
     data: {},
@@ -227,7 +228,7 @@ function handleClose() {
 
 function handleMin() {
   ipcRendererSend({
-    windowId: WINDOW_ID_ENUM.remote,
+    windowId: WINDOW_ID_MAP.remote,
     channel: IPC_EVENT.windowMinimize,
     requestId: getRandomString(8),
     data: {},
@@ -263,7 +264,7 @@ const moving = (e: MouseEvent) => {
   }
   if (isMoving.value) {
     ipcRendererInvoke({
-      windowId: WINDOW_ID_ENUM.remote,
+      windowId: WINDOW_ID_MAP.remote,
       channel: IPC_EVENT.setWindowPosition,
       requestId: getRandomString(8),
       data: {

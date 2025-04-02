@@ -1,4 +1,3 @@
-export * from '@/pure-constant';
 import { Key } from '@nut-tree-fork/shared';
 
 import type { BilldHtmlWebpackPluginLog } from '@/interface';
@@ -57,72 +56,72 @@ export const NUT_KEY_MAP = {
   F23: Key.F23,
   F24: Key.F24,
 
-  '`': Key.Grave, // 波浪号
-  1: Key.Num1,
-  2: Key.Num2,
-  3: Key.Num3,
-  4: Key.Num4,
-  5: Key.Num5,
-  6: Key.Num6,
-  7: Key.Num7,
-  8: Key.Num8,
-  9: Key.Num9,
-  0: Key.Num0,
-  '-': Key.Minus, // 减号
-  '+': Key.Equal, // 等号
+  Backquote: Key.Grave, // 波浪号
+  Digit1: Key.Num1,
+  Digit2: Key.Num2,
+  Digit3: Key.Num3,
+  Digit4: Key.Num4,
+  Digit5: Key.Num5,
+  Digit6: Key.Num6,
+  Digit7: Key.Num7,
+  Digit8: Key.Num8,
+  Digit9: Key.Num9,
+  Digit0: Key.Num0,
+  Minus: Key.Minus, // 减号
+  Equal: Key.Equal, // 等号
   Backspace: Key.Backspace, // 删除
 
   Tab: Key.Tab,
-  Q: Key.Q,
-  W: Key.W,
-  E: Key.E,
-  R: Key.R,
-  T: Key.T,
-  Y: Key.Y,
-  U: Key.U,
-  I: Key.I,
-  O: Key.O,
-  P: Key.P,
-  '[': Key.LeftBracket, // 左方括号
-  ']': Key.RightBracket, // 右方括号
-  '\\': Key.Backslash, // 反斜杠
+  KeyQ: Key.Q,
+  KeyW: Key.W,
+  KeyE: Key.E,
+  KeyR: Key.R,
+  KeyT: Key.T,
+  KeyY: Key.Y,
+  KeyU: Key.U,
+  KeyI: Key.I,
+  KeyO: Key.O,
+  KeyP: Key.P,
+  BracketLeft: Key.LeftBracket, // 左方括号
+  BracketRight: Key.RightBracket, // 右方括号
+  Backslash: Key.Backslash, // 反斜杠
   Delete: Key.Delete, // del
 
   CapsLock: Key.CapsLock, // 大小写切换
-  A: Key.A,
-  S: Key.S,
-  D: Key.D,
-  F: Key.F,
-  G: Key.G,
-  H: Key.H,
-  J: Key.J,
-  K: Key.K,
-  L: Key.L,
-  ';': Key.Semicolon, // 分号
-  "'": Key.Quote, // 引号
+  KeyA: Key.A,
+  KeyS: Key.S,
+  KeyD: Key.D,
+  KeyF: Key.F,
+  KeyG: Key.G,
+  KeyH: Key.H,
+  KeyJ: Key.J,
+  KeyK: Key.K,
+  KeyL: Key.L,
+  Semicolon: Key.Semicolon, // 分号
+  Quote: Key.Quote, // 引号
   Enter: Key.Enter, // 回车enter
 
-  Shift: Key.LeftShift, // 左边的shift
-  Z: Key.Z,
-  X: Key.X,
-  C: Key.C,
-  V: Key.V,
-  B: Key.B,
-  N: Key.N,
-  M: Key.M,
-  ',': Key.Comma, // 逗号
-  '.': Key.Period, // 句号
-  '/': Key.Slash, // 斜杠
-  // Shift: Key.RightShift, // 右边的shift
+  ShiftLeft: Key.LeftShift, // 左边的shift
+  KeyZ: Key.Z,
+  KeyX: Key.X,
+  KeyC: Key.C,
+  KeyV: Key.V,
+  KeyB: Key.B,
+  KeyN: Key.N,
+  KeyM: Key.M,
+  Comma: Key.Comma, // 逗号
+  Period: Key.Period, // 句号
+  Slash: Key.Slash, // 斜杠
+  ShiftRight: Key.RightShift, // 右边边的shift
 
   fn: 'fn',
-  Control: Key.LeftControl,
+  ControlLeft: Key.LeftControl,
   Alt: Key.LeftAlt,
-  Meta: Key.LeftCmd,
-  ' ': Key.Space,
-  // Meta: Key.RightCmd,
-  // Alt: Key.RightAlt,
-  // Control: Key.RightControl,
+  MetaLeft: Key.LeftCmd,
+  Space: Key.Space,
+  MetaRight: Key.RightCmd,
+  AltRight: Key.RightAlt,
+  ControlRight: Key.RightControl,
 
   ArrowUp: Key.Up,
   ArrowDown: Key.Down,
@@ -139,14 +138,24 @@ export const NUT_KEY_MAP = {
   Pause: Key.Pause,
   ScrollLock: Key.ScrollLock,
 
+  // 数字小键盘
+  Numpad1: Key.Num1,
+  Numpad2: Key.Num2,
+  Numpad3: Key.Num3,
+  Numpad4: Key.Num4,
+  Numpad5: Key.Num5,
+  Numpad6: Key.Num6,
+  Numpad7: Key.Num7,
+  Numpad8: Key.Num8,
+  Numpad9: Key.Num9,
+  Numpad0: Key.Num0,
+
   // 没用到
   // RightCmd: Key.RightCmd,
 };
 
 // 全局的cookie的key
-export const COOKIE_KEY = {
-  thirdLoginInfo: 'thirdLoginInfo',
-};
+export const COOKIE_KEY = {};
 
 export const LS_KEY_PREFIX = 'billd_desk___';
 

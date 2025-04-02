@@ -33,7 +33,7 @@
 <script lang="ts" setup>
 import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
 import { ClientEnvEnum } from '@/interface';
-import { WINDOW_ID_ENUM } from '@/pure-constant';
+import { WINDOW_ID_MAP } from '@/pure-constant';
 import { useAppStore } from '@/store/app';
 import { getClientEnv } from '@/utils';
 
@@ -92,7 +92,7 @@ function handleUpdate() {
       return;
     }
     handleOpenExternal({
-      windowId: WINDOW_ID_ENUM.remote,
+      windowId: WINDOW_ID_MAP.remote,
       url,
     });
   } else {

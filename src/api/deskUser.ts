@@ -1,4 +1,4 @@
-import { IDeskUser } from '@/types/IUser';
+import { IDeskUser } from '@/interface';
 import request from '@/utils/request';
 
 export function fetchFindReceiverByUuid(uuid) {
