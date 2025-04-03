@@ -53,6 +53,13 @@
         </div>
         <div
           class="item"
+          :class="{ active: route.name === routerName.screenWall }"
+          @click="router.push({ name: routerName.screenWall })"
+        >
+          屏幕墙
+        </div>
+        <div
+          class="item"
           :class="{ active: route.name === routerName.setting }"
           @click="router.push({ name: routerName.setting })"
         >
@@ -115,6 +122,7 @@ import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { fetchDeskVersionCheck } from '@/api/deskVersion';
+import { fetchScreenWallSetImg } from '@/api/screenWall';
 import { NODE_ENV } from '@/constant';
 import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
 import { ClientEnvEnum } from '@/interface';
@@ -122,6 +130,7 @@ import { IPC_EVENT, WINDOW_ID_MAP } from '@/pure-constant';
 import { IIpcRendererData } from '@/pure-interface';
 import { routerName } from '@/router';
 import { useAppStore } from '@/store/app';
+import { usePiniaCacheStore } from '@/store/cache';
 import {
   getClientEnv,
   ipcRenderer,
@@ -133,8 +142,10 @@ import {
 const appStore = useAppStore();
 const router = useRouter();
 const route = useRoute();
+const cacheStore = usePiniaCacheStore();
 
-const { handleOpenDevTools, handleSetAlwaysOnTop } = useIpcRendererSend();
+const { handleOpenDevTools, handleSetAlwaysOnTop, handleGetThumbnail } =
+  useIpcRendererSend();
 
 // 窗口当前的位置 + 鼠标当前的相对位置 - 鼠标以前的相对位置
 const isMoving = ref<boolean>(false);
@@ -143,10 +154,44 @@ const useCustomBar = ref(true);
 const clickNum = ref(1);
 const teststr = ref('');
 const platform = ref<ClientEnvEnum>();
+const loopGetThumbnailTimer = ref();
+const loopfetchScreenWallSetImgTimer = ref();
+let base64 = '';
+
+function loopGetThumbnail() {
+  clearInterval(loopGetThumbnailTimer.value);
+  loopGetThumbnailTimer.value = setInterval(async () => {
+    const res = await handleGetThumbnail({
+      windowId: WINDOW_ID_MAP.remote,
+      quality: 100,
+    });
+    const buffer = res.data as Uint8Array;
+    if (buffer) {
+      const str = window.btoa(String.fromCharCode(...new Uint8Array(buffer)));
+      base64 = `data:image/;base64,${str}`;
+    }
+  }, 1000 * 1);
+
+  clearInterval(loopfetchScreenWallSetImgTimer.value);
+  loopfetchScreenWallSetImgTimer.value = setInterval(() => {
+    try {
+      fetchScreenWallSetImg({
+        uuid: cacheStore.deskUserUuid,
+        password: cacheStore.deskUserPassword,
+        data: base64,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }, 1000 * 2);
+}
 
 onMounted(() => {
   if (!ipcRenderer) {
     useCustomBar.value = false;
+  }
+  if (ipcRenderer) {
+    loopGetThumbnail();
   }
   platform.value = getClientEnv();
 });

@@ -2,6 +2,7 @@ export const WINDOW_ID_MAP = {
   remote: 1,
   webrtc: 2,
   about: 3,
+  layout: 4,
 };
 
 export const ENGLISH_LETTER = [
@@ -62,6 +63,7 @@ export const IPC_EVENT = {
   setWindowPosition: 'setWindowPosition',
   getWindowPosition: 'getWindowPosition',
   getScreenStream: 'getScreenStream',
+  getThumbnail: 'getThumbnail',
   getWindowStream: 'getWindowStream',
   setAlwaysOnTop: 'setAlwaysOnTop',
   scaleFactor: 'scaleFactor',

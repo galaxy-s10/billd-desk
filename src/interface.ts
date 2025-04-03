@@ -102,3 +102,15 @@ export interface IDeskUser {
   updated_at?: string;
   deleted_at?: string;
 }
+
+export interface IScreenWall {
+  id?: number;
+  uuid?: string;
+  group_name?: string;
+  c_uuid?: string;
+  c_password?: string;
+
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
+}

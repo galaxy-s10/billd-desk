@@ -22,6 +22,7 @@ export const routerName = {
   version: 'version',
   webrtc: 'webrtc',
   deviceManage: 'deviceManage',
+  screenWall: 'screenWall',
   setting: 'setting',
   hi: 'hi',
   privatizationDeployment: 'privatizationDeployment',
@@ -51,6 +52,11 @@ export const defaultRoutes: RouteRecordRaw[] = [
         name: routerName.deviceManage,
         path: '/deviceManage',
         component: () => import('@/views/deviceManage/index.vue'),
+      },
+      {
+        name: routerName.screenWall,
+        path: '/screenWall',
+        component: () => import('@/views/screenWall/index.vue'),
       },
       {
         name: routerName.setting,
