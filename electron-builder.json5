@@ -16,8 +16,8 @@
     target: {
       target: 'dmg',
       // https://github.com/electron-userland/electron-builder/issues/5392
-      // arch: ['x64', 'arm64'],
-      arch: ['arm64'],
+      arch: ['x64', 'arm64'],
+      // arch: ['arm64'],
     },
     artifactName: '${productName}-mac-${platform}-${version}-${arch}-installer.${ext}',
     icon: 'build/output/icons/icon.icns',
@@ -48,8 +48,8 @@
       {
         // portable、nsis
         target: 'nsis',
-        // arch: ['x64', 'arm64'],
-        arch: ['x64'],
+        arch: ['x64', 'arm64'],
+        // arch: ['x64'],
       },
     ],
     icon: 'build/output/icons/icon.ico',

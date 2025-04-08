@@ -23,6 +23,7 @@ export const routerName = {
   webrtc: 'webrtc',
   deviceManage: 'deviceManage',
   screenWall: 'screenWall',
+  screenWallAdmin: 'screenWallAdmin',
   setting: 'setting',
   hi: 'hi',
   privatizationDeployment: 'privatizationDeployment',
@@ -57,6 +58,11 @@ export const defaultRoutes: RouteRecordRaw[] = [
         name: routerName.screenWall,
         path: '/screenWall',
         component: () => import('@/views/screenWall/index.vue'),
+      },
+      {
+        name: routerName.screenWallAdmin,
+        path: '/screenWallAdmin',
+        component: () => import('@/views/screenWallAdmin/index.vue'),
       },
       {
         name: routerName.setting,

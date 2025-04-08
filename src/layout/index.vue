@@ -52,11 +52,20 @@
           设备列表
         </div>
         <div
+          v-if="!ipcRenderer"
           class="item"
           :class="{ active: route.name === routerName.screenWall }"
           @click="router.push({ name: routerName.screenWall })"
         >
           屏幕墙
+        </div>
+        <div
+          v-if="!ipcRenderer && cacheStore.deskUserUuid === 'superadmin'"
+          class="item"
+          :class="{ active: route.name === routerName.screenWallAdmin }"
+          @click="router.push({ name: routerName.screenWallAdmin })"
+        >
+          屏幕墙（管理员）
         </div>
         <div
           class="item"
@@ -121,7 +130,12 @@ import { getRandomString, windowReload } from 'billd-utils';
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { fetchDeskVersionCheck } from '@/api/deskVersion';
+import {
+  fetchDeskVersionByVersion,
+  fetchDeskVersionCheck,
+  fetchDeskVersionLatest,
+} from '@/api/deskVersion';
+import { fetchInviteCreate } from '@/api/inivte';
 import { fetchScreenWallSetImg } from '@/api/screenWall';
 import { NODE_ENV } from '@/constant';
 import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
@@ -137,6 +151,7 @@ import {
   ipcRendererInvoke,
   ipcRendererOn,
   ipcRendererSend,
+  streamToBase64,
 } from '@/utils';
 
 const appStore = useAppStore();
@@ -144,8 +159,12 @@ const router = useRouter();
 const route = useRoute();
 const cacheStore = usePiniaCacheStore();
 
-const { handleOpenDevTools, handleSetAlwaysOnTop, handleGetThumbnail } =
-  useIpcRendererSend();
+const {
+  handleOpenDevTools,
+  handleSetAlwaysOnTop,
+  handleGetThumbnail,
+  handleSetPowerBootStatus,
+} = useIpcRendererSend();
 
 // 窗口当前的位置 + 鼠标当前的相对位置 - 鼠标以前的相对位置
 const isMoving = ref<boolean>(false);
@@ -157,19 +176,56 @@ const platform = ref<ClientEnvEnum>();
 const loopGetThumbnailTimer = ref();
 const loopfetchScreenWallSetImgTimer = ref();
 let base64 = '';
+let timer;
 
 function loopGetThumbnail() {
   clearInterval(loopGetThumbnailTimer.value);
   loopGetThumbnailTimer.value = setInterval(async () => {
     const res = await handleGetThumbnail({
       windowId: WINDOW_ID_MAP.remote,
-      quality: 100,
     });
-    const buffer = res.data as Uint8Array;
-    if (buffer) {
-      const str = window.btoa(String.fromCharCode(...new Uint8Array(buffer)));
-      base64 = `data:image/;base64,${str}`;
+    // https://github.com/electron/electron/issues/16031
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: {
+        // @ts-ignore
+        mandatory: {
+          // https://www.electronjs.org/zh/docs/latest/api/structures/desktop-capturer-source
+          chromeMediaSource: 'desktop',
+          chromeMediaSourceId: res.data,
+        },
+      },
+    });
+    const settings = stream.getVideoTracks()[0].getSettings();
+    let scale = 1;
+    let quality = 1;
+    if (settings.width && settings.height) {
+      const all = settings.width * settings.height;
+      const normal = 1920 * 1080;
+      const num = all / normal;
+      if (num <= 1) {
+        scale = 0.5;
+        quality = 0.2;
+      } else if (num < 2) {
+        scale = 0.4;
+        quality = 0.2;
+      } else if (num < 3) {
+        scale = 0.3;
+        quality = 0.2;
+      } else if (num < 4) {
+        scale = 0.25;
+        quality = 0.2;
+      } else if (num < 5) {
+        scale = 0.2;
+        quality = 0.2;
+      } else {
+        scale = 0.2;
+        quality = 0.2;
+      }
     }
+    const res1 = (await streamToBase64({ stream, scale, quality })) as any;
+    // const res1 = (await streamToUint8Array({ stream, scale })) as any;
+    base64 = res1.base64;
   }, 1000 * 1);
 
   clearInterval(loopfetchScreenWallSetImgTimer.value);
@@ -186,15 +242,85 @@ function loopGetThumbnail() {
   }, 1000 * 2);
 }
 
-onMounted(() => {
+onMounted(async () => {
   if (!ipcRenderer) {
     useCustomBar.value = false;
   }
   if (ipcRenderer) {
     loopGetThumbnail();
+    handleDeskVersionCheck();
+    handleSetPowerBootStatus({
+      windowId: WINDOW_ID_MAP.remote,
+    }).then((res) => {
+      if (res.code === 0) {
+        cacheStore.powerBoot = res.data.open;
+      }
+    });
+    const res1 = await ipcRendererInvoke({
+      windowId: WINDOW_ID_MAP.remote,
+      channel: IPC_EVENT.getArch,
+      requestId: getRandomString(8),
+      data: {},
+    });
+    if (res1?.code === 0) {
+      appStore.arch = res1.data.arch;
+    }
   }
+  handleInviteInfo();
+  handleVersion();
   platform.value = getClientEnv();
+
+  handleSetAlwaysOnTop({
+    windowId: WINDOW_ID_MAP.remote,
+    flag: cacheStore.isAlwaysOnTop,
+  });
 });
+
+async function handleVersion() {
+  let res;
+  if (ipcRenderer) {
+    res = await fetchDeskVersionByVersion(appStore.version);
+  } else {
+    res = await fetchDeskVersionLatest();
+  }
+  if (res.code === 200 && res.data) {
+    appStore.deskVersionInfo = res.data;
+  }
+}
+
+async function handleDeskVersionCheck() {
+  const res = await fetchDeskVersionCheck(appStore.version);
+  if (res.code === 200 && res.data) {
+    appStore.updateModalInfo = res.data;
+  }
+}
+
+function handleInviteInfo() {
+  async function main() {
+    if (cacheStore.deskUserUuid && cacheStore.deskUserPassword) {
+      const appInfo = process.env.BilldHtmlWebpackPlugin as any;
+      const res = await fetchInviteCreate({
+        roomId: cacheStore.deskUserUuid,
+        uuid: cacheStore.deskUserUuid,
+        pwd: cacheStore.deskUserPassword,
+        client_env: getClientEnv(),
+        client_version: appInfo?.pkgVersion,
+      });
+      if (res.code === 200) {
+        clearInterval(timer);
+        appStore.inviteId = res.data.id;
+      }
+    }
+  }
+  main();
+  timer = setInterval(() => {
+    if (appStore.inviteId) {
+      clearInterval(timer);
+      return;
+    }
+    main();
+  }, 1000);
+}
 
 ipcRendererOn(
   IPC_EVENT.response_closeWindowed,
@@ -336,14 +462,14 @@ $sidebar-width: 160px;
     box-sizing: border-box;
     width: 100vw;
     height: $top-system-bar-height;
+
+    user-select: none;
     &.drag {
       -webkit-app-region: drag;
     }
     &.no-drag {
       -webkit-app-region: no-drag;
     }
-
-    user-select: none;
     .top-left {
       display: flex;
       align-items: baseline;

@@ -6,7 +6,15 @@ export function fetchScreenWallSetImg(data) {
 }
 
 export function fetchScreenWallGetImg(params) {
-  return request.get('/screen_wall/set_img', { params });
+  return request.get('/screen_wall/get_img', { params });
+}
+
+export function fetchScreenWallGetAllImg(params) {
+  return request.get('/screen_wall/get_all_img', { params });
+}
+
+export function fetchScreenWallGetImgBySuperAdmin(params) {
+  return request.get('/screen_wall/get_img_by_superadmin', { params });
 }
 
 export function fetchScreenWallAddGroup(data) {
@@ -17,8 +25,16 @@ export function fetchScreenWallDelData(data) {
   return request.post('/screen_wall/del_data', data);
 }
 
+export function fetchScreenWallDelGroup(data) {
+  return request.post('/screen_wall/del_group', data);
+}
+
 export function fetchScreenWallEditData(data) {
   return request.post('/screen_wall/edit_data', data);
+}
+
+export function fetchScreenWallEditGroup(data) {
+  return request.post('/screen_wall/edit_group', data);
 }
 
 export function fetchScreenWallAddData(data) {

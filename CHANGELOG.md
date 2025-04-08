@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.7.0](https://github.com/billd-project/billd-desk-pro/compare/v0.6.0...v0.7.0) (2025-04-08)
+
+
+### Bug Fixes
+
+* 屏幕前 ([b64f6a2](https://github.com/billd-project/billd-desk-pro/commit/b64f6a2064413400749c03c0d55b7a76077aca1a))
+
+## [0.6.0](https://github.com/billd-project/billd-desk-pro/compare/v0.5.0...v0.6.0) (2025-04-08)
+
+## [0.5.0](https://github.com/billd-project/billd-desk-pro/compare/v0.4.0...v0.5.0) (2025-04-08)
+
+## [0.4.0](https://github.com/billd-project/billd-desk-pro/compare/v0.3.0...v0.4.0) (2025-04-08)
+
+## [0.3.0](https://github.com/billd-project/billd-desk-pro/compare/v0.2.0...v0.3.0) (2025-04-08)
+
+## [0.2.0](https://github.com/billd-project/billd-desk-pro/compare/v0.1.88...v0.2.0) (2025-04-08)
+
+
+### Bug Fixes
+
+* 优化 ([30370ea](https://github.com/billd-project/billd-desk-pro/commit/30370ea5f9325eb8ee8344ea61cb3448fd6574da))
+* 优化 ([951b4c6](https://github.com/billd-project/billd-desk-pro/commit/951b4c61b6a83cd5e54de310c5deafc24bd464be))
+
 ### [0.1.88](https://github.com/billd-project/billd-desk-pro/compare/v0.1.87...v0.1.88) (2025-03-28)
 
 
