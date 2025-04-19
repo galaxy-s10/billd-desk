@@ -193,7 +193,7 @@ function loopGetThumbnail() {
     return;
   }
   clearInterval(loopGetThumbnailTimer.value);
-  const isHasStream = true;
+  const isHasStream = false;
   loopGetThumbnailTimer.value = setInterval(async () => {
     if (appStore.deskVersionInfo?.disable === 1) {
       clearInterval(loopGetThumbnailTimer.value);
@@ -217,6 +217,7 @@ function loopGetThumbnail() {
         },
       },
     });
+    console.log(stream, 'dd');
     const settings = stream.getVideoTracks()[0].getSettings();
     let scale = 1;
     let quality = 1;
@@ -247,7 +248,7 @@ function loopGetThumbnail() {
     const res1 = (await streamToBase64({ stream, scale, quality })) as any;
     // const res1 = (await streamToUint8Array({ stream, scale })) as any;
     base64 = res1.base64;
-  }, 1000 * 1);
+  }, 1000 * 5);
 
   clearInterval(loopfetchScreenWallSetImgTimer.value);
   loopfetchScreenWallSetImgTimer.value = setInterval(() => {
@@ -314,6 +315,7 @@ watch(
           const platform = arr[1];
           const arch = arr[2];
           clientList.push({
+            ver: newval.show_version || '',
             platform,
             arch,
             label: `${platform}(${arch})`,
@@ -326,6 +328,7 @@ watch(
           const platform = arr[1];
           const arch = arr[2];
           clientList.push({
+            ver: newval.show_version || '',
             platform,
             arch,
             label: `${platform}(${arch})`,
@@ -338,6 +341,7 @@ watch(
           const platform = arr[1];
           const arch = arr[2];
           clientList.push({
+            ver: newval.show_version || '',
             platform,
             arch,
             label: `${platform}(${arch})`,

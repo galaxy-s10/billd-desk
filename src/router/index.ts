@@ -30,6 +30,7 @@ export const routerName = {
   price: 'price',
   invite: 'invite',
   download: 'download',
+  release: 'release',
 
   pull: 'pull',
   push: 'push',
@@ -74,6 +75,11 @@ export const defaultRoutes: RouteRecordRaw[] = [
         name: routerName.download,
         path: '/download',
         component: () => import('@/views/download/index.vue'),
+      },
+      {
+        name: routerName.release,
+        path: '/release',
+        component: () => import('@/views/release/index.vue'),
       },
       {
         name: routerName.hi,

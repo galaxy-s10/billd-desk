@@ -13,3 +13,8 @@ export function fetchDeskVersionByVersion({ version, type }) {
     params: { version, type },
   });
 }
+export function fetchDeskVersionAllVersion({ type }) {
+  return request.get(`/desk_version/find_all_version`, {
+    params: { type },
+  });
+}
