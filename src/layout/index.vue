@@ -74,6 +74,13 @@
         >
           高级设置
         </div>
+        <div
+          class="item"
+          :class="{ active: route.name === routerName.download }"
+          @click="router.push({ name: routerName.download })"
+        >
+          客户端下载
+        </div>
       </div>
     </div>
     <div class="view">
@@ -127,7 +134,7 @@
 
 <script lang="ts" setup>
 import { getRandomString, windowReload } from 'billd-utils';
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import {
@@ -139,11 +146,11 @@ import { fetchInviteCreate } from '@/api/inivte';
 import { fetchScreenWallSetImg } from '@/api/screenWall';
 import { NODE_ENV } from '@/constant';
 import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
-import { ClientEnvEnum } from '@/interface';
+import { ClientEnvEnum, DeskConfigEnum } from '@/interface';
 import { IPC_EVENT, WINDOW_ID_MAP } from '@/pure-constant';
 import { IIpcRendererData } from '@/pure-interface';
 import { routerName } from '@/router';
-import { useAppStore } from '@/store/app';
+import { AppRootState, useAppStore } from '@/store/app';
 import { usePiniaCacheStore } from '@/store/cache';
 import {
   getClientEnv,
@@ -179,8 +186,22 @@ let base64 = '';
 let timer;
 
 function loopGetThumbnail() {
+  if (appStore.deskVersionInfo?.disable === 1) {
+    return;
+  }
+  if (!ipcRenderer) {
+    return;
+  }
   clearInterval(loopGetThumbnailTimer.value);
+  const isHasStream = true;
   loopGetThumbnailTimer.value = setInterval(async () => {
+    if (appStore.deskVersionInfo?.disable === 1) {
+      clearInterval(loopGetThumbnailTimer.value);
+      return;
+    }
+    if (isHasStream) {
+      return;
+    }
     const res = await handleGetThumbnail({
       windowId: WINDOW_ID_MAP.remote,
     });
@@ -192,7 +213,7 @@ function loopGetThumbnail() {
         mandatory: {
           // https://www.electronjs.org/zh/docs/latest/api/structures/desktop-capturer-source
           chromeMediaSource: 'desktop',
-          chromeMediaSourceId: res.data,
+          chromeMediaSourceId: res.data.id,
         },
       },
     });
@@ -230,6 +251,10 @@ function loopGetThumbnail() {
 
   clearInterval(loopfetchScreenWallSetImgTimer.value);
   loopfetchScreenWallSetImgTimer.value = setInterval(() => {
+    if (appStore.deskVersionInfo?.disable === 1) {
+      clearInterval(loopfetchScreenWallSetImgTimer.value);
+      return;
+    }
     try {
       fetchScreenWallSetImg({
         uuid: cacheStore.deskUserUuid,
@@ -247,7 +272,6 @@ onMounted(async () => {
     useCustomBar.value = false;
   }
   if (ipcRenderer) {
-    loopGetThumbnail();
     handleDeskVersionCheck();
     handleSetPowerBootStatus({
       windowId: WINDOW_ID_MAP.remote,
@@ -266,8 +290,10 @@ onMounted(async () => {
       appStore.arch = res1.data.arch;
     }
   }
+  await handleVersion();
   handleInviteInfo();
-  handleVersion();
+  loopGetThumbnail();
+
   platform.value = getClientEnv();
 
   handleSetAlwaysOnTop({
@@ -276,35 +302,103 @@ onMounted(async () => {
   });
 });
 
+watch(
+  () => appStore.deskVersionInfo,
+  (newval) => {
+    if (newval) {
+      const clientList: AppRootState['clientList'] = [];
+      Object.keys(newval).forEach((item) => {
+        if (item.indexOf('download_linux') !== -1) {
+          const arr = item.split('_');
+          const ext = arr[3] === 'appimage' ? 'app' : arr[3];
+          const platform = arr[1];
+          const arch = arr[2];
+          clientList.push({
+            platform,
+            arch,
+            label: `${platform}(${arch})`,
+            ext,
+            url: newval[item],
+          });
+        }
+        if (item.indexOf('download_windows') !== -1) {
+          const arr = item.split('_');
+          const platform = arr[1];
+          const arch = arr[2];
+          clientList.push({
+            platform,
+            arch,
+            label: `${platform}(${arch})`,
+            ext: arr[3],
+            url: newval[item],
+          });
+        }
+        if (item.indexOf('download_macos') !== -1) {
+          const arr = item.split('_');
+          const platform = arr[1];
+          const arch = arr[2];
+          clientList.push({
+            platform,
+            arch,
+            label: `${platform}(${arch})`,
+            ext: arr[3],
+            url: newval[item],
+          });
+        }
+      });
+      appStore.clientList = clientList;
+    }
+  },
+  { immediate: true, deep: true }
+);
+
 async function handleVersion() {
-  let res;
-  if (ipcRenderer) {
-    res = await fetchDeskVersionByVersion(appStore.version);
-  } else {
-    res = await fetchDeskVersionLatest();
-  }
-  if (res.code === 200 && res.data) {
-    appStore.deskVersionInfo = res.data;
+  try {
+    let res;
+    if (ipcRenderer) {
+      res = await fetchDeskVersionByVersion({
+        version: appStore.version,
+        type: DeskConfigEnum.electronVersionConfig,
+      });
+    } else {
+      res = await fetchDeskVersionLatest({
+        type: DeskConfigEnum.electronVersionConfig,
+      });
+    }
+    const res1 = await fetchDeskVersionLatest({
+      type: DeskConfigEnum.flutterVersionConfig,
+    });
+    if (res.code === 200 && res.data) {
+      appStore.deskVersionInfo = res.data;
+    }
+    if (res1.code === 200 && res1.data) {
+      appStore.deskAppVersionInfo = res1.data;
+    }
+  } catch (error) {
+    console.error(error);
   }
 }
 
 async function handleDeskVersionCheck() {
-  const res = await fetchDeskVersionCheck(appStore.version);
+  const res = await fetchDeskVersionCheck({
+    version: appStore.version,
+    type: DeskConfigEnum.electronVersionConfig,
+  });
   if (res.code === 200 && res.data) {
     appStore.updateModalInfo = res.data;
   }
 }
 
 function handleInviteInfo() {
+  if (appStore.deskVersionInfo?.disable === 1) {
+    return;
+  }
   async function main() {
     if (cacheStore.deskUserUuid && cacheStore.deskUserPassword) {
-      const appInfo = process.env.BilldHtmlWebpackPlugin as any;
       const res = await fetchInviteCreate({
         roomId: cacheStore.deskUserUuid,
         uuid: cacheStore.deskUserUuid,
-        pwd: cacheStore.deskUserPassword,
-        client_env: getClientEnv(),
-        client_version: appInfo?.pkgVersion,
+        password: cacheStore.deskUserPassword,
       });
       if (res.code === 200) {
         clearInterval(timer);
@@ -314,6 +408,10 @@ function handleInviteInfo() {
   }
   main();
   timer = setInterval(() => {
+    if (appStore.deskVersionInfo?.disable === 1) {
+      clearInterval(timer);
+      return;
+    }
     if (appStore.inviteId) {
       clearInterval(timer);
       return;
@@ -365,7 +463,10 @@ ipcRendererOn(
   IPC_EVENT.response_open_version,
   async (_event, data: IIpcRendererData) => {
     console.log('response_open_version', data);
-    const res = await fetchDeskVersionCheck(appStore.version);
+    const res = await fetchDeskVersionCheck({
+      version: appStore.version,
+      type: DeskConfigEnum.electronVersionConfig,
+    });
     if (res.code === 200 && res.data) {
       appStore.updateModalInfo = res.data;
       if (appStore.updateModalInfo?.checkUpdate === 2) {

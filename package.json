@@ -1,6 +1,6 @@
 {
   "name": "billd-desk",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "基于Vue3 + WebRTC + Electron + Nodejs搭建的远程桌面",
   "keywords": [
     "billd",
@@ -26,14 +26,14 @@
   "main": "electron-dist/index.cjs",
   "scripts": {
     "build:beta": "cross-env VITE_APP_RELEASE_PROJECT_ISWEB=true vite build",
-    "build:deb": "npm run release-prod && vite build && electron-builder --linux deb",
-    "build:linux": "npm run release-prod && vite build && electron-builder --linux",
-    "build:mac": "npm run release-prod && vite build && electron-builder --mac",
+    "build:deb": "vite build && electron-builder --linux deb",
+    "build:linux": "vite build && electron-builder --linux",
+    "build:mac": "vite build && electron-builder --mac",
     "build:mw": "npm run release-prod && vite build && electron-builder --mac --win",
     "build:mwl": "npm run release-prod && vite build && electron-builder --mac --win --linux",
     "build:prod": "cross-env VITE_APP_RELEASE_PROJECT_ISWEB=true vite build",
     "build:web": "cross-env VITE_APP_RELEASE_PROJECT_ISWEB=true vite build",
-    "build:win": "npm run release-prod && vite build && electron-builder --win",
+    "build:win": "vite build && electron-builder --win",
     "cz": "cz",
     "deploy:beta": "node ./deploy/index.cjs --beta",
     "deploy:prod": "node ./deploy/index.cjs --prod",

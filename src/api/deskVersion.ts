@@ -1,13 +1,15 @@
 import request from '@/utils/request';
 
-export function fetchDeskVersionLatest() {
-  return request.get(`/desk_version/latest`);
+export function fetchDeskVersionLatest(params) {
+  return request.get(`/desk_version/latest`, { params });
 }
 
-export function fetchDeskVersionCheck(version) {
-  return request.get(`/desk_version/check`, { params: { version } });
+export function fetchDeskVersionCheck({ version, type }) {
+  return request.get(`/desk_version/check`, { params: { version, type } });
 }
 
-export function fetchDeskVersionByVersion(version) {
-  return request.get(`/desk_version/find_by_version`, { params: { version } });
+export function fetchDeskVersionByVersion({ version, type }) {
+  return request.get(`/desk_version/find_by_version`, {
+    params: { version, type },
+  });
 }

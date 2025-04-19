@@ -29,6 +29,7 @@ export const routerName = {
   privatizationDeployment: 'privatizationDeployment',
   price: 'price',
   invite: 'invite',
+  download: 'download',
 
   pull: 'pull',
   push: 'push',
@@ -68,6 +69,11 @@ export const defaultRoutes: RouteRecordRaw[] = [
         name: routerName.setting,
         path: '/setting',
         component: () => import('@/views/setting/index.vue'),
+      },
+      {
+        name: routerName.download,
+        path: '/download',
+        component: () => import('@/views/download/index.vue'),
       },
       {
         name: routerName.hi,

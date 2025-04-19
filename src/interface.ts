@@ -13,6 +13,7 @@ export interface BilldHtmlWebpackPluginLog {
 
 export interface IDeskVersion {
   id?: number;
+  type?: string;
   /** 1:强制更新; 2:不强制更新 */
   force?: number;
   /** 版本 */
@@ -51,6 +52,10 @@ export interface IDeskVersion {
   download_linux_arm64_deb?: string;
   /** linux deb 64位X86，X86是x86_64 或 amd64的别名 */
   download_linux_x64_deb?: string;
+  download_android_apk?: string;
+  download_ios_ipa?: string;
+  download_ios_deb?: string;
+  download_ios_pxl?: string;
   remark?: string;
 
   created_at?: string;
@@ -113,4 +118,9 @@ export interface IScreenWall {
   created_at?: string;
   updated_at?: string;
   deleted_at?: string;
+}
+
+export enum DeskConfigEnum {
+  electronVersionConfig,
+  flutterVersionConfig,
 }
