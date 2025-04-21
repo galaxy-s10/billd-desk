@@ -122,6 +122,12 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 
 ### 文件传输
 
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/readme_img/666.png?raw=true)
+
+### 跨平台支持
+
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/readme_img/555.png?raw=true)
+
 ## 技术栈
 
 - 前端相关：[Vue3](https://vuejs.org) 以及相关技术栈、`Typescript`、`WebRTC`、`WebCodecs`、`Web Workder`、`Web Audio`、`Canvas`
