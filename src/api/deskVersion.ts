@@ -1,3 +1,4 @@
+import { IDeskVersion, IList } from '@/interface';
 import request from '@/utils/request';
 
 export function fetchDeskVersionLatest(params) {
@@ -13,8 +14,8 @@ export function fetchDeskVersionByVersion({ version, type }) {
     params: { version, type },
   });
 }
-export function fetchDeskVersionAllVersion({ type }) {
+export function fetchDeskVersionAllVersion(params: IList<IDeskVersion>) {
   return request.get(`/desk_version/find_all_version`, {
-    params: { type },
+    params,
   });
 }

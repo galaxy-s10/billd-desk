@@ -1,7 +1,6 @@
 <template>
   <div class="layout">
     <div
-      v-if="useCustomBar"
       class="system-bar"
       :class="{
         'no-drag': platform !== ClientEnvEnum.macos,
@@ -12,7 +11,10 @@
       @mousemove="moving"
       @mouseleave="handleMouseleave"
     >
-      <div class="top-left">
+      <div
+        v-if="useCustomBar"
+        class="top-left"
+      >
         <div class="left">
           <div
             class="ico close"
@@ -30,11 +32,27 @@
         </div>
         <div class="right">v{{ appStore.version }}</div>
       </div>
-      <div class="top-right"></div>
+      <div
+        v-else
+        class="top-left"
+      ></div>
+      <div class="top-right">
+        <div
+          class="msg"
+          title="消息"
+          @click="appStore.showGlobalMsg.show = true"
+        >
+          <div class="red-dot"></div>
+          <div class="msg-ico"></div>
+        </div>
+      </div>
     </div>
     <div class="sidebar">
       <div class="user">
-        <div class="dot"></div>
+        <div
+          class="dot"
+          :class="{ ok: connectStatus === WsConnectStatusEnum.connect }"
+        ></div>
       </div>
       <div class="list">
         <div
@@ -129,6 +147,10 @@
         )
       "
     ></DisableModal>
+    <GlobalMsgModal
+      v-if="appStore.showGlobalMsg.show"
+      @close="appStore.showGlobalMsg.show = false"
+    ></GlobalMsgModal>
   </div>
 </template>
 
@@ -142,16 +164,24 @@ import {
   fetchDeskVersionCheck,
   fetchDeskVersionLatest,
 } from '@/api/deskVersion';
+import { fetchGlobalMsgGlobal } from '@/api/globalMsg';
 import { fetchInviteCreate } from '@/api/inivte';
 import { fetchScreenWallSetImg } from '@/api/screenWall';
 import { NODE_ENV } from '@/constant';
 import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
-import { ClientEnvEnum, DeskConfigEnum } from '@/interface';
+import { useWebsocket } from '@/hooks/use-websocket';
+import {
+  ClientEnvEnum,
+  DeskConfigTypeEnum,
+  GlobalMsgTypeEnum,
+  SwitchEnum,
+} from '@/interface';
 import { IPC_EVENT, WINDOW_ID_MAP } from '@/pure-constant';
 import { IIpcRendererData } from '@/pure-interface';
 import { routerName } from '@/router';
 import { AppRootState, useAppStore } from '@/store/app';
 import { usePiniaCacheStore } from '@/store/cache';
+import { WsConnectStatusEnum } from '@/types/websocket';
 import {
   getClientEnv,
   ipcRenderer,
@@ -172,6 +202,7 @@ const {
   handleGetThumbnail,
   handleSetPowerBootStatus,
 } = useIpcRendererSend();
+const { connectStatus } = useWebsocket();
 
 // 窗口当前的位置 + 鼠标当前的相对位置 - 鼠标以前的相对位置
 const isMoving = ref<boolean>(false);
@@ -184,6 +215,30 @@ const loopGetThumbnailTimer = ref();
 const loopfetchScreenWallSetImgTimer = ref();
 let base64 = '';
 let timer;
+
+async function handleGlobalMsgMyList() {
+  const res = await fetchGlobalMsgGlobal({
+    orderName: 'priority',
+    orderBy: 'desc',
+    show: SwitchEnum.yes,
+  });
+
+  if (res.code === 200) {
+    res.data.forEach((item) => {
+      if (item.type === GlobalMsgTypeEnum.notification) {
+        appStore.notification.push(item);
+      } else {
+        appStore.showGlobalMsg.list.push(item);
+        appStore.showGlobalMsg.show = true;
+        // window.$modal.create({
+        //   title: item.title || '提示',
+        //   preset: 'dialog',
+        //   content: item.content || '',
+        // });
+      }
+    });
+  }
+}
 
 function loopGetThumbnail() {
   if (appStore.deskVersionInfo?.disable === 1) {
@@ -217,7 +272,6 @@ function loopGetThumbnail() {
         },
       },
     });
-    console.log(stream, 'dd');
     const settings = stream.getVideoTracks()[0].getSettings();
     let scale = 1;
     let quality = 1;
@@ -291,6 +345,7 @@ onMounted(async () => {
       appStore.arch = res1.data.arch;
     }
   }
+  handleGlobalMsgMyList();
   await handleVersion();
   handleInviteInfo();
   loopGetThumbnail();
@@ -362,15 +417,15 @@ async function handleVersion() {
     if (ipcRenderer) {
       res = await fetchDeskVersionByVersion({
         version: appStore.version,
-        type: DeskConfigEnum.electronVersionConfig,
+        type: DeskConfigTypeEnum.electronVersionConfig,
       });
     } else {
       res = await fetchDeskVersionLatest({
-        type: DeskConfigEnum.electronVersionConfig,
+        type: DeskConfigTypeEnum.electronVersionConfig,
       });
     }
     const res1 = await fetchDeskVersionLatest({
-      type: DeskConfigEnum.flutterVersionConfig,
+      type: DeskConfigTypeEnum.flutterVersionConfig,
     });
     if (res.code === 200 && res.data) {
       appStore.deskVersionInfo = res.data;
@@ -386,7 +441,7 @@ async function handleVersion() {
 async function handleDeskVersionCheck() {
   const res = await fetchDeskVersionCheck({
     version: appStore.version,
-    type: DeskConfigEnum.electronVersionConfig,
+    type: DeskConfigTypeEnum.electronVersionConfig,
   });
   if (res.code === 200 && res.data) {
     appStore.updateModalInfo = res.data;
@@ -469,7 +524,7 @@ ipcRendererOn(
     console.log('response_open_version', data);
     const res = await fetchDeskVersionCheck({
       version: appStore.version,
-      type: DeskConfigEnum.electronVersionConfig,
+      type: DeskConfigTypeEnum.electronVersionConfig,
     });
     if (res.code === 200 && res.data) {
       appStore.updateModalInfo = res.data;
@@ -512,6 +567,7 @@ function handleMin() {
 }
 
 const startMove = (e: MouseEvent) => {
+  if (!useCustomBar.value) return;
   if (platform.value === ClientEnvEnum.macos) {
     return;
   }
@@ -521,6 +577,7 @@ const startMove = (e: MouseEvent) => {
 };
 
 const endMove = () => {
+  if (!useCustomBar.value) return;
   if (platform.value === ClientEnvEnum.macos) {
     return;
   }
@@ -528,6 +585,7 @@ const endMove = () => {
 };
 
 const handleMouseleave = () => {
+  if (!useCustomBar.value) return;
   if (platform.value === ClientEnvEnum.macos) {
     return;
   }
@@ -535,6 +593,7 @@ const handleMouseleave = () => {
 };
 
 const moving = (e: MouseEvent) => {
+  if (!useCustomBar.value) return;
   if (platform.value === ClientEnvEnum.macos) {
     return;
   }
@@ -562,7 +621,7 @@ $sidebar-width: 160px;
   .system-bar {
     position: fixed;
     top: 0;
-    z-index: 999;
+    z-index: 888;
     display: flex;
     box-sizing: border-box;
     width: 100vw;
@@ -629,9 +688,34 @@ $sidebar-width: 160px;
       }
     }
     .top-right {
-      display: flex;
-      align-items: center;
+      position: relative;
       width: calc(100vw - $sidebar-width);
+
+      .msg {
+        position: absolute;
+        top: 50%;
+        right: 20px;
+        cursor: pointer;
+        transform: translateY(-50%);
+
+        -webkit-app-region: no-drag;
+
+        .red-dot {
+          position: absolute;
+          top: 0px;
+          right: 0px;
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background-color: red;
+        }
+        .msg-ico {
+          width: 20px;
+          height: 20px;
+
+          @include setBackground('@/assets/img/message.png');
+        }
+      }
     }
   }
   .sidebar {
@@ -655,7 +739,11 @@ $sidebar-width: 160px;
         width: 11px;
         height: 11px;
         border-radius: 50%;
-        background-color: #6cdd5b;
+        background-color: #f8af2d;
+
+        &.ok {
+          background-color: #6cdd5b;
+        }
       }
     }
     .list {

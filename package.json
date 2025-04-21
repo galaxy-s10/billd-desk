@@ -1,6 +1,6 @@
 {
   "name": "billd-desk",
-  "version": "0.8.0",
+  "version": "0.10.0",
   "description": "基于Vue3 + WebRTC + Electron + Nodejs搭建的远程桌面",
   "keywords": [
     "billd",

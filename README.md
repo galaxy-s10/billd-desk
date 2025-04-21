@@ -124,6 +124,8 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 
 ## 本地启动
 
+> https://desk.hsslive.cn/s/qk
+
 - [x] billd-desk(pro) 查看 [start-client.md](docs/start-client.md)
 
 - [x] billd-desk-server(pro) 查看 [start-server.md](docs/start-server.md)
@@ -153,6 +155,16 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 ## 私有化部署
 
 billd-desk完全开源（可商用），欢迎部署！
+
+## 客户端下载
+
+> https://desk.hsslive.cn/s/bd
+>
+> 备用链接：https://pan.quark.cn/s/2acbf2d49603
+
+## 官方交流群
+
+![wechat_group](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/img/wechat_group.jpg?raw=true)
 
 ## 兼容性
 

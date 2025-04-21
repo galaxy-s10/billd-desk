@@ -120,7 +120,62 @@ export interface IScreenWall {
   deleted_at?: string;
 }
 
-export enum DeskConfigEnum {
-  electronVersionConfig,
-  flutterVersionConfig,
+export enum DeskConfigTypeEnum {
+  electronVersionConfig = 'electronVersionConfig',
+  flutterVersionConfig = 'flutterVersionConfig',
+}
+
+export type IListBase = {
+  nowPage?: number | string;
+  pageSize?: number | string;
+  orderBy?: string;
+  orderName?: string;
+  keyWord?: string;
+  childNowPage?: number | string;
+  childPageSize?: number | string;
+  childOrderBy?: string;
+  childOrderName?: string;
+  childKeyWord?: string;
+  rangTimeType?: 'created_at' | 'updated_at' | 'deleted_at';
+  rangTimeStart?: number | string;
+  rangTimeEnd?: number | string;
+};
+
+export type IList<T> = IListBase & T;
+
+export interface IPaging<T> {
+  nowPage: number;
+  pageSize: number;
+  hasMore: boolean;
+  total: number;
+  rows: T[];
+}
+
+export enum GlobalMsgTypeEnum {
+  user = 'user',
+  system = 'system',
+  activity = 'activity',
+  notification = 'notification',
+}
+
+export enum SwitchEnum {
+  yes,
+  no,
+}
+
+export interface IGlobalMsg {
+  id?: number;
+  user_id?: number;
+  client_ip?: string;
+  type?: GlobalMsgTypeEnum;
+  show?: SwitchEnum;
+  show_date?: string;
+  priority?: number;
+  title?: string;
+  content?: string;
+  remark?: string;
+
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
 }
