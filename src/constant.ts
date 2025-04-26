@@ -167,5 +167,8 @@ export const LS_KEY = {
   token: 'token',
   axiosBaseUrl: 'axiosBaseUrl',
   wssUrl: 'wssUrl',
-  turnUrl: 'turnUrl',
+  turnUrls: 'turnUrls',
+  turnUsername: 'turnUsername',
+  turnCredential: 'turnCredential',
+  preview: 'preview',
 };

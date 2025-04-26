@@ -40,14 +40,20 @@
         <div
           class="msg"
           title="消息"
-          @click="appStore.showGlobalMsg.show = true"
+          @click="cacheStore.showGlobalMsg.show = true"
         >
-          <div class="red-dot"></div>
+          <div
+            v-if="cacheStore.showGlobalMsg.red === true"
+            class="red-dot"
+          ></div>
           <div class="msg-ico"></div>
         </div>
       </div>
     </div>
-    <div class="sidebar">
+    <div
+      v-if="!appStore.isMobile"
+      class="sidebar"
+    >
       <div class="user">
         <div
           class="dot"
@@ -101,7 +107,12 @@
         </div>
       </div>
     </div>
-    <div class="view">
+    <div
+      class="view"
+      :class="{
+        mobile: appStore.isMobile,
+      }"
+    >
       <RouterView></RouterView>
     </div>
     <div
@@ -148,8 +159,8 @@
       "
     ></DisableModal>
     <GlobalMsgModal
-      v-if="appStore.showGlobalMsg.show"
-      @close="appStore.showGlobalMsg.show = false"
+      v-if="cacheStore.showGlobalMsg.show"
+      @close="cacheStore.showGlobalMsg.show = false"
     ></GlobalMsgModal>
   </div>
 </template>
@@ -170,6 +181,7 @@ import { fetchScreenWallSetImg } from '@/api/screenWall';
 import { NODE_ENV } from '@/constant';
 import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
 import { useWebsocket } from '@/hooks/use-websocket';
+import { useWebRtcRemoteDesk } from '@/hooks/webrtc/remoteDesk';
 import {
   ClientEnvEnum,
   DeskConfigTypeEnum,
@@ -190,6 +202,7 @@ import {
   ipcRendererSend,
   streamToBase64,
 } from '@/utils';
+import { clearPreview, getPreview, setPreview } from '@/utils/localStorage/app';
 
 const appStore = useAppStore();
 const router = useRouter();
@@ -203,6 +216,7 @@ const {
   handleSetPowerBootStatus,
 } = useIpcRendererSend();
 const { connectStatus } = useWebsocket();
+const { handleTurnserver } = useWebRtcRemoteDesk();
 
 // 窗口当前的位置 + 鼠标当前的相对位置 - 鼠标以前的相对位置
 const isMoving = ref<boolean>(false);
@@ -213,7 +227,6 @@ const teststr = ref('');
 const platform = ref<ClientEnvEnum>();
 const loopGetThumbnailTimer = ref();
 const loopfetchScreenWallSetImgTimer = ref();
-let base64 = '';
 let timer;
 
 async function handleGlobalMsgMyList() {
@@ -222,21 +235,23 @@ async function handleGlobalMsgMyList() {
     orderBy: 'desc',
     show: SwitchEnum.yes,
   });
-
   if (res.code === 200) {
-    res.data.forEach((item) => {
-      if (item.type === GlobalMsgTypeEnum.notification) {
-        appStore.notification.push(item);
-      } else {
-        appStore.showGlobalMsg.list.push(item);
-        appStore.showGlobalMsg.show = true;
-        // window.$modal.create({
-        //   title: item.title || '提示',
-        //   preset: 'dialog',
-        //   content: item.content || '',
-        // });
-      }
-    });
+    const newstr = JSON.stringify(res.data);
+    const oldstr = JSON.stringify(cacheStore.showGlobalMsg.list);
+    if (newstr !== oldstr) {
+      cacheStore.showGlobalMsg.list = [];
+      cacheStore.showGlobalMsg.red = true;
+      res.data.forEach((item) => {
+        if (item.type === GlobalMsgTypeEnum.notification) {
+          appStore.notification.push(item);
+        } else {
+          cacheStore.showGlobalMsg.list.push(item);
+          cacheStore.showGlobalMsg.show = true;
+        }
+      });
+    } else {
+      cacheStore.showGlobalMsg.red = false;
+    }
   }
 }
 
@@ -248,13 +263,12 @@ function loopGetThumbnail() {
     return;
   }
   clearInterval(loopGetThumbnailTimer.value);
-  const isHasStream = false;
   loopGetThumbnailTimer.value = setInterval(async () => {
     if (appStore.deskVersionInfo?.disable === 1) {
       clearInterval(loopGetThumbnailTimer.value);
       return;
     }
-    if (isHasStream) {
+    if (getPreview()) {
       return;
     }
     const res = await handleGetThumbnail({
@@ -272,6 +286,9 @@ function loopGetThumbnail() {
         },
       },
     });
+    if (!stream) {
+      return;
+    }
     const settings = stream.getVideoTracks()[0].getSettings();
     let scale = 1;
     let quality = 1;
@@ -301,8 +318,8 @@ function loopGetThumbnail() {
     }
     const res1 = (await streamToBase64({ stream, scale, quality })) as any;
     // const res1 = (await streamToUint8Array({ stream, scale })) as any;
-    base64 = res1.base64;
-  }, 1000 * 5);
+    setPreview(res1.base64);
+  }, 1000 * 3);
 
   clearInterval(loopfetchScreenWallSetImgTimer.value);
   loopfetchScreenWallSetImgTimer.value = setInterval(() => {
@@ -314,12 +331,13 @@ function loopGetThumbnail() {
       fetchScreenWallSetImg({
         uuid: cacheStore.deskUserUuid,
         password: cacheStore.deskUserPassword,
-        data: base64,
+        data: getPreview(),
       });
+      clearPreview();
     } catch (error) {
       console.error(error);
     }
-  }, 1000 * 2);
+  }, 1000 * 5);
 }
 
 onMounted(async () => {
@@ -345,6 +363,7 @@ onMounted(async () => {
       appStore.arch = res1.data.arch;
     }
   }
+  handleTurnserver();
   handleGlobalMsgMyList();
   await handleVersion();
   handleInviteInfo();
@@ -768,6 +787,9 @@ $sidebar-width: 160px;
   .view {
     box-sizing: border-box;
     width: calc(100vw - $sidebar-width);
+    &.mobile {
+      width: 100vw;
+    }
   }
   .teststr {
     position: fixed;

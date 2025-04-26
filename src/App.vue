@@ -16,8 +16,18 @@
 </template>
 
 <script lang="ts" setup>
+import { isIPad, isMobile } from 'billd-utils';
 import { GlobalThemeOverrides, NConfigProvider } from 'naive-ui';
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted, watch } from 'vue';
+
+import { usePiniaCacheStore } from '@/store/cache';
+import { setAxiosBaseUrl } from '@/utils/localStorage/app';
+
+import { useAppStore } from './store/app';
+import { memory } from './utils/memory';
+
+const appStore = useAppStore();
+const cacheStore = usePiniaCacheStore();
 
 const themeOverrides: GlobalThemeOverrides = {
   common: {
@@ -31,9 +41,40 @@ function handleRemoveGlobalLoading() {
   el.style.display = 'none';
 }
 
+watch(
+  () => cacheStore.customApi,
+  () => {
+    setAxiosBaseUrl(cacheStore.customApi);
+  },
+  { immediate: true, deep: true }
+);
+
+watch(
+  () => cacheStore.customTurnServer,
+  () => {
+    memory.customTurnserver = cacheStore.customTurnServer;
+  },
+  { immediate: true, deep: true }
+);
+
+function handleResize() {
+  if (isMobile()) {
+    appStore.isMobile = true;
+  } else {
+    appStore.isMobile = false;
+  }
+  appStore.isIPad = isIPad();
+}
+
 onMounted(() => {
   console.log('当前地址栏', location.href);
   handleRemoveGlobalLoading();
+  handleResize();
+  window.addEventListener('resize', handleResize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
 });
 </script>
 

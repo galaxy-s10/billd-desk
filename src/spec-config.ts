@@ -33,8 +33,5 @@ export const AXIOS_BASEURL =
 
 // ======线上正式=====
 
-// 本地测试时，TURN_URL可以随便填，其实用不到；但线上的时候，需要填对！
-export const TURN_URL = `turn:hk.${PROD_DOMAIN}`;
-
 export const COOKIE_DOMAIN =
   process.env.NODE_ENV === 'development' ? undefined : `.${PROD_DOMAIN}`;

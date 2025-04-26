@@ -1,6 +1,6 @@
 {
   "name": "billd-desk",
-  "version": "0.10.0",
+  "version": "0.12.0",
   "description": "基于Vue3 + WebRTC + Electron + Nodejs搭建的远程桌面",
   "keywords": [
     "billd",
@@ -47,9 +47,11 @@
     "release-fix": "npm run release -- --release-as patch",
     "release-prod": "npm run release -- --release-as minor",
     "release-version": "npm run release -- --release-as 1.0.0",
+    "sync-all-github": "ts-node ./deploy/handleSyncAllGithub.mjs",
+    "sync-all-github-doc": "ts-node ./deploy/handleSyncAllGithubDoc.mjs",
     "sync-codeup": "ts-node ./deploy/handleSyncCodeup.mjs",
-    "sync-doc": "ts-node ./deploy/handleSyncDoc.mjs",
-    "sync-public": "ts-node ./deploy/handleSyncPublic.mjs"
+    "sync-github": "ts-node ./deploy/handleSyncGithub.mjs",
+    "sync-pro-doc": "ts-node ./deploy/handleSyncProDoc.mjs"
   },
   "config": {},
   "dependencies": {},

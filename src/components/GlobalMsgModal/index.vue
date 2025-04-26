@@ -1,9 +1,15 @@
 <template>
   <div>
-    <div class="mask"></div>
+    <div
+      class="mask"
+      @click="emits('close')"
+    ></div>
     <div
       ref="dragModalEl"
       class="drag-modal"
+      :class="{
+        mobile: appStore.isMobile,
+      }"
     >
       <div class="top">
         <div class="title">消息中心</div>
@@ -15,7 +21,7 @@
       <div class="hr"></div>
       <div class="pc-wrap">
         <div
-          v-for="(item, index) in appStore.showGlobalMsg.list"
+          v-for="(item, index) in cacheStore.showGlobalMsg.list"
           :key="index"
           class="item"
         >
@@ -28,7 +34,7 @@
           <!-- eslint-enable -->
         </div>
         <div
-          v-if="!appStore.showGlobalMsg.list.length"
+          v-if="!cacheStore.showGlobalMsg.list.length"
           class="null"
         >
           暂无消息
@@ -40,11 +46,13 @@
 
 <script lang="ts" setup>
 // import { useDraggable } from '@vueuse/core';
-import { ref } from 'vue';
+import { onUnmounted, ref } from 'vue';
 
 import { useAppStore } from '@/store/app';
+import { usePiniaCacheStore } from '@/store/cache';
 
 const appStore = useAppStore();
+const cacheStore = usePiniaCacheStore();
 const dragModalEl = ref<HTMLDivElement>();
 // const { style: dragPanelStyle } = useDraggable(dragModalEl, {
 //   initialValue: { x: 100, y: 100 },
@@ -52,6 +60,10 @@ const dragModalEl = ref<HTMLDivElement>();
 // });
 
 const emits = defineEmits(['close']);
+
+onUnmounted(() => {
+  cacheStore.showGlobalMsg.red = false;
+});
 </script>
 
 <style lang="scss" scoped>
@@ -66,6 +78,7 @@ const emits = defineEmits(['close']);
   left: 50%;
   z-index: 90;
   display: flex;
+  overflow: hidden;
   flex-direction: column;
   box-sizing: border-box;
   width: 400px;
@@ -73,6 +86,9 @@ const emits = defineEmits(['close']);
   background-color: white;
   box-shadow: 0 2px 20px rgb(0 0 0 / 10%);
   transform: translate(-50%, -50%);
+  &.mobile {
+    width: 80vw;
+  }
   .top {
     display: flex;
     align-items: center;
