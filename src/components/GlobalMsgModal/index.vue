@@ -9,6 +9,7 @@
       class="drag-modal"
       :class="{
         mobile: appStore.isMobile,
+        ipad: appStore.isIPad,
       }"
     >
       <div class="top">
@@ -88,6 +89,9 @@ onUnmounted(() => {
   transform: translate(-50%, -50%);
   &.mobile {
     width: 80vw;
+  }
+  &.ipad {
+    width: 400px;
   }
   .top {
     display: flex;

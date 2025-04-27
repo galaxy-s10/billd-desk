@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.14.0](https://github.com/billd-project/billd-desk-pro/compare/v0.13.0...v0.14.0) (2025-04-26)
+
+
+### Bug Fixes
+
+* 优化 ([3c92788](https://github.com/billd-project/billd-desk-pro/commit/3c9278828f9718358cec6b7b663ea0a2bcd38a6b))
+
 ## [0.13.0](https://github.com/billd-project/billd-desk-pro/compare/v0.12.0...v0.13.0) (2025-04-26)
 
 

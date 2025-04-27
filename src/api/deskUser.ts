@@ -9,6 +9,10 @@ export function fetchDeskUserLogin(data: IDeskUser) {
   return request.post<IDeskUser>(`/desk_user/login`, data);
 }
 
+export function fetchDeskUserAutoLogin(data: IDeskUser) {
+  return request.post<IDeskUser>(`/desk_user/auto_login`, data);
+}
+
 export function fetchDeskUserLinkVerify(data: IDeskUser) {
   return request.post(`/desk_user/link_verify`, data);
 }

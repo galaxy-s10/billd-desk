@@ -51,7 +51,7 @@
       </div>
     </div>
     <div
-      v-if="!appStore.isMobile"
+      v-if="!appStore.isMobile || appStore.isIPad"
       class="sidebar"
     >
       <div class="user">
@@ -521,7 +521,7 @@ ipcRendererOn(
     }
     appStore.createAboutWindows = true;
     ipcRendererSend({
-      windowId: 0,
+      windowId: WINDOW_ID_MAP.remote,
       channel: IPC_EVENT.createWindow,
       requestId: getRandomString(8),
       data: {
