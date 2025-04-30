@@ -2,10 +2,10 @@
   // 指定行尾序列为\n（LF）或者\r\n（CRLF）或者auto
   // "files.eol": "\n",
 
-  "files.exclude": {
-    "electron-dist": true,
-    "electron-release": true
-  },
+  // "files.exclude": {
+  //   "electron-dist": true,
+  //   "electron-release": true
+  // },
 
   // 在保存时格式化
   "editor.formatOnSave": true,

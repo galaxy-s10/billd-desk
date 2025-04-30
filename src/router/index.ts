@@ -19,6 +19,7 @@ export const routerName = {
   remote: 'remote',
   home: 'home',
   about: 'about',
+  fixedPopupWindow: 'fixedPopupWindow',
   version: 'version',
   webrtc: 'webrtc',
   deviceManage: 'deviceManage',
@@ -107,6 +108,11 @@ export const defaultRoutes: RouteRecordRaw[] = [
     name: routerName.about,
     path: '/about',
     component: () => import('@/views/about/index.vue'),
+  },
+  {
+    name: routerName.fixedPopupWindow,
+    path: '/fixedPopupWindow',
+    component: () => import('@/views/fixedPopupWindow/index.vue'),
   },
   {
     name: routerName.invite,

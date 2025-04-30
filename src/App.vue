@@ -18,16 +18,15 @@
 <script lang="ts" setup>
 import { isIPad, isMobile } from 'billd-utils';
 import { GlobalThemeOverrides, NConfigProvider } from 'naive-ui';
-import { onMounted, onUnmounted, watch } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
 
-import { usePiniaCacheStore } from '@/store/cache';
-import { setAxiosBaseUrl } from '@/utils/localStorage/app';
+import { getApi, getTurn, getWss } from '@/utils/localStorage/app';
 
 import { useAppStore } from './store/app';
+import { handleAtob } from './utils';
 import { memory } from './utils/memory';
 
 const appStore = useAppStore();
-const cacheStore = usePiniaCacheStore();
 
 const themeOverrides: GlobalThemeOverrides = {
   common: {
@@ -41,21 +40,40 @@ function handleRemoveGlobalLoading() {
   el.style.display = 'none';
 }
 
-watch(
-  () => cacheStore.customApi,
-  () => {
-    setAxiosBaseUrl(cacheStore.customApi);
-  },
-  { immediate: true, deep: true }
-);
+function handleCustomApi() {
+  const val = getApi();
+  if (val) {
+    memory.customApi.open = val.open;
+    memory.customApi.url = val.url;
+  }
+}
+function handleCustomWss() {
+  const val = getWss();
+  if (val) {
+    memory.customWss.open = val.open;
+    memory.customWss.url = val.url;
+  }
+}
 
-watch(
-  () => cacheStore.customTurnServer,
-  () => {
-    memory.customTurnserver = cacheStore.customTurnServer;
-  },
-  { immediate: true, deep: true }
-);
+function handleCustomTurnserver() {
+  const val = getTurn();
+  if (val) {
+    memory.customTurnserver.open = val.open;
+    memory.customTurnserver.data = val.data;
+    const { err, msg } = handleAtob(val.data);
+    if (!err) {
+      try {
+        if (msg === '') return;
+        const json = JSON.parse(msg);
+        memory.customTurnserver.urls = json.urls;
+        memory.customTurnserver.username = json.username;
+        memory.customTurnserver.credential = json.credential;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+}
 
 function handleResize() {
   if (isMobile()) {
@@ -70,6 +88,9 @@ onMounted(() => {
   console.log('当前地址栏', location.href);
   handleRemoveGlobalLoading();
   handleResize();
+  handleCustomWss();
+  handleCustomApi();
+  handleCustomTurnserver();
   window.addEventListener('resize', handleResize);
 });
 

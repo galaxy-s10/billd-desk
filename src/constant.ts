@@ -165,10 +165,8 @@ export const LS_KEY = {
   uuid: 'uuid',
   password: 'password',
   token: 'token',
-  axiosBaseUrl: 'axiosBaseUrl',
-  wssUrl: 'wssUrl',
-  turnUrls: 'turnUrls',
-  turnUsername: 'turnUsername',
-  turnCredential: 'turnCredential',
+  api: 'api',
+  wss: 'wss',
+  turn: 'turn',
   preview: 'preview',
 };

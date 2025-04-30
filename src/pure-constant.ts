@@ -3,6 +3,7 @@ export const WINDOW_ID_MAP = {
   webrtc: 2,
   about: 3,
   layout: 4,
+  fixedPopupWindow: 5,
 };
 
 export const ENGLISH_LETTER = [
@@ -77,6 +78,10 @@ export const IPC_EVENT = {
   powerBootStatus: 'powerBootStatus',
   windowManager: 'windowManager',
   getAllWindowName: 'getAllWindowName',
+  getPrimaryDisplay: 'getPrimaryDisplay',
+  request_rtcMap: 'request_rtcMap',
+  message: 'message',
+  getAllWindowMap: 'getAllWindowMap',
 
   response_powerSaveBlockerStart: 'response_powerSaveBlockerStart',
   response_closeAllWindow: 'response_closeAllWindow',
@@ -115,6 +120,7 @@ export const IPC_EVENT = {
   response_open_version: 'response_open_version',
   response_open_url: 'response_open_url',
   response_getAllWindowName: 'response_getAllWindowName',
+  response_rtcMap: 'response_rtcMap',
 };
 
 export const GLOBAL_SHORTCUT = {

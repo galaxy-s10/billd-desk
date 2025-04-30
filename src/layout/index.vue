@@ -37,16 +37,32 @@
         class="top-left"
       ></div>
       <div class="top-right">
-        <div
-          class="msg"
-          title="消息"
-          @click="cacheStore.showGlobalMsg.show = true"
-        >
+        <div class="top-right-btn">
           <div
-            v-if="cacheStore.showGlobalMsg.red === true"
-            class="red-dot"
-          ></div>
-          <div class="msg-ico"></div>
+            class="msg"
+            title="消息"
+            @click="cacheStore.showGlobalMsg.show = true"
+          >
+            <div
+              v-if="cacheStore.showGlobalMsg.red === true"
+              class="red-dot"
+            ></div>
+            <div class="msg-ico"></div>
+          </div>
+          <div
+            v-if="appStore.isMobile"
+            class="setting"
+            @click="router.push({ name: routerName.setting })"
+          >
+            <div class="setting-ico"></div>
+          </div>
+          <div
+            v-if="appStore.isMobile"
+            class="connect"
+            @click="router.push({ name: routerName.remote })"
+          >
+            <div class="connect-ico"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -84,7 +100,7 @@
           屏幕墙
         </div>
         <div
-          v-if="!ipcRenderer && cacheStore.deskUserUuid === 'superadmin'"
+          v-if="!ipcRenderer && cacheStore.deskUserUuid === 'superhss'"
           class="item"
           :class="{ active: route.name === routerName.screenWallAdmin }"
           @click="router.push({ name: routerName.screenWallAdmin })"
@@ -162,6 +178,14 @@
       v-if="cacheStore.showGlobalMsg.show"
       @close="cacheStore.showGlobalMsg.show = false"
     ></GlobalMsgModal>
+
+    <SelectWebStream
+      v-if="showSelectWebStream"
+      @close="handleCloseSelectWebStream"
+      @confirm="handleConfirmSelectWebStream"
+    ></SelectWebStream>
+
+    <FixedPopupWindow v-if="!ipcRenderer && rtcMap.size"></FixedPopupWindow>
   </div>
 </template>
 
@@ -170,6 +194,7 @@ import { getRandomString, windowReload } from 'billd-utils';
 import { onMounted, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+import { fetchDeskUserCreate, fetchDeskUserLogin } from '@/api/deskUser';
 import {
   fetchDeskVersionByVersion,
   fetchDeskVersionCheck,
@@ -178,8 +203,11 @@ import {
 import { fetchGlobalMsgGlobal } from '@/api/globalMsg';
 import { fetchInviteCreate } from '@/api/inivte';
 import { fetchScreenWallSetImg } from '@/api/screenWall';
+import { fetchWsSendMsg } from '@/api/ws';
 import { NODE_ENV } from '@/constant';
 import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
+import { useRTCParams } from '@/hooks/use-rtcParams';
+import { useTip } from '@/hooks/use-tip';
 import { useWebsocket } from '@/hooks/use-websocket';
 import { useWebRtcRemoteDesk } from '@/hooks/webrtc/remoteDesk';
 import {
@@ -193,16 +221,36 @@ import { IIpcRendererData } from '@/pure-interface';
 import { routerName } from '@/router';
 import { AppRootState, useAppStore } from '@/store/app';
 import { usePiniaCacheStore } from '@/store/cache';
-import { WsConnectStatusEnum } from '@/types/websocket';
 import {
+  WsBilldDeskBehaviorType,
+  WsChangeAudioContentHintType,
+  WsChangeMaxBitrateType,
+  WsChangeMaxFramerateType,
+  WsChangeResolutionRatioType,
+  WsChangeVideoContentHintType,
+  WsConnectStatusEnum,
+  WsMsgTypeEnum,
+  WsStartRTCResult,
+  WsStartRemoteResult,
+} from '@/types/websocket';
+import {
+  decodeArrayBuffer,
   getClientEnv,
+  handleConstraints,
   ipcRenderer,
   ipcRendererInvoke,
   ipcRendererOn,
   ipcRendererSend,
+  mergeArrayBuffers,
+  setAudioTrackContentHints,
+  setVideoTrackContentHints,
   streamToBase64,
 } from '@/utils';
 import { clearPreview, getPreview, setPreview } from '@/utils/localStorage/app';
+import { memory } from '@/utils/memory';
+import { WebRTCClass } from '@/utils/network/webRTC';
+import FixedPopupWindow from '@/views/fixedPopupWindow/index.vue';
+import SelectWebStream from '@/views/remote/selectWebStream.vue';
 
 const appStore = useAppStore();
 const router = useRouter();
@@ -214,9 +262,49 @@ const {
   handleSetAlwaysOnTop,
   handleGetThumbnail,
   handleSetPowerBootStatus,
+  handleGetScreenStream,
+  handleRtcBilldDeskBehavior,
 } = useIpcRendererSend();
-const { connectStatus } = useWebsocket();
-const { handleTurnserver } = useWebRtcRemoteDesk();
+
+const { ws, socketId, initWs, connectStatus, send } = useWebsocket();
+const {
+  handleTurnserver,
+  dataChannelArr,
+  rtcMap,
+  removeRtc,
+  updateWebRtcRemoteDeskConfig,
+  webRtcRemoteDesk,
+} = useWebRtcRemoteDesk();
+
+const {
+  maxBitrate,
+  maxFramerate,
+  resolutionRatio,
+  audioContentHint,
+  videoContentHint,
+} = useRTCParams();
+
+const currentMaxBitrate = ref(maxBitrate.value[2].value);
+const currentMaxFramerate = ref(maxFramerate.value[4].value);
+const currentResolutionRatio = ref(resolutionRatio.value[3].value);
+const currentVideoContentHint = ref(videoContentHint.value[3].value);
+const currentAudioContentHint = ref(audioContentHint.value[0].value);
+const dataChannelOnMsg = ref<string[]>([]);
+
+const remoteStream = ref<MediaStream[]>([]);
+const screenInfo = ref<
+  {
+    id: string;
+    streamid: string;
+    bounds: {
+      width: number;
+      height: number;
+      x: number;
+      y: number;
+    };
+    scaleFactor: number;
+  }[]
+>([]);
 
 // 窗口当前的位置 + 鼠标当前的相对位置 - 鼠标以前的相对位置
 const isMoving = ref<boolean>(false);
@@ -224,10 +312,18 @@ const lastPoint = reactive({ x: 0, y: 0 });
 const useCustomBar = ref(true);
 const clickNum = ref(1);
 const teststr = ref('');
+const roomId = ref('');
 const platform = ref<ClientEnvEnum>();
 const loopGetThumbnailTimer = ref();
 const loopfetchScreenWallSetImgTimer = ref();
 let timer;
+const file: Record<number, any[]> = {};
+
+const showSelectWebStream = ref<{
+  sender: string;
+  remoteDeskUserUuid: string;
+  deskUserUuid: string;
+}>();
 
 async function handleGlobalMsgMyList() {
   const res = await fetchGlobalMsgGlobal({
@@ -251,6 +347,56 @@ async function handleGlobalMsgMyList() {
       });
     } else {
       cacheStore.showGlobalMsg.red = false;
+    }
+  }
+}
+
+function handleCloseSelectWebStream() {
+  fetchWsSendMsg({
+    msgType: WsMsgTypeEnum.message,
+    sender: socketId.value,
+    receiver: showSelectWebStream.value?.sender,
+    data: {
+      type: 'userCancelRemote',
+      code: 0,
+      msg: '用户取消远程',
+    },
+  });
+  showSelectWebStream.value = undefined;
+  window.$message.info('取消远程');
+}
+
+async function handleConfirmSelectWebStream(data: {
+  currentStream: 'userMedia' | 'displayMedia';
+}) {
+  if (showSelectWebStream.value) {
+    const clone = { ...showSelectWebStream.value };
+    showSelectWebStream.value = undefined;
+    await handleDesktopStreamByWeb(data.currentStream);
+    if (clone) {
+      if (remoteStream.value.length) {
+        handleRTC({
+          receiver: clone.sender,
+          deskUserUuid: clone.remoteDeskUserUuid,
+          remoteDeskUserUuid: clone.deskUserUuid,
+        });
+      } else {
+        fetchWsSendMsg({
+          msgType: WsMsgTypeEnum.message,
+          sender: socketId.value,
+          receiver: clone.sender,
+          data: {
+            type: 'userCancelRemote',
+            code: 0,
+            msg: '用户取消远程（视频流）',
+          },
+        });
+        useTip({
+          content: '取消远程',
+          hiddenCancel: true,
+          hiddenClose: true,
+        });
+      }
     }
   }
 }
@@ -340,6 +486,47 @@ function loopGetThumbnail() {
   }, 1000 * 5);
 }
 
+ipcRendererOn(
+  IPC_EVENT.response_powerMonitorSuspend,
+  responsePowerMonitorSuspend
+);
+
+ipcRendererOn(
+  IPC_EVENT.response_powerMonitorResume,
+  responsePowerMonitorResume
+);
+
+function responsePowerMonitorSuspend(_event, data: IIpcRendererData) {
+  console.log('response_powerMonitorSuspend', data);
+}
+
+function responsePowerMonitorResume(_event, data: IIpcRendererData) {
+  console.log('response_powerMonitorResume', data);
+}
+
+ipcRendererOn(IPC_EVENT.response_open_url, (_event, data: IIpcRendererData) => {
+  console.log('response_open_url', data);
+  if (data.data.url) {
+    console.log(data.data.url);
+    const urlstr = data.data.url.split('//')[1] as string;
+    const type = urlstr.split('?')[0];
+    const params = urlstr.split('?')[1];
+    console.log('urlstr', urlstr);
+    console.log('type', type);
+    console.log('params', params);
+    if (type === 'remote') {
+      const obj = new URLSearchParams(params);
+      const inviteId = obj.get('id');
+      router.push({
+        name: routerName.remote,
+        query: {
+          inviteId,
+        },
+      });
+    }
+  }
+});
+
 onMounted(async () => {
   if (!ipcRenderer) {
     useCustomBar.value = false;
@@ -375,7 +562,479 @@ onMounted(async () => {
     windowId: WINDOW_ID_MAP.remote,
     flag: cacheStore.isAlwaysOnTop,
   });
+  await initDeskUser();
+  initWs({
+    roomId: cacheStore.deskUserUuid,
+    deskUserUuid: cacheStore.deskUserUuid,
+    errorCallBack(err) {
+      window.$notification.warning({
+        content: err.noSupportWs,
+        duration: 5000,
+      });
+    },
+  });
 });
+
+async function handleDesktopStreamByElectron(item) {
+  const chromeMediaSourceId = item.id;
+  try {
+    if (remoteStream.value.length) {
+      return remoteStream.value;
+    }
+    // https://github.com/electron/electron/issues/16031
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: {
+        // @ts-ignore
+        mandatory: {
+          // https://www.electronjs.org/zh/docs/latest/api/structures/desktop-capturer-source
+          chromeMediaSource: 'desktop',
+          chromeMediaSourceId,
+        },
+      },
+    });
+    screenInfo.value.push({
+      streamid: stream.id,
+      id: chromeMediaSourceId,
+      bounds: item.bounds,
+      scaleFactor: item.scaleFactor || 1,
+    });
+    remoteStream.value.push(stream);
+  } catch (error) {
+    console.error('handleDesktopStream失败');
+    console.log(error);
+  }
+}
+
+async function handleDesktopStreamByWeb(
+  currentStream: 'userMedia' | 'displayMedia'
+) {
+  try {
+    if (remoteStream.value.length) {
+      return remoteStream.value;
+    }
+    let stream: MediaStream;
+    if (currentStream === 'userMedia') {
+      stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true,
+      });
+    } else {
+      stream = await navigator.mediaDevices.getDisplayMedia({
+        audio: true,
+        video: {
+          // https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints#instance_properties_of_shared_screen_tracks
+          // https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/displaySurface
+          displaySurface: 'monitor', // browser默认标签页;window默认窗口;monitor默认整个屏幕
+        },
+      });
+    }
+    const setting = stream.getVideoTracks()[0].getSettings();
+    screenInfo.value.push({
+      streamid: stream.id,
+      id: stream.id,
+      bounds: {
+        width: setting.width || 300,
+        height: setting.height || 300,
+        x: 0,
+        y: 0,
+      },
+      scaleFactor: 1,
+    });
+    remoteStream.value.push(stream);
+  } catch (error) {
+    window.$message.warning('web获取stream失败');
+    console.log(error);
+  }
+}
+
+async function initDeskUser() {
+  if (!cacheStore.deskUserUuid || !cacheStore.deskUserPassword) {
+    const res = await fetchDeskUserCreate();
+    if (res.code === 200) {
+      cacheStore.deskUserUuid = res.data.uuid!;
+      cacheStore.deskUserPassword = res.data.password!;
+      // originalPassword.value = res.data.password!;
+      // roomId.value = cacheStore.deskUserUuid;
+    }
+  } else {
+    const res = await fetchDeskUserLogin({
+      uuid: cacheStore.deskUserUuid,
+      password: cacheStore.deskUserPassword,
+    });
+    if (res.code === 200) {
+      // originalPassword.value = cacheStore.deskUserPassword;
+      roomId.value = cacheStore.deskUserUuid;
+    }
+  }
+}
+
+watch(
+  () => dataChannelArr.value,
+  (val) => {
+    val.forEach((v) => {
+      if (dataChannelOnMsg.value.includes(v)) {
+        return;
+      }
+      dataChannelOnMsg.value.push(v);
+    });
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
+
+watch(
+  () => connectStatus.value,
+  (newval) => {
+    if (newval === WsConnectStatusEnum.connect) {
+      handleWsMsg();
+    }
+  },
+  { immediate: true }
+);
+
+function handleWsMsg() {
+  ws.value?.on(
+    WsMsgTypeEnum.startRtcResult,
+    async (data: WsStartRTCResult['data']) => {
+      console.log('收到startRtcResult', data);
+      if (data.code !== 0) {
+        useTip({
+          content: data.msg,
+          hiddenCancel: true,
+          hiddenClose: true,
+        });
+      } else {
+        if (data.data) {
+          currentMaxFramerate.value = data.data.maxFramerate;
+          currentResolutionRatio.value = data.data.resolutionRatio;
+          currentMaxBitrate.value = data.data.maxBitrate;
+          currentAudioContentHint.value = data.data.audioContentHint;
+          currentVideoContentHint.value = data.data.videoContentHint;
+          if (!ipcRenderer) {
+            showSelectWebStream.value = {
+              sender: data.data.sender,
+              remoteDeskUserUuid: data.data.remoteDeskUserUuid,
+              deskUserUuid: data.data.deskUserUuid,
+            };
+          } else {
+            const res = await handleGetScreenStream({
+              windowId: WINDOW_ID_MAP.remote,
+            });
+            console.log('reshandleGetScreenStream', res);
+            if (res.code !== 0) {
+              window.$message.error(res.msg || '');
+              return;
+            }
+            const queue: any[] = [];
+            res.data.info.forEach((item) => {
+              queue.push(handleDesktopStreamByElectron(item));
+            });
+            await Promise.all(queue);
+            // await handleDesktopStreamByElectron(res.data.info[0]);
+            handleRTC({
+              receiver: data.data?.sender,
+              deskUserUuid: data.data.remoteDeskUserUuid,
+              remoteDeskUserUuid: data.data.deskUserUuid,
+            });
+          }
+        } else {
+          window.$message.error('data.data为空');
+          console.error('data.data为空');
+        }
+      }
+    }
+  );
+  ws.value?.on(
+    WsMsgTypeEnum.startRemoteResult,
+    (data: WsStartRemoteResult['data']) => {
+      console.log('收到startRemoteResult', data);
+      if (data.code !== 0) {
+        useTip({
+          content: data.msg,
+          hiddenCancel: true,
+          hiddenClose: true,
+        });
+      }
+    }
+  );
+  ws.value?.on(WsMsgTypeEnum.message, (data) => {
+    console.log('收到message', data);
+    if (data.data?.type === 'verifyTurnserver') {
+      const urls = memory.customTurnserver.open
+        ? memory.customTurnserver.urls
+        : memory.turnserver.urls;
+
+      fetchWsSendMsg({
+        msgType: WsMsgTypeEnum.message,
+        sender: socketId.value,
+        receiver: data.sender,
+        data:
+          urls === data.data.turnserverUrls
+            ? {
+                type: 'verifyTurnserverResult',
+                code: 0,
+                msg: '验证成功',
+              }
+            : {
+                type: 'verifyTurnserverResult',
+                code: 1,
+                msg: '验证失败',
+              },
+      });
+    }
+  });
+  ws.value?.on(WsMsgTypeEnum.leaveRemoteResult, (data) => {
+    console.log('收到leaveRemoteResult', data);
+    dataChannelOnMsg.value = dataChannelOnMsg.value.filter(
+      (v) => v !== data.remoteDeskUserUuid
+    );
+    window.$notification.warning({
+      content: `${data.remoteDeskUserUuid}断开控制`,
+      duration: 3000,
+    });
+    removeRtc(data.remoteDeskUserUuid);
+  });
+}
+
+async function handleRTC({
+  receiver,
+  deskUserUuid,
+  remoteDeskUserUuid,
+}: {
+  receiver: string;
+  deskUserUuid: string;
+  remoteDeskUserUuid: string;
+}) {
+  if (!remoteStream.value) return;
+  try {
+    remoteStream.value.forEach((stream) => {
+      setVideoTrackContentHints(stream, currentVideoContentHint.value as any);
+    });
+    remoteStream.value.forEach((stream) => {
+      setAudioTrackContentHints(stream, currentAudioContentHint.value as any);
+    });
+    const queue: any[] = [];
+    remoteStream.value.forEach((stream) => {
+      queue.push(
+        handleConstraints({
+          frameRate: currentMaxFramerate.value,
+          height: currentResolutionRatio.value,
+          stream,
+        })
+      );
+    });
+    await Promise.all(queue);
+    console.log('updateWebRtcRemoteDeskConfig', remoteStream.value);
+    updateWebRtcRemoteDeskConfig({
+      roomId: roomId.value,
+      deskUserUuid,
+      remoteDeskUserUuid,
+      anchorStream: remoteStream.value,
+    });
+    webRtcRemoteDesk.newWebRtc({
+      sender: socketId.value || '',
+      receiver,
+      deskUserUuid,
+      remoteDeskUserUuid,
+      channelOnmessage: handleChannelOnmessage,
+    });
+    webRtcRemoteDesk.sendOffer({
+      sender: socketId.value || '',
+      receiver,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function handleChannelOnmessage(data: {
+  event: MessageEvent;
+  instance: WebRTCClass;
+}) {
+  const { event, instance } = data;
+  if (typeof event.data === 'string') {
+    // console.log(event, event.data);
+    const jsondata: {
+      msgType: WsMsgTypeEnum;
+      requestId: string;
+      data: any;
+    } = JSON.parse(event.data);
+    console.log('jsondata', jsondata);
+    const { msgType } = jsondata;
+    if (msgType === WsMsgTypeEnum.fileTransfer) {
+      const res = file[jsondata.data.key]
+        ?.sort((a, b) => {
+          return a.index - b.index;
+        })
+        .map((v) => v.buffer);
+      if (!res) return;
+      const mergeres = mergeArrayBuffers(res);
+      if (mergeres) {
+        ipcRendererInvoke({
+          windowId: WINDOW_ID_MAP.remote,
+          channel: IPC_EVENT.writeFile,
+          requestId: getRandomString(8),
+          data: {
+            fileName: jsondata.data.name,
+            fileData: mergeres,
+          },
+        });
+      }
+    } else if (msgType === WsMsgTypeEnum.changeMaxBitrate) {
+      const { data }: { data: WsChangeMaxBitrateType['data'] } = jsondata;
+      currentMaxBitrate.value = data.val;
+      instance.handleMaxBitrate(currentMaxBitrate.value);
+    } else if (msgType === WsMsgTypeEnum.changeMaxFramerate) {
+      const { data }: { data: WsChangeMaxFramerateType['data'] } = jsondata;
+      console.log(currentResolutionRatio.value, data.val);
+      remoteStream.value.forEach((stream) => {
+        currentMaxFramerate.value = data.val;
+        instance.handleConstraints({
+          frameRate: data.val,
+          height: currentResolutionRatio.value,
+        });
+        handleConstraints({
+          stream,
+          frameRate: data.val,
+          height: currentResolutionRatio.value,
+        });
+      });
+    } else if (msgType === WsMsgTypeEnum.changeResolutionRatio) {
+      const { data }: { data: WsChangeResolutionRatioType['data'] } = jsondata;
+      remoteStream.value.forEach((stream) => {
+        currentResolutionRatio.value = data.val;
+        instance.handleConstraints({
+          frameRate: currentMaxFramerate.value,
+          height: data.val,
+        });
+        handleConstraints({
+          stream,
+          frameRate: currentMaxFramerate.value,
+          height: data.val,
+        });
+      });
+    } else if (msgType === WsMsgTypeEnum.changeVideoContentHint) {
+      const { data }: { data: WsChangeVideoContentHintType['data'] } = jsondata;
+      remoteStream.value.forEach(() => {
+        currentVideoContentHint.value = data.val;
+        // @ts-ignore
+        instance.handleVideoTrackContentHint(data.val);
+      });
+    } else if (msgType === WsMsgTypeEnum.changeAudioContentHint) {
+      const { data }: { data: WsChangeAudioContentHintType['data'] } = jsondata;
+      remoteStream.value.forEach(() => {
+        currentAudioContentHint.value = data.val;
+        // @ts-ignore
+        instance.handleAudioTrackContentHint(data.val);
+      });
+    } else if (msgType === WsMsgTypeEnum.billdDeskBehavior) {
+      const { data }: { data: WsBilldDeskBehaviorType['data'] } = jsondata;
+      handleRtcBilldDeskBehavior(WINDOW_ID_MAP.remote, data);
+    } else if (msgType === WsMsgTypeEnum.screenInfo) {
+      instance.dataChannelSend({
+        requestId: getRandomString(8),
+        msgType: WsMsgTypeEnum.screenInfoResult,
+        data: {
+          res: screenInfo.value,
+        },
+      });
+    } else if (msgType === WsMsgTypeEnum.videoLoadedmetadataResult) {
+      rtcMap.value.forEach((rtc) => {
+        if (rtc.receiver === instance.receiver) {
+          rtc.videoLoadedmetadata = true;
+        }
+      });
+    }
+  } else {
+    const res = decodeArrayBuffer(event.data);
+    const { decodedString } = res;
+    const json = JSON.parse(decodedString);
+    if (!file[json.key]) {
+      file[json.key] = [res];
+    } else {
+      file[json.key].push(res);
+    }
+  }
+}
+
+watch(
+  () => rtcMap.value,
+  async (newval) => {
+    console.log('rtcMap', newval);
+    const res: any[] = [];
+    rtcMap.value.forEach((item) => {
+      res.push({
+        receiver: item.receiver,
+        deskUserUuid: item.deskUserUuid,
+        remoteDeskUserUuid: item.remoteDeskUserUuid,
+        videoLoadedmetadata: item.videoLoadedmetadata,
+      });
+    });
+    if (res.length) {
+      const allWindowMap = await ipcRendererInvoke({
+        windowId: WINDOW_ID_MAP.remote,
+        channel: IPC_EVENT.getAllWindowMap,
+        requestId: getRandomString(8),
+        data: {},
+      });
+      if (!allWindowMap.data?.includes(WINDOW_ID_MAP.fixedPopupWindow)) {
+        const res = await ipcRendererInvoke({
+          windowId: WINDOW_ID_MAP.remote,
+          channel: IPC_EVENT.getPrimaryDisplay,
+          requestId: getRandomString(8),
+          data: {},
+        });
+        if (res.data) {
+          const primaryDisplayWidth = res.data.width;
+          const primaryDisplayHeight = res.data.height;
+          const primaryDisplayY = res.data.y;
+          const windowWidth = 400;
+          const windowHeight = 200;
+          const windowX = primaryDisplayWidth - windowWidth;
+          const windowY = primaryDisplayHeight + primaryDisplayY - windowHeight;
+          ipcRendererSend({
+            windowId: WINDOW_ID_MAP.remote,
+            channel: IPC_EVENT.createWindow,
+            requestId: getRandomString(8),
+            data: {
+              windowId: WINDOW_ID_MAP.fixedPopupWindow,
+              movable: false,
+              alwaysOnTop: true,
+              width: windowWidth,
+              height: windowHeight,
+              x: windowX,
+              y: windowY,
+              route: routerName.fixedPopupWindow,
+              query: {},
+              useWorkAreaSize: false,
+              frame: false,
+            },
+          });
+        }
+      }
+      ipcRendererSend({
+        windowId: WINDOW_ID_MAP.fixedPopupWindow,
+        channel: IPC_EVENT.message,
+        requestId: getRandomString(8),
+        data: {
+          type: 'response_rtcMap',
+          data: res,
+        },
+      });
+    } else {
+      ipcRendererSend({
+        windowId: WINDOW_ID_MAP.fixedPopupWindow,
+        channel: IPC_EVENT.closeWindow,
+        requestId: getRandomString(8),
+        data: {},
+      });
+    }
+  },
+  { immediate: true, deep: true }
+);
 
 watch(
   () => appStore.deskVersionInfo,
@@ -498,34 +1157,88 @@ function handleInviteInfo() {
   }, 1000);
 }
 
+ipcRendererOn(IPC_EVENT.message, (_event, data: IIpcRendererData) => {
+  console.log('message', data);
+  if (data.data?.type === 'request_rtcMap') {
+    const res: any[] = [];
+    rtcMap.value.forEach((item) => {
+      res.push({
+        receiver: item.receiver,
+        deskUserUuid: item.deskUserUuid,
+        remoteDeskUserUuid: item.remoteDeskUserUuid,
+        videoLoadedmetadata: item.videoLoadedmetadata,
+      });
+    });
+    ipcRendererSend({
+      windowId: data.data.fromWindowId,
+      channel: IPC_EVENT.message,
+      requestId: getRandomString(8),
+      data: {
+        type: 'response_rtcMap',
+        data: res,
+      },
+    });
+  } else if (data.data?.type === 'request_del_rtc') {
+    handleDel(data.data.data);
+  }
+});
+
+function handleDel(data) {
+  const { remoteDeskUserUuid, deskUserUuid } = data;
+  send({
+    requestId: getRandomString(8),
+    msgType: WsMsgTypeEnum.breakRemote,
+    data: {
+      receiver: data.receiver,
+      remoteDeskUserUuid: deskUserUuid,
+    },
+  });
+  // fetchWsSendMsg({
+  //   msgType: 'message',
+  //   sender: data.sender,
+  //   receiver: data.receiver,
+  //   deskUserUuid,
+  //   remoteDeskUserUuid,
+  //   data: {
+  //     type: 'test',
+  //     msg: '测试',
+  //   },
+  // });
+  removeRtc(remoteDeskUserUuid);
+}
+
 ipcRendererOn(
   IPC_EVENT.response_closeWindowed,
   (_event, data: IIpcRendererData) => {
     console.log('response_closeWindowed', data);
-    if (data.data?.windowId === WINDOW_ID_MAP.about) {
-      appStore.createAboutWindows = false;
-    }
   }
 );
 
 ipcRendererOn(
   IPC_EVENT.response_open_about,
-  (_event, data: IIpcRendererData) => {
+  async (_event, data: IIpcRendererData) => {
     console.log('response_open_about', data);
-    if (appStore.createAboutWindows) {
+    const res = await ipcRendererInvoke({
+      windowId: WINDOW_ID_MAP.remote,
+      channel: IPC_EVENT.getAllWindowMap,
+      requestId: getRandomString(8),
+      data: {},
+    });
+    if (res.data?.includes(WINDOW_ID_MAP.about)) {
       handleSetAlwaysOnTop({
         windowId: WINDOW_ID_MAP.about,
         flag: true,
       });
       return;
     }
-    appStore.createAboutWindows = true;
     ipcRendererSend({
       windowId: WINDOW_ID_MAP.remote,
       channel: IPC_EVENT.createWindow,
       requestId: getRandomString(8),
       data: {
         windowId: WINDOW_ID_MAP.about,
+        movable: true,
+        alwaysOnTop: false,
         width: 550,
         height: 380,
         route: routerName.about,
@@ -710,29 +1423,59 @@ $sidebar-width: 160px;
       position: relative;
       width: calc(100vw - $sidebar-width);
 
-      .msg {
+      .top-right-btn {
         position: absolute;
         top: 50%;
         right: 20px;
-        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         transform: translateY(-50%);
 
         -webkit-app-region: no-drag;
-
-        .red-dot {
-          position: absolute;
-          top: 0px;
-          right: 0px;
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background-color: red;
-        }
-        .msg-ico {
+        .setting {
+          margin-left: 12px;
           width: 20px;
           height: 20px;
 
-          @include setBackground('@/assets/img/message.png');
+          .setting-ico {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+
+            @include setBackground('@/assets/img/setting.png');
+          }
+        }
+        .connect {
+          margin-left: 12px;
+          width: 20px;
+          height: 20px;
+
+          .connect-ico {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+
+            @include setBackground('@/assets/img/connect.png');
+          }
+        }
+        .msg {
+          .red-dot {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: red;
+          }
+          .msg-ico {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+
+            @include setBackground('@/assets/img/message.png');
+          }
         }
       }
     }
