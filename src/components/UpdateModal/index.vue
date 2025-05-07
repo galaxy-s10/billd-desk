@@ -145,6 +145,7 @@ function handleUpdate() {
       max-height: 200px;
       font-size: 16px;
 
+      user-select: text;
       @extend %customScrollbarHide;
       &:hover {
         @extend %customScrollbar;

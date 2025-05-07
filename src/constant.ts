@@ -169,4 +169,5 @@ export const LS_KEY = {
   wss: 'wss',
   turn: 'turn',
   preview: 'preview',
+  todaylock: 'todaylock',
 };

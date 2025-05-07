@@ -179,3 +179,18 @@ export interface IGlobalMsg {
   updated_at?: string;
   deleted_at?: string;
 }
+
+export interface ILoginRecord {
+  id?: number;
+  uuid?: string;
+  user_agent?: string;
+  client_ip?: string;
+  client_env?: ClientEnvEnum;
+  client_app?: ClientAppEnum;
+  client_app_version?: string;
+  remark?: string;
+
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
+}

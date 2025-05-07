@@ -202,12 +202,14 @@ import {
 } from '@/api/deskVersion';
 import { fetchGlobalMsgGlobal } from '@/api/globalMsg';
 import { fetchInviteCreate } from '@/api/inivte';
+import { fetchLoginRecordCreate } from '@/api/loginRecord';
 import { fetchScreenWallSetImg } from '@/api/screenWall';
 import { fetchWsSendMsg } from '@/api/ws';
 import { NODE_ENV } from '@/constant';
 import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
 import { useRTCParams } from '@/hooks/use-rtcParams';
 import { useTip } from '@/hooks/use-tip';
+import { useTodayLock } from '@/hooks/use-today-lock';
 import { useWebsocket } from '@/hooks/use-websocket';
 import { useWebRtcRemoteDesk } from '@/hooks/webrtc/remoteDesk';
 import {
@@ -563,6 +565,7 @@ onMounted(async () => {
     flag: cacheStore.isAlwaysOnTop,
   });
   await initDeskUser();
+  handleLoginRecord();
   initWs({
     roomId: cacheStore.deskUserUuid,
     deskUserUuid: cacheStore.deskUserUuid,
@@ -574,6 +577,21 @@ onMounted(async () => {
     },
   });
 });
+
+function handleLoginRecord() {
+  try {
+    const flag = useTodayLock();
+    if (flag) {
+      return;
+    }
+    fetchLoginRecordCreate({
+      uuid: cacheStore.deskUserUuid,
+    });
+  } catch (error) {
+    console.error('handleLoginRecord失败');
+    console.log(error);
+  }
+}
 
 async function handleDesktopStreamByElectron(item) {
   const chromeMediaSourceId = item.id;
@@ -974,56 +992,59 @@ watch(
       });
     });
     if (res.length) {
-      const allWindowMap = await ipcRendererInvoke({
-        windowId: WINDOW_ID_MAP.remote,
-        channel: IPC_EVENT.getAllWindowMap,
-        requestId: getRandomString(8),
-        data: {},
-      });
-      if (!allWindowMap.data?.includes(WINDOW_ID_MAP.fixedPopupWindow)) {
-        const res = await ipcRendererInvoke({
+      if (ipcRenderer) {
+        const allWindowMap = await ipcRendererInvoke({
           windowId: WINDOW_ID_MAP.remote,
-          channel: IPC_EVENT.getPrimaryDisplay,
+          channel: IPC_EVENT.getAllWindowMap,
           requestId: getRandomString(8),
           data: {},
         });
-        if (res.data) {
-          const primaryDisplayWidth = res.data.width;
-          const primaryDisplayHeight = res.data.height;
-          const primaryDisplayY = res.data.y;
-          const windowWidth = 400;
-          const windowHeight = 200;
-          const windowX = primaryDisplayWidth - windowWidth;
-          const windowY = primaryDisplayHeight + primaryDisplayY - windowHeight;
-          ipcRendererSend({
+        if (!allWindowMap.data?.includes(WINDOW_ID_MAP.fixedPopupWindow)) {
+          const res = await ipcRendererInvoke({
             windowId: WINDOW_ID_MAP.remote,
-            channel: IPC_EVENT.createWindow,
+            channel: IPC_EVENT.getPrimaryDisplay,
             requestId: getRandomString(8),
-            data: {
-              windowId: WINDOW_ID_MAP.fixedPopupWindow,
-              movable: false,
-              alwaysOnTop: true,
-              width: windowWidth,
-              height: windowHeight,
-              x: windowX,
-              y: windowY,
-              route: routerName.fixedPopupWindow,
-              query: {},
-              useWorkAreaSize: false,
-              frame: false,
-            },
+            data: {},
           });
+          if (res.data) {
+            const primaryDisplayWidth = res.data.width;
+            const primaryDisplayHeight = res.data.height;
+            const primaryDisplayY = res.data.y;
+            const windowWidth = 400;
+            const windowHeight = 200;
+            const windowX = primaryDisplayWidth - windowWidth;
+            const windowY =
+              primaryDisplayHeight + primaryDisplayY - windowHeight;
+            ipcRendererSend({
+              windowId: WINDOW_ID_MAP.remote,
+              channel: IPC_EVENT.createWindow,
+              requestId: getRandomString(8),
+              data: {
+                windowId: WINDOW_ID_MAP.fixedPopupWindow,
+                movable: false,
+                alwaysOnTop: true,
+                width: windowWidth,
+                height: windowHeight,
+                x: windowX,
+                y: windowY,
+                route: routerName.fixedPopupWindow,
+                query: {},
+                useWorkAreaSize: false,
+                frame: false,
+              },
+            });
+          }
         }
+        ipcRendererSend({
+          windowId: WINDOW_ID_MAP.fixedPopupWindow,
+          channel: IPC_EVENT.message,
+          requestId: getRandomString(8),
+          data: {
+            type: 'response_rtcMap',
+            data: res,
+          },
+        });
       }
-      ipcRendererSend({
-        windowId: WINDOW_ID_MAP.fixedPopupWindow,
-        channel: IPC_EVENT.message,
-        requestId: getRandomString(8),
-        data: {
-          type: 'response_rtcMap',
-          data: res,
-        },
-      });
     } else {
       ipcRendererSend({
         windowId: WINDOW_ID_MAP.fixedPopupWindow,
@@ -1180,6 +1201,15 @@ ipcRendererOn(IPC_EVENT.message, (_event, data: IIpcRendererData) => {
     });
   } else if (data.data?.type === 'request_del_rtc') {
     handleDel(data.data.data);
+  } else if (data.data?.type === 'request_del_all_rtc') {
+    rtcMap.value.forEach((item) => {
+      handleDel({
+        receiver: item.receiver,
+        deskUserUuid: item.deskUserUuid,
+        remoteDeskUserUuid: item.remoteDeskUserUuid,
+      });
+    });
+    rtcMap.value.clear();
   }
 });
 
