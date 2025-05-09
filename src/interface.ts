@@ -156,6 +156,7 @@ export enum GlobalMsgTypeEnum {
   system = 'system',
   activity = 'activity',
   notification = 'notification',
+  alwaysRedMsg = 'alwaysRedMsg',
 }
 
 export enum SwitchEnum {
@@ -194,3 +195,5 @@ export interface ILoginRecord {
   updated_at?: string;
   deleted_at?: string;
 }
+
+export type closeMainWindowType = 'mini' | 'exit';

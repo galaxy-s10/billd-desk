@@ -1,6 +1,6 @@
 {
   "name": "billd-desk",
-  "version": "0.19.0",
+  "version": "0.21.0",
   "description": "基于Vue3 + WebRTC + Electron + Nodejs搭建的远程桌面",
   "keywords": [
     "billd",
@@ -38,7 +38,7 @@
     "deploy:beta": "node ./deploy/index.cjs --beta",
     "deploy:prod": "node ./deploy/index.cjs --prod",
     "dev": "rimraf electron-dist dist && vite",
-    "gen-icons": "rimraf build/output/ && electron-icon-builder --input=./build/source/billd.png --output=./build/output/ --flatten",
+    "gen-icons": "rimraf build/output/ && electron-icon-builder --input=./build/source/logo.png --output=./build/output/ --flatten",
     "lint": "eslint . --config ./eslint.config.js --cache",
     "lint:fix": "eslint . --config ./eslint.config.js --cache --fix",
     "preview": "vite preview",

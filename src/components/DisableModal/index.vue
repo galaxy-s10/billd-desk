@@ -43,7 +43,7 @@ function handleClose() {
     windowId: WINDOW_ID_MAP.remote,
     channel: IPC_EVENT.closeAllWindow,
     requestId: getRandomString(8),
-    data: {},
+    data: { windowId: WINDOW_ID_MAP.remote },
   });
 }
 </script>

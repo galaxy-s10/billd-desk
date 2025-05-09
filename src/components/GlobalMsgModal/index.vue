@@ -49,6 +49,7 @@
 // import { useDraggable } from '@vueuse/core';
 import { onUnmounted, ref } from 'vue';
 
+import { GlobalMsgTypeEnum } from '@/interface';
 import { useAppStore } from '@/store/app';
 import { usePiniaCacheStore } from '@/store/cache';
 
@@ -63,7 +64,15 @@ const dragModalEl = ref<HTMLDivElement>();
 const emits = defineEmits(['close']);
 
 onUnmounted(() => {
-  cacheStore.showGlobalMsg.red = false;
+  if (
+    cacheStore.showGlobalMsg.list.find(
+      (v) => v.type === GlobalMsgTypeEnum.alwaysRedMsg
+    )
+  ) {
+    cacheStore.showGlobalMsg.red = true;
+  } else {
+    cacheStore.showGlobalMsg.red = false;
+  }
 });
 </script>
 

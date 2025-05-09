@@ -15,6 +15,8 @@ export const COMMON_URL = {
   privatizationDeployment: 'https://desk.hsslive.cn/#/privatizationDeployment',
   price: 'https://desk.hsslive.cn/#/price',
   hi: 'https://desk.hsslive.cn/#/hi',
+  download: 'https://desk.hsslive.cn/#/download',
+  wechatGroup: 'https://desk.hsslive.cn/#/wechatGroup',
   payCoursesArticle: `https://www.hsslive.cn/article/151`,
 };
 
