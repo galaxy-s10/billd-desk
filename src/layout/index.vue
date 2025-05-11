@@ -3,8 +3,11 @@
     <div
       class="system-bar"
       :class="{
-        'no-drag': platform !== ClientEnvEnum.macos,
-        drag: platform === ClientEnvEnum.macos,
+        // 一开始以为只是mac控制win时，拖动win窗口会卡主，所以只判断了win的时候，自定义drag
+        // 其实win控制mac时，拖动mac窗口也会卡主（我猜的），只是没有实际测试过win控制mac
+        'no-drag': 1,
+        // 'no-drag': platform !== ClientEnvEnum.macos,
+        // drag: platform === ClientEnvEnum.macos,
       }"
       @mousedown="startMove"
       @mouseup="endMove"
@@ -19,15 +22,11 @@
           <div
             class="ico close"
             @click="handleClose"
-          >
-            <div class="corss"></div>
-          </div>
+          ></div>
           <div
             class="ico min"
             @click="handleMin"
-          >
-            <div class="heng"></div>
-          </div>
+          ></div>
           <div class="ico max"></div>
         </div>
         <div class="right">v{{ appStore.version }}</div>
@@ -140,9 +139,10 @@
       class="debug-area"
       @click="handleOpenDebug"
     ></div>
-    <!--       v-if="appStore.showDebug || NODE_ENV === 'development'"
- -->
-    <div class="debug-area-wrap">
+    <div
+      v-if="appStore.showDebug || NODE_ENV === 'development'"
+      class="debug-area-wrap"
+    >
       <div
         class="item"
         @click="windowReload"
@@ -203,6 +203,7 @@ import { fetchInviteCreate } from '@/api/inivte';
 import { fetchLoginRecordCreate } from '@/api/loginRecord';
 import { fetchScreenWallSetImg } from '@/api/screenWall';
 import { fetchWsSendMsg } from '@/api/ws';
+import { NODE_ENV } from '@/constant';
 import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
 import { useRTCParams } from '@/hooks/use-rtcParams';
 import { useTip } from '@/hooks/use-tip';
@@ -259,7 +260,6 @@ const cacheStore = usePiniaCacheStore();
 const {
   handleOpenDevTools,
   handleSetAlwaysOnTop,
-  handleGetThumbnail,
   handleSetPowerBootStatus,
   handleGetScreenStream,
   handleRtcBilldDeskBehavior,
@@ -424,21 +424,7 @@ function loopGetThumbnail() {
     if (getPreview()) {
       return;
     }
-    const res = await handleGetThumbnail({
-      windowId: WINDOW_ID_MAP.remote,
-    });
-    // https://github.com/electron/electron/issues/16031
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: {
-        // @ts-ignore
-        mandatory: {
-          // https://www.electronjs.org/zh/docs/latest/api/structures/desktop-capturer-source
-          chromeMediaSource: 'desktop',
-          chromeMediaSourceId: res.data.id,
-        },
-      },
-    });
+    const stream = remoteStream.value[0];
     if (!stream) {
       return;
     }
@@ -566,7 +552,7 @@ ipcRendererOn(IPC_EVENT.response_open_url, (_event, data: IIpcRendererData) => {
     console.log('urlstr', urlstr);
     console.log('type', type);
     console.log('params', params);
-    if (type === 'remote') {
+    if (type === 'remote' || type === 'remote/') {
       const obj = new URLSearchParams(params);
       const inviteId = obj.get('id');
       router.push({
@@ -589,11 +575,50 @@ function initCache() {
   }
 }
 
+async function handleInitStream() {
+  if (remoteStream.value.length) {
+    return remoteStream.value;
+  }
+  const res = await handleGetScreenStream({
+    windowId: WINDOW_ID_MAP.remote,
+  });
+  console.log('reshandleGetScreenStream', res);
+  if (res.code !== 0) {
+    window.$message.error(res.msg || '');
+    return;
+  }
+  electronStreamInfo.value = res.data.info;
+  const queue: any[] = [];
+  res.data.info.forEach((item) => {
+    queue.push(handleDesktopStreamByElectron(item));
+  });
+  await Promise.all(queue);
+}
+
 onMounted(async () => {
   if (!ipcRenderer) {
     useCustomBar.value = false;
   }
   if (ipcRenderer) {
+    // const res = await ipcRendererInvoke({
+    //   windowId: WINDOW_ID_MAP.remote,
+    //   channel: IPC_EVENT.debugInfo,
+    //   requestId: getRandomString(8),
+    //   data: {},
+    // });
+    // window.$notification.warning({
+    //   content: JSON.stringify(res),
+    // });
+    const res = await ipcRendererInvoke({
+      windowId: WINDOW_ID_MAP.remote,
+      channel: IPC_EVENT.windowManager,
+      requestId: getRandomString(8),
+      data: {},
+    });
+    window.$notification.warning({
+      content: JSON.stringify(res),
+    });
+    handleInitStream();
     handleDeskVersionCheck();
     handleSetPowerBootStatus({
       windowId: WINDOW_ID_MAP.remote,
@@ -781,33 +806,6 @@ watch(
   }
 );
 
-// watch(
-//   () => streamActive.value,
-//   async (newval) => {
-//     if (newval === false) {
-//       remoteStream.value.forEach((v) => {
-//         v.getTracks().forEach((vv) => {
-//           v.removeTrack(vv);
-//         });
-//       });
-//       remoteStream.value = [];
-//       const queue: any[] = [];
-//       electronStreamInfo.value?.forEach((item) => {
-//         queue.push(handleDesktopStreamByElectron(item));
-//       });
-//       await Promise.all(queue);
-//       rtcMap.value.forEach((rtc) => {
-//         remoteStream.value.forEach((stream) => {
-//           stream.getTracks().forEach((track) => {
-//             console.log('remoteDesk的sendAnswer插入track', stream.id);
-//             rtc.peerConnection?.addTrack(track, stream);
-//           });
-//         });
-//       });
-//     }
-//   }
-// );
-
 watch(
   () => connectStatus.value,
   (newval) => {
@@ -843,21 +841,7 @@ function handleWsMsg() {
               deskUserUuid: data.data.deskUserUuid,
             };
           } else {
-            const res = await handleGetScreenStream({
-              windowId: WINDOW_ID_MAP.remote,
-            });
-            console.log('reshandleGetScreenStream', res);
-            if (res.code !== 0) {
-              window.$message.error(res.msg || '');
-              return;
-            }
-            electronStreamInfo.value = res.data.info;
-            const queue: any[] = [];
-            res.data.info.forEach((item) => {
-              queue.push(handleDesktopStreamByElectron(item));
-            });
-            await Promise.all(queue);
-            // await handleDesktopStreamByElectron(res.data.info[0]);
+            await handleInitStream();
             handleRTC({
               receiver: data.data?.sender,
               deskUserUuid: data.data.remoteDeskUserUuid,
@@ -1512,9 +1496,9 @@ function handleMin() {
 
 const startMove = (e: MouseEvent) => {
   if (!useCustomBar.value) return;
-  if (platform.value === ClientEnvEnum.macos) {
-    return;
-  }
+  // if (platform.value === ClientEnvEnum.macos) {
+  //   return;
+  // }
   isMoving.value = true;
   lastPoint.x = e.clientX;
   lastPoint.y = e.clientY;
@@ -1522,25 +1506,25 @@ const startMove = (e: MouseEvent) => {
 
 const endMove = () => {
   if (!useCustomBar.value) return;
-  if (platform.value === ClientEnvEnum.macos) {
-    return;
-  }
+  // if (platform.value === ClientEnvEnum.macos) {
+  //   return;
+  // }
   isMoving.value = false;
 };
 
 const handleMouseleave = () => {
   if (!useCustomBar.value) return;
-  if (platform.value === ClientEnvEnum.macos) {
-    return;
-  }
+  // if (platform.value === ClientEnvEnum.macos) {
+  //   return;
+  // }
   isMoving.value = false;
 };
 
 const moving = (e: MouseEvent) => {
   if (!useCustomBar.value) return;
-  if (platform.value === ClientEnvEnum.macos) {
-    return;
-  }
+  // if (platform.value === ClientEnvEnum.macos) {
+  //   return;
+  // }
   if (isMoving.value) {
     ipcRendererInvoke({
       windowId: WINDOW_ID_MAP.remote,
@@ -1602,22 +1586,20 @@ $sidebar-width: 160px;
           cursor: pointer;
 
           -webkit-app-region: no-drag;
-          .corss {
-            width: 7px;
-            height: 7px;
 
-            @include cross(black, 1px);
-          }
-          .heng {
-            width: 7px;
-            height: 1px;
-            background-color: black;
+          &:hover {
+            &.close {
+              @include setBackground('@/assets/img/system-close.png');
+            }
+            &.min {
+              @include setBackground('@/assets/img/system-min.png');
+            }
           }
           &.close {
-            background-color: #f7564d;
+            background-color: #e86c62;
           }
           &.min {
-            background-color: #f6c84e;
+            background-color: #f0b754;
           }
           &.max {
             background-color: #dedede;

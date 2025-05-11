@@ -12,6 +12,14 @@
     output: 'electron-release/${version}',
   },
   files: ['dist', 'electron-dist'],
+  // https://www.electron.build/app-builder-lib.interface.configuration#extraresources
+  // extraResources.from的build是项目目录，它最终会复制到安装目录的resources的build
+  extraResources: [
+    {
+      from: 'build',
+      to: 'build',
+    },
+  ],
   mac: {
     target: {
       target: 'dmg',
@@ -43,7 +51,8 @@
     artifactName: '${productName}-win-${platform}-${version}-${arch}-installer.${ext}',
     // highestAvailable，可用的最高权限
     // requireAdministrator，管理员权限
-    requestedExecutionLevel: 'requireAdministrator',
+    // WARN 设置管理员权限后，开启自启不生效
+    // requestedExecutionLevel: 'highestAvailable',
     target: [
       {
         // portable、nsis
@@ -67,7 +76,7 @@
     // deleteAppDataOnUninstall，仅限一键安装程序。卸载时是否删除应用程序数据。
     deleteAppDataOnUninstall: false,
     // for win - 将协议写入主机的脚本
-    include: 'script/urlProtoco.nsh',
+    // include: 'script/urlProtoco.nsh',
     // installerIcon: 'build/output/icons/icon.ico',
     // uninstallerIcon: 'build/output/icons/icon.ico',
   },

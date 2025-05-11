@@ -86,6 +86,7 @@ export const IPC_EVENT = {
   windowClose: 'windowClose',
   getSystemInfo: 'getSystemInfo',
   setMainWindowPosition: 'setMainWindowPosition',
+  debugInfo: 'debugInfo',
 
   response_powerSaveBlockerStart: 'response_powerSaveBlockerStart',
   response_closeAllWindow: 'response_closeAllWindow',
