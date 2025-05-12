@@ -192,7 +192,14 @@ billd-desk完全开源（可商用），欢迎部署！
 
 ## 官方交流群
 
-![img](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/readme_img/wechat_group.jpg?raw=true)
+- 1群（已满200人）
+  ![wechat_group1](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/readme_img/wechat_group1.jpg?raw=true)
+
+- 2群（已满200人）
+  ![wechat_group2](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/readme_img/wechat_group2.jpg?raw=true)
+
+- 3群（未满200人）
+  ![wechat_group3](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/readme_img/wechat_group3.jpg?raw=true)
 
 ## 多平台支持
 
