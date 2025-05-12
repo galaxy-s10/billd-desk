@@ -1,34 +1,40 @@
 <template>
   <div class="layout">
     <div
-      class="system-bar"
-      :class="{
-        // 一开始以为只是mac控制win时，拖动win窗口会卡主，所以只判断了win的时候，自定义drag
-        // 其实win控制mac时，拖动mac窗口也会卡主（我猜的），只是没有实际测试过win控制mac
-        'no-drag': 1,
-        // 'no-drag': platform !== ClientEnvEnum.macos,
-        // drag: platform === ClientEnvEnum.macos,
-      }"
+      v-if="0"
       @mousedown="startMove"
       @mouseup="endMove"
       @mousemove="moving"
       @mouseleave="handleMouseleave"
+    ></div>
+    <div
+      class="system-bar"
+      :class="{
+        // 一开始以为只是mac控制win时，拖动win窗口会卡主，所以只判断了win的时候，自定义drag
+        // 其实win控制mac时，拖动mac窗口也会卡主（我猜的），只是没有实际测试过win控制mac
+        // 'no-drag': 1,
+        drag: 1,
+        // 'no-drag': platform !== ClientEnvEnum.macos,
+        // drag: platform === ClientEnvEnum.macos,
+      }"
     >
       <div
         v-if="useCustomBar"
         class="top-left"
       >
-        <div class="left">
-          <div
-            class="ico close"
-            @click="handleClose"
-          ></div>
-          <div
-            class="ico min"
-            @click="handleMin"
-          ></div>
-          <div class="ico max"></div>
-        </div>
+        <template v-if="platform === ClientEnvEnum.macos">
+          <div class="left">
+            <div
+              class="ico close"
+              @click="handleClose"
+            ></div>
+            <div
+              class="ico min"
+              @click="handleMin"
+            ></div>
+            <div class="ico max"></div>
+          </div>
+        </template>
         <div class="right">v{{ appStore.version }}</div>
       </div>
       <div
@@ -62,6 +68,21 @@
           >
             <div class="connect-ico"></div>
           </div>
+          <template v-if="platform === ClientEnvEnum.windows">
+            <div class="fgx"></div>
+            <div
+              class="system-ico min"
+              @click="handleMin"
+            >
+              <div class="heng"></div>
+            </div>
+            <div
+              class="system-ico close"
+              @click="handleClose"
+            >
+              <div class="cross"></div>
+            </div>
+          </template>
         </div>
       </div>
     </div>
@@ -600,7 +621,7 @@ onMounted(async () => {
     useCustomBar.value = false;
   }
   if (ipcRenderer) {
-    // const res = await ipcRendererInvoke({
+    // await ipcRendererInvoke({
     //   windowId: WINDOW_ID_MAP.remote,
     //   channel: IPC_EVENT.debugInfo,
     //   requestId: getRandomString(8),
@@ -609,15 +630,15 @@ onMounted(async () => {
     // window.$notification.warning({
     //   content: JSON.stringify(res),
     // });
-    const res = await ipcRendererInvoke({
-      windowId: WINDOW_ID_MAP.remote,
-      channel: IPC_EVENT.windowManager,
-      requestId: getRandomString(8),
-      data: {},
-    });
-    window.$notification.warning({
-      content: JSON.stringify(res),
-    });
+    // const res = await ipcRendererInvoke({
+    //   windowId: WINDOW_ID_MAP.remote,
+    //   channel: IPC_EVENT.windowManager,
+    //   requestId: getRandomString(8),
+    //   data: {},
+    // });
+    // window.$notification.warning({
+    //   content: JSON.stringify(res),
+    // });
     handleInitStream();
     handleDeskVersionCheck();
     handleSetPowerBootStatus({
@@ -713,6 +734,7 @@ async function handleDesktopStreamByElectron(item) {
     });
     setInterval(() => {
       streamActive.value = stream.active;
+      console.log('视频流是否活跃', stream.active);
     }, 1000);
     screenInfo.value.push({
       streamid: stream.id,
@@ -1568,7 +1590,7 @@ $sidebar-width: 160px;
       align-items: baseline;
       justify-content: space-between;
       box-sizing: border-box;
-      padding: 10px 8px 0 12px;
+      padding: 15px 10px 0 15px;
       width: $sidebar-width;
       .left {
         display: flex;
@@ -1621,7 +1643,7 @@ $sidebar-width: 160px;
       .top-right-btn {
         position: absolute;
         top: 50%;
-        right: 20px;
+        right: 15px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -1671,6 +1693,52 @@ $sidebar-width: 160px;
             cursor: pointer;
 
             @include setBackground('@/assets/img/message.png');
+          }
+        }
+        .fgx {
+          margin: 0 10px;
+          height: 20px;
+          width: 2px;
+          background-color: #eee;
+        }
+        .system-ico {
+          width: 32px;
+          height: 26px;
+          border-radius: 4px;
+          cursor: pointer;
+          &:not(:last-child) {
+            margin-right: 4px;
+          }
+
+          &:hover {
+            background-color: #eee;
+            &.close {
+              background-color: #e66d65;
+              .cross {
+                @include cross(white, 1px);
+              }
+            }
+          }
+          &.min {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            .heng {
+              width: 50%;
+              height: 1px;
+              border-radius: 4px;
+              background-color: #181818;
+            }
+          }
+          &.close {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            .cross {
+              width: 14px;
+              height: 14px;
+              @include cross(#181818, 1px);
+            }
           }
         }
       }

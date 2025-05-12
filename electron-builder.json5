@@ -52,7 +52,7 @@
     // highestAvailable，可用的最高权限
     // requireAdministrator，管理员权限
     // WARN 设置管理员权限后，开启自启不生效
-    // requestedExecutionLevel: 'highestAvailable',
+    requestedExecutionLevel: 'requireAdministrator',
     target: [
       {
         // portable、nsis

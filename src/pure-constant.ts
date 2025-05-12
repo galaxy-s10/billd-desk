@@ -87,6 +87,7 @@ export const IPC_EVENT = {
   getSystemInfo: 'getSystemInfo',
   setMainWindowPosition: 'setMainWindowPosition',
   debugInfo: 'debugInfo',
+  sudoPrompt: 'sudoPrompt',
 
   response_powerSaveBlockerStart: 'response_powerSaveBlockerStart',
   response_closeAllWindow: 'response_closeAllWindow',
