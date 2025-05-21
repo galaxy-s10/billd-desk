@@ -192,20 +192,21 @@ billd-desk完全开源（可商用），欢迎部署！
 
 ## 官方交流群
 
-- 1群（已满200人）
-  ![wechat_group1](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/readme_img/wechat_group1.jpg?raw=true)
+- 3群（未满200人）
+  ![wechat_group3-1](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/readme_img/wechat_group3-1.jpg?raw=true)
 
 - 2群（已满200人）
   ![wechat_group2](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/readme_img/wechat_group2.jpg?raw=true)
 
-- 3群（未满200人）
-  ![wechat_group3](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/readme_img/wechat_group3.jpg?raw=true)
+- 1群（已满200人）
+  ![wechat_group1](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/readme_img/wechat_group1.jpg?raw=true)
 
 ## 多平台支持
 
 - [x] Web网页（建议使用：[Chrome浏览器](https://www.google.com/intl/zh-CN/chrome/) / [Via浏览器](https://viayoo.com) / `Safari浏览器`）
 - [ ] Windows 7（[再见，Windows 7/8/8.1](https://www.electronjs.org/zh/blog/windows-7-to-8-1-deprecation-notice)）
 - [x] Windows 10
+- [x] Windows 11
 - [x] macOS
 - [x] Linux
 - [x] Android 12+，低于该版本的未实际测试
