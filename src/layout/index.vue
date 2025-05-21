@@ -1,13 +1,6 @@
 <template>
   <div class="layout">
     <div
-      v-if="0"
-      @mousedown="startMove"
-      @mouseup="endMove"
-      @mousemove="moving"
-      @mouseleave="handleMouseleave"
-    ></div>
-    <div
       class="system-bar"
       :class="{
         // 一开始以为只是mac控制win时，拖动win窗口会卡主，所以只判断了win的时候，自定义drag
@@ -210,7 +203,7 @@
 
 <script lang="ts" setup>
 import { getRandomString, windowReload } from 'billd-utils';
-import { onMounted, reactive, ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { fetchDeskUserCreate, fetchDeskUserLogin } from '@/api/deskUser';
@@ -329,9 +322,6 @@ const screenInfo = ref<
 const electronStreamInfo = ref();
 const streamActive = ref(true);
 
-// 窗口当前的位置 + 鼠标当前的相对位置 - 鼠标以前的相对位置
-const isMoving = ref<boolean>(false);
-const lastPoint = reactive({ x: 0, y: 0 });
 const useCustomBar = ref(true);
 const clickNum = ref(1);
 const teststr = ref('');
@@ -621,18 +611,18 @@ onMounted(async () => {
     useCustomBar.value = false;
   }
   if (ipcRenderer) {
-    // await ipcRendererInvoke({
-    //   windowId: WINDOW_ID_MAP.remote,
-    //   channel: IPC_EVENT.debugInfo,
-    //   requestId: getRandomString(8),
-    //   data: {},
-    // });
     // window.$notification.warning({
     //   content: JSON.stringify(res),
     // });
     // const res = await ipcRendererInvoke({
     //   windowId: WINDOW_ID_MAP.remote,
     //   channel: IPC_EVENT.windowManager,
+    //   requestId: getRandomString(8),
+    //   data: {},
+    // });
+    // const res = await ipcRendererInvoke({
+    //   windowId: WINDOW_ID_MAP.remote,
+    //   channel: IPC_EVENT.debugInfo,
     //   requestId: getRandomString(8),
     //   data: {},
     // });
@@ -1145,6 +1135,7 @@ watch(
                 query: {},
                 useWorkAreaSize: false,
                 frame: false,
+                resizable: false,
               },
             });
           }
@@ -1515,51 +1506,6 @@ function handleMin() {
     data: { windowId: WINDOW_ID_MAP.remote },
   });
 }
-
-const startMove = (e: MouseEvent) => {
-  if (!useCustomBar.value) return;
-  // if (platform.value === ClientEnvEnum.macos) {
-  //   return;
-  // }
-  isMoving.value = true;
-  lastPoint.x = e.clientX;
-  lastPoint.y = e.clientY;
-};
-
-const endMove = () => {
-  if (!useCustomBar.value) return;
-  // if (platform.value === ClientEnvEnum.macos) {
-  //   return;
-  // }
-  isMoving.value = false;
-};
-
-const handleMouseleave = () => {
-  if (!useCustomBar.value) return;
-  // if (platform.value === ClientEnvEnum.macos) {
-  //   return;
-  // }
-  isMoving.value = false;
-};
-
-const moving = (e: MouseEvent) => {
-  if (!useCustomBar.value) return;
-  // if (platform.value === ClientEnvEnum.macos) {
-  //   return;
-  // }
-  if (isMoving.value) {
-    ipcRendererInvoke({
-      windowId: WINDOW_ID_MAP.remote,
-      channel: IPC_EVENT.setMainWindowPosition,
-      requestId: getRandomString(8),
-      data: {
-        windowId: WINDOW_ID_MAP.remote,
-        x: e.screenX - lastPoint.x,
-        y: e.screenY - lastPoint.y,
-      },
-    });
-  }
-};
 </script>
 
 <style lang="scss" scoped>

@@ -19,6 +19,10 @@
       from: 'build',
       to: 'build',
     },
+    {
+      from: 'script',
+      to: 'script',
+    },
   ],
   mac: {
     target: {
@@ -52,13 +56,13 @@
     // highestAvailable，可用的最高权限
     // requireAdministrator，管理员权限
     // WARN 设置管理员权限后，开启自启不生效
-    requestedExecutionLevel: 'requireAdministrator',
+    // requestedExecutionLevel: 'requireAdministrator',
     target: [
       {
         // portable、nsis
         target: 'nsis',
-        // arch: ['x64', 'arm64'],
-        arch: ['x64'],
+        arch: ['x64', 'arm64'],
+        // arch: ['x64'],
       },
     ],
     icon: 'build/output/icons/icon.ico',

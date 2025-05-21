@@ -173,3 +173,912 @@ export const LS_KEY = {
   preview: 'preview',
   todaylock: 'todaylock',
 };
+
+export const pricePageData = {
+  currentTab: 'priceTwo',
+  tab: [
+    {
+      id: 'priceOne',
+      txt: '个人订阅',
+    },
+    {
+      id: 'priceTwo',
+      txt: '个人套餐',
+    },
+    {
+      id: 'priceThree',
+      txt: '企业订阅',
+    },
+    {
+      id: 'priceFour',
+      txt: '企业套餐',
+    },
+  ],
+  detail: {
+    priceOne: {
+      slogan: ['一次性源码，适合个人用户', '欢迎订阅🚀'],
+      list: [
+        {
+          color: '#38c0ff',
+          name: '远程控制桌面端',
+          desc: '基于Vue3 + WebRTC + Electron',
+          price: {
+            left: '￥',
+            center: '599',
+            right: '元',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-pro',
+            },
+          ],
+          btn: {
+            type: 'showContact',
+            link: '',
+            txt: '立即咨询',
+          },
+        },
+        {
+          color: '#597ef7',
+          name: '远程控制后台',
+          desc: '基于Vue3 + NaiveUI + Vite6',
+          price: {
+            left: '￥',
+            center: '599',
+            right: '元',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'todo',
+              txt: 'billd-desk-admin-pro',
+            },
+          ],
+          btn: {
+            type: 'todo',
+            link: '',
+            txt: '敬请期待',
+          },
+        },
+        {
+          color: '#30d1aa',
+          name: '远程控制后端',
+          desc: '基于Nodejs + Koa2 + TypeScript',
+          price: {
+            left: '￥',
+            center: '599',
+            right: '元',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-server-pro',
+            },
+          ],
+          btn: {
+            type: 'showContact',
+            link: '',
+            txt: '立即咨询',
+          },
+        },
+        {
+          color: '#ffa940',
+          name: '远程控制App端',
+          desc: '基于Flutter3 + WebRTC',
+          price: {
+            left: '￥',
+            center: '599',
+            right: '元',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-flutter-pro',
+            },
+          ],
+          btn: {
+            type: 'showContact',
+            link: '',
+            txt: '立即咨询',
+          },
+        },
+      ],
+    },
+    priceTwo: {
+      slogan: ['一次性源码，适合个人用户', '套餐订阅更优惠！🚀'],
+      list: [
+        {
+          color: '#1677ff',
+          name: '远程控制',
+          desc: '网页/客户端远程控制',
+          price: {
+            left: '￥',
+            center: '899',
+            right: '元',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-pro',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server-pro',
+            },
+          ],
+          btn: {
+            type: 'showContact',
+            link: '',
+            txt: '立即咨询',
+          },
+        },
+        {
+          color: '#EE826C',
+          name: 'App远程控制',
+          desc: '手机App远程控制',
+          price: {
+            left: '￥',
+            center: '899',
+            right: '元',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-flutter-pro',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server-pro',
+            },
+          ],
+          btn: {
+            type: 'showContact',
+            link: '',
+            txt: '立即咨询',
+          },
+        },
+        {
+          color: '#bae637',
+          name: '远程控制+后台',
+          desc: '网页/客户端远程控制；<br />远程控制后台',
+          price: {
+            left: '￥',
+            center: '1099',
+            right: '元',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-pro',
+            },
+            {
+              status: 'todo',
+              txt: 'billd-desk-admin-pro',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server-pro',
+            },
+          ],
+          btn: {
+            type: 'todo',
+            link: '',
+            txt: '敬请期待',
+          },
+        },
+        {
+          color: '#eb2f96',
+          name: 'App远程控制+后台',
+          desc: '手机App远程控制；<br />远程控制后台',
+          price: {
+            left: '￥',
+            center: '1099',
+            right: '元',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-flutter-pro',
+            },
+            {
+              status: 'todo',
+              txt: 'billd-desk-admin-pro',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server-pro',
+            },
+          ],
+          btn: {
+            type: 'todo',
+            link: '',
+            txt: '敬请期待',
+          },
+        },
+        {
+          color: '#13c2c2',
+          name: '全平台远程控制',
+          desc: '网页/客户端远程控制；<br />手机App远程控制；<br />远程控制后台',
+          price: {
+            left: '￥',
+            center: '1299',
+            right: '元',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-pro',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-flutter-pro',
+            },
+            {
+              status: 'todo',
+              txt: 'billd-desk-admin-pro',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server-pro',
+            },
+          ],
+          btn: {
+            type: 'todo',
+            link: '',
+            txt: '敬请期待',
+          },
+        },
+      ],
+    },
+    priceThree: {
+      slogan: ['源码永久更新，适合企业用户', '欢迎订阅🚀'],
+      list: [
+        {
+          color: '#38c0ff',
+          name: '远程控制桌面端',
+          desc: '基于Vue3 + WebRTC + Electron',
+          price: {
+            left: '￥',
+            center: '999',
+            right: '元/永久',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-pro',
+            },
+          ],
+          btn: {
+            type: 'showContact',
+            link: '',
+            txt: '立即咨询',
+          },
+        },
+        {
+          color: '#597ef7',
+          name: '远程控制后台',
+          desc: '基于Vue3 + NaiveUI + Vite6',
+          price: {
+            left: '￥',
+            center: '999',
+            right: '元/永久',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'todo',
+              txt: 'billd-desk-admin-pro',
+            },
+          ],
+          btn: {
+            type: 'todo',
+            link: '',
+            txt: '敬请期待',
+          },
+        },
+        {
+          color: '#30d1aa',
+          name: '远程控制后端',
+          desc: '基于Nodejs + Koa2 + TypeScript',
+          price: {
+            left: '￥',
+            center: '999',
+            right: '元/永久',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-server-pro',
+            },
+          ],
+          btn: {
+            type: 'showContact',
+            link: '',
+            txt: '立即咨询',
+          },
+        },
+        {
+          color: '#ffa940',
+          name: '远程控制App端',
+          desc: '基于Flutter3 + WebRTC',
+          price: {
+            left: '￥',
+            center: '999',
+            right: '元/永久',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-flutter-pro',
+            },
+          ],
+          btn: {
+            type: 'showContact',
+            link: '',
+            txt: '立即咨询',
+          },
+        },
+      ],
+    },
+    priceFour: {
+      slogan: ['源码永久更新，适合企业用户', '套餐订阅更优惠！🚀'],
+      list: [
+        {
+          color: '#1677ff',
+          name: '远程控制',
+          desc: '网页/客户端远程控制',
+          price: {
+            left: '￥',
+            center: '1399',
+            right: '元/永久',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-pro',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server-pro',
+            },
+          ],
+          btn: {
+            type: 'showContact',
+            link: '',
+            txt: '立即咨询',
+          },
+        },
+        {
+          color: '#EE826C',
+          name: 'App远程控制',
+          desc: '手机App远程控制',
+          price: {
+            left: '￥',
+            center: '1399',
+            right: '元/永久',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-flutter-pro',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server-pro',
+            },
+          ],
+          btn: {
+            type: 'showContact',
+            link: '',
+            txt: '立即咨询',
+          },
+        },
+        {
+          color: '#bae637',
+          name: '远程控制+后台',
+          desc: '网页/客户端远程控制；<br />远程控制后台',
+          price: {
+            left: '￥',
+            center: '1599',
+            right: '元/永久',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-pro',
+            },
+            {
+              status: 'todo',
+              txt: 'billd-desk-admin-pro',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server-pro',
+            },
+          ],
+          btn: {
+            type: 'todo',
+            link: '',
+            txt: '敬请期待',
+          },
+        },
+        {
+          color: '#eb2f96',
+          name: 'App远程控制+后台',
+          desc: '手机App远程控制；<br />远程控制后台',
+          price: {
+            left: '￥',
+            center: '1599',
+            right: '元/永久',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-flutter-pro',
+            },
+            {
+              status: 'todo',
+              txt: 'billd-desk-admin-pro',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server-pro',
+            },
+          ],
+          btn: {
+            type: 'todo',
+            link: '',
+            txt: '敬请期待',
+          },
+        },
+        {
+          color: '#13c2c2',
+          name: '全平台远程控制',
+          desc: '网页/客户端远程控制；<br />手机App远程控制；<br />远程控制后台',
+          price: {
+            left: '￥',
+            center: '1799',
+            right: '元/永久',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-pro',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-flutter-pro',
+            },
+            {
+              status: 'todo',
+              txt: 'billd-desk-admin-pro',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server-pro',
+            },
+          ],
+          btn: {
+            type: 'todo',
+            link: '',
+            txt: '敬请期待',
+          },
+        },
+      ],
+    },
+  },
+};
+
+export const privatizationDeploymentData = {
+  currentTab: 'single',
+  tab: [
+    {
+      id: 'single',
+      txt: '开源版',
+    },
+    {
+      id: 'multi',
+      txt: '高级版',
+    },
+    {
+      id: 'forever',
+      txt: '定制版',
+    },
+  ],
+  detail: {
+    single: {
+      slogan: ['BilldDesk开源版允许商用！', '欢迎部署🚀'],
+      list: [
+        {
+          color: '#1677ff',
+          name: '远程控制',
+          desc: '网页/客户端远程控制',
+          price: {
+            left: '￥',
+            center: '0',
+            right: '元',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server',
+            },
+          ],
+          btn: {
+            type: 'link',
+            link: 'https://github.com/galaxy-s10/billd-desk',
+            txt: '立即部署',
+          },
+        },
+        {
+          color: '#EE826C',
+          name: 'App远程控制',
+          desc: '手机App远程控制',
+          price: {
+            left: '￥',
+            center: '0',
+            right: '元',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-flutter',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server',
+            },
+          ],
+          btn: {
+            type: 'link',
+            link: 'https://github.com/galaxy-s10/billd-desk',
+            txt: '立即部署',
+          },
+        },
+        {
+          color: '#bae637',
+          name: '远程控制+后台',
+          desc: '网页/客户端远程控制；<br />远程控制后台',
+          price: {
+            left: '￥',
+            center: '0',
+            right: '元',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk',
+            },
+            {
+              status: 'todo',
+              txt: 'billd-desk-admin',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server',
+            },
+          ],
+          btn: {
+            type: 'link',
+            link: 'https://github.com/galaxy-s10/billd-desk',
+            txt: '立即部署',
+          },
+        },
+        {
+          color: '#eb2f96',
+          name: 'App远程控制+后台',
+          desc: '手机App远程控制；<br />远程控制后台',
+          price: {
+            left: '￥',
+            center: '0',
+            right: '元',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-flutter',
+            },
+            {
+              status: 'todo',
+              txt: 'billd-desk-admin',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server',
+            },
+          ],
+          btn: {
+            type: 'link',
+            link: 'https://github.com/galaxy-s10/billd-desk',
+            txt: '立即部署',
+          },
+        },
+        {
+          color: '#13c2c2',
+          name: '全平台远程控制',
+          desc: '网页/客户端远程控制；<br />手机App远程控制；<br />远程控制后台',
+          price: {
+            left: '￥',
+            center: '0',
+            right: '元',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-flutter',
+            },
+            {
+              status: 'todo',
+              txt: 'billd-desk-admin',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server',
+            },
+          ],
+          btn: {
+            type: 'link',
+            link: 'https://github.com/galaxy-s10/billd-desk',
+            txt: '立即部署',
+          },
+        },
+      ],
+    },
+    multi: {
+      slogan: ['一次部署，永久使用！', '无需懂技术，全程专人部署🚀'],
+      list: [
+        {
+          color: '#1677ff',
+          name: '远程控制',
+          desc: '网页/客户端远程控制',
+          price: {
+            left: '￥',
+            center: '4999',
+            right: '元',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-pro',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server-pro',
+            },
+          ],
+          btn: {
+            type: 'showContact',
+            link: '',
+            txt: '立即咨询',
+          },
+        },
+        {
+          color: '#EE826C',
+          name: 'App远程控制',
+          desc: '手机App远程控制',
+          price: {
+            left: '￥',
+            center: '4999',
+            right: '元',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-flutter-pro',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server-pro',
+            },
+          ],
+          btn: {
+            type: 'showContact',
+            link: '',
+            txt: '立即咨询',
+          },
+        },
+        {
+          color: '#bae637',
+          name: '远程控制+后台',
+          desc: '网页/客户端远程控制；<br />远程控制后台',
+          price: {
+            left: '￥',
+            center: '5999',
+            right: '元',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-pro',
+            },
+            {
+              status: 'todo',
+              txt: 'billd-desk-admin-pro',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server-pro',
+            },
+          ],
+          btn: {
+            type: 'todo',
+            link: '',
+            txt: '敬请期待',
+          },
+        },
+        {
+          color: '#eb2f96',
+          name: 'App远程控制+后台',
+          desc: '手机App远程控制；<br />远程控制后台',
+          price: {
+            left: '￥',
+            center: '5999',
+            right: '元',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-flutter-pro',
+            },
+            {
+              status: 'todo',
+              txt: 'billd-desk-admin-pro',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server-pro',
+            },
+          ],
+          btn: {
+            type: 'todo',
+            link: '',
+            txt: '敬请期待',
+          },
+        },
+        {
+          color: '#13c2c2',
+          name: '全平台远程控制',
+          desc: '网页/客户端远程控制；<br />手机App远程控制；<br />远程控制后台',
+          price: {
+            left: '￥',
+            center: '6999',
+            right: '元',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-pro',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-flutter-pro',
+            },
+            {
+              status: 'todo',
+              txt: 'billd-desk-admin-pro',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server-pro',
+            },
+          ],
+          btn: {
+            type: 'todo',
+            link: '',
+            txt: '敬请期待',
+          },
+        },
+      ],
+    },
+    forever: {
+      slogan: ['BilldDesk支持定制化！', '适合二开，定制个性化功能~'],
+      list: [
+        {
+          color: '#38c0ff',
+          name: '在线咨询',
+          desc: '咨询任何问题服务',
+          price: {
+            left: '￥',
+            center: '100',
+            right: '元/小时',
+          },
+          tip: '',
+          feat: [
+            {
+              status: 'done',
+              txt: '一对一解答',
+            },
+          ],
+          btn: {
+            type: 'showContact',
+            link: '',
+            txt: '立即咨询',
+          },
+        },
+        {
+          color: '#eb2f96',
+          name: '技术支持',
+          desc: '处理技术相关问题服务',
+          price: {
+            left: '￥',
+            center: '200',
+            right: '元/小时',
+          },
+          tip: '',
+          feat: [
+            {
+              status: 'done',
+              txt: '远程协助处理问题',
+            },
+          ],
+          btn: {
+            type: 'showContact',
+            link: '',
+            txt: '立即咨询',
+          },
+        },
+        {
+          color: '#30d1aa',
+          name: '定制私有化部署',
+          desc: '适用于个人/企业自建远程桌面',
+          price: {
+            left: '￥',
+            center: '6999',
+            right: '元/起',
+          },
+          tip: '包含以下代码仓库：',
+          feat: [
+            {
+              status: 'done',
+              txt: 'billd-desk-pro',
+            },
+            {
+              status: 'done',
+              txt: 'billd-desk-server-pro',
+            },
+          ],
+          btn: {
+            type: 'showContact',
+            link: '',
+            txt: '立即咨询',
+          },
+        },
+      ],
+    },
+  },
+};
