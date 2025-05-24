@@ -67,7 +67,13 @@ body:
   - type: textarea
     id: problem1
     attributes:
-      label: 问题是什么？
+      label: 你遇到的问题是什么？
       placeholder: 详细描述你的问题
+    validations:
+      required: true
+  - type: textarea
+    id: problem2
+    attributes:
+      label: 你期望的结果是什么？
     validations:
       required: true
