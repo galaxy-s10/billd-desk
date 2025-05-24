@@ -2,6 +2,18 @@
 
 如果应用图标不更新，可以尝试替换一个图标图片再打包，或者你不希望换图标图片的话，可以将现在的图标图片拿去压缩一下，亲测也能解决问题。
 
+## windows 任务管理器显示的进程图标问题
+
+如果windows 任务管理器显示的进程图标问题不更新，请尝试以下步骤：
+
+1，重启 ​​Windows 资源管理器​​：
+
+```bash
+taskkill /f /im explorer.exe && start explorer.exe
+```
+
+2，重启任务管理器。
+
 ## pnpm 安装 electron 时卡在 postinstall
 
 1. 直接 ctrl+c 退出 npm 安装

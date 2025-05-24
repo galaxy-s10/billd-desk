@@ -10,7 +10,7 @@ export function fetchScreenWallGetImg(params) {
 }
 
 export function fetchScreenWallGetAllImg(params) {
-  return request.get('/screen_wall/get_all_img', { params });
+  return request.get<string[]>('/screen_wall/get_all_img', { params });
 }
 
 export function fetchScreenWallGetImgBySuperAdmin(params) {

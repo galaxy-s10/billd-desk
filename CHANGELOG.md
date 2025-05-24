@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.25.0](https://github.com/billd-project/billd-desk-pro/compare/v0.24.0...v0.25.0) (2025-05-24)
+
+
+### Bug Fixes
+
+* 保存 ([dbf40be](https://github.com/billd-project/billd-desk-pro/commit/dbf40be1b117327a59f560c91aeb64266d0b57ec))
+* 修复窗口卡主问题 ([894f0af](https://github.com/billd-project/billd-desk-pro/commit/894f0af10dfd3b67740fc7526190bc751bce8f2e))
+
 ## [0.24.0](https://github.com/billd-project/billd-desk-pro/compare/v0.23.0...v0.24.0) (2025-05-14)
 
 ## [0.23.0](https://github.com/billd-project/billd-desk-pro/compare/v0.22.0...v0.23.0) (2025-05-14)

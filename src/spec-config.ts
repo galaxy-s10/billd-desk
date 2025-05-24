@@ -22,12 +22,12 @@ const BACKEND_SERVER_PORT = 5300; // 后端服务的端口号
 // ======线上正式=====
 
 export const WEBSOCKET_URL =
-  process.env.NODE_ENV !== 'development'
+  process.env.NODE_ENV === 'development'
     ? `ws://localhost:${BACKEND_SERVER_PORT}`
     : `wss://desk-api.${PROD_DOMAIN}`;
 
 export const AXIOS_BASEURL =
-  process.env.NODE_ENV !== 'development'
+  process.env.NODE_ENV === 'development'
     ? `/api`
     : `https://desk-api.${PROD_DOMAIN}`;
 

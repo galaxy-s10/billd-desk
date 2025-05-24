@@ -7861,7 +7861,7 @@ snapshots:
       '@babel/traverse': 7.24.0
       '@babel/types': 7.24.0
       convert-source-map: 2.0.0
-      debug: 4.3.4
+      debug: 4.4.0
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -12336,7 +12336,7 @@ snapshots:
   esbuild-plugin-browserslist@0.11.1(browserslist@4.23.0)(esbuild@0.15.18):
     dependencies:
       browserslist: 4.23.0
-      debug: 4.3.4
+      debug: 4.4.0
       esbuild: 0.15.18
       zod: 3.22.4
     transitivePeerDependencies:

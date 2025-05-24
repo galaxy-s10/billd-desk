@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: BilldDesk在线远程
+    url: https://desk.hsslive.cn
+    about: 网页远程控制客户端/手机端！
+  - name: BilldDesk最新版下载
+    url: https://desk.hsslive.cn/#/download
+    about: 遇到问题，先看看版本是不是最新的，优先使用最新版！
