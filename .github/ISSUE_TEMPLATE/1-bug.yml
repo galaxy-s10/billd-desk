@@ -1,6 +1,10 @@
 name: "\U0001F41E BilldDesk问题反馈"
 description: 欢迎提出你遇到的问题！
 body:
+  - type: markdown
+    attributes:
+      value: |
+        ** 强烈建议主控和被控使用同一个版本！ **
   - type: input
     id: app1
     attributes:
@@ -14,6 +18,7 @@ body:
     id: version1
     attributes:
       label: BilldDesk主控端版本
+      placeholder: 0.24.0
     validations:
       required: true
   - type: input
@@ -38,6 +43,7 @@ body:
     id: version2
     attributes:
       label: BilldDesk被控端版本
+      placeholder: 0.25.0
     validations:
       required: true
   - type: input
