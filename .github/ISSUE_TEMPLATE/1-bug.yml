@@ -1,4 +1,4 @@
-name: "\U0001F41E Bug report"
+name: "\U0001F41E BilldDesk问题反馈"
 description: Create a report to help us improve
 body:
   - type: markdown
