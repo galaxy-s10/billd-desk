@@ -4,8 +4,8 @@ body:
   - type: markdown
     attributes:
       value: |
-        ** 强烈建议主控和被控使用同一个版本！ **
-        ** 如果你用的浏览器作为主控/被控，强烈建议使用：[Chrome浏览器](https://www.google.com/intl/zh-CN/chrome/) / [Via浏览器](https://viayoo.com) / `Safari浏览器` **
+        *** 强烈建议主控和被控使用同一个版本！ ***
+        *** 如果你用的浏览器作为主控/被控，强烈建议使用：[Chrome浏览器](https://www.google.com/intl/zh-CN/chrome/) / [Via浏览器](https://viayoo.com) / `Safari浏览器` ***
   - type: input
     id: app1
     attributes:
@@ -28,7 +28,9 @@ body:
       label: 主控端环境
       description: |
         如果你用的浏览器：电脑火狐浏览器、电脑edge浏览器、手机via浏览器、手机Safari浏览器...
+
         如果你用的pc客户端：win7、win10、win11、macos...
+
         如果你用的安卓端：安卓12、安卓13...
       placeholder: 手机via浏览器
     validations:
@@ -55,7 +57,9 @@ body:
       label: 被控端环境
       description: |
         如果你用的浏览器：电脑火狐浏览器、电脑edge浏览器、手机via浏览器、手机Safari浏览器...
+
         如果你用的pc客户端：win7、win10、win11、macos...
+
         如果你用的安卓端：安卓12、安卓13...
       placeholder: 安卓12
     validations:
