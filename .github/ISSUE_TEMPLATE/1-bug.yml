@@ -5,13 +5,13 @@ body:
     attributes:
       value: |
         **强烈建议主控和被控使用同一个版本！**
-        **如果你用的浏览器作为主控/被控，强烈建议使用：[Chrome浏览器](https://www.google.com/intl/zh-CN/chrome/) / [Via浏览器](https://viayoo.com) / `Safari浏览器`**
+        **如果你使用浏览器作为主控/被控，强烈建议使用：[Chrome浏览器](https://www.google.com/intl/zh-CN/chrome/) / [Via浏览器](https://viayoo.com) / `Safari浏览器`**
   - type: input
     id: app1
     attributes:
       label: BilldDesk主控端
       description: |
-        web电脑网页端、web手机网页端、安卓端、win客户端、mac客户端等等
+        web电脑网页端、web手机网页端、安卓端、win客户端、mac客户端...
       placeholder: web电脑网页端
     validations:
       required: true
@@ -27,11 +27,11 @@ body:
     attributes:
       label: 主控端环境
       description: |
-        如果你用的浏览器：电脑火狐浏览器、电脑edge浏览器、手机via浏览器、手机Safari浏览器...
+        如果你使用浏览器：电脑火狐浏览器、电脑edge浏览器、手机via浏览器、手机Safari浏览器...
 
-        如果你用的pc客户端：win7、win10、win11、macos...
+        如果你使用pc客户端：win7、win10、win11、macos...
 
-        如果你用的安卓端：安卓12、安卓13...
+        如果你使用安卓端：安卓12、安卓13...
       placeholder: 手机via浏览器
     validations:
       required: true
@@ -40,7 +40,7 @@ body:
     attributes:
       label: BilldDesk被控端
       description: |
-        web电脑网页端、web手机网页端、安卓端、win客户端、mac客户端等等
+        web电脑网页端、web手机网页端、安卓端、win客户端、mac客户端...
       placeholder: win客户端
     validations:
       required: true
@@ -56,11 +56,11 @@ body:
     attributes:
       label: 被控端环境
       description: |
-        如果你用的浏览器：电脑火狐浏览器、电脑edge浏览器、手机via浏览器、手机Safari浏览器...
+        如果你使用浏览器：电脑火狐浏览器、电脑edge浏览器、手机via浏览器、手机Safari浏览器...
 
-        如果你用的pc客户端：win7、win10、win11、macos...
+        如果你使用pc客户端：win7、win10、win11、macos...
 
-        如果你用的安卓端：安卓12、安卓13...
+        如果你使用安卓端：安卓12、安卓13...
       placeholder: 安卓12
     validations:
       required: true
