@@ -16,8 +16,9 @@ export const COMMON_URL = {
   price: 'https://desk.hsslive.cn/#/price',
   hi: 'https://desk.hsslive.cn/#/hi',
   download: 'https://desk.hsslive.cn/#/download',
-  wechatGroup: 'https://desk.hsslive.cn/#/wechatGroup',
+  officialGroup: 'https://desk.hsslive.cn/#/officialGroup',
   payCoursesArticle: `https://www.hsslive.cn/article/151`,
+  qqGroup: 957845615,
 };
 
 // @ts-ignore

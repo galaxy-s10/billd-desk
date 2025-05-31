@@ -12,7 +12,7 @@
         ipad: appStore.isIPad,
       }"
     >
-      <div class="top">
+      <div class="top drag">
         <div class="title">消息中心</div>
         <div
           class="close"
@@ -78,7 +78,7 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 .mask {
-  z-index: 90;
+  z-index: 900;
 
   @extend %maskBg;
 }
@@ -86,7 +86,7 @@ onUnmounted(() => {
   position: fixed;
   top: 50%;
   left: 50%;
-  z-index: 90;
+  z-index: 901;
   display: flex;
   overflow: hidden;
   flex-direction: column;
@@ -108,6 +108,9 @@ onUnmounted(() => {
     justify-content: space-between;
     box-sizing: border-box;
     padding: 8px 20px;
+    &.drag {
+      -webkit-app-region: drag;
+    }
     .title {
       font-weight: 500;
       font-size: 16px;
@@ -117,6 +120,7 @@ onUnmounted(() => {
       height: 14px;
       cursor: pointer;
 
+      -webkit-app-region: no-drag;
       @include cross(#666, 2px);
     }
   }

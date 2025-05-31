@@ -16,15 +16,16 @@
 </template>
 
 <script lang="ts" setup>
-import { isIPad, isMobile } from 'billd-utils';
+import { getRandomString, isIPad, isMobile } from 'billd-utils';
 import { GlobalThemeOverrides, NConfigProvider } from 'naive-ui';
 import { onMounted, onUnmounted } from 'vue';
 
+import { useAppStore } from '@/store/app';
+import { handleAtob, ipcRendererInvoke } from '@/utils';
 import { getApi, getTurn, getWss } from '@/utils/localStorage/app';
+import { memory } from '@/utils/memory';
 
-import { useAppStore } from './store/app';
-import { handleAtob } from './utils';
-import { memory } from './utils/memory';
+import { IPC_EVENT, WINDOW_ID_MAP } from './pure-constant';
 
 const appStore = useAppStore();
 
@@ -84,8 +85,19 @@ function handleResize() {
   appStore.isIPad = isIPad();
 }
 
-onMounted(() => {
+onMounted(async () => {
   console.log('当前地址栏', location.href);
+  try {
+    await ipcRendererInvoke({
+      windowId: WINDOW_ID_MAP.remote,
+      channel: IPC_EVENT.eLog,
+      requestId: getRandomString(8),
+      data: { windowId: WINDOW_ID_MAP.remote, msg: 'app.vue' },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
   handleRemoveGlobalLoading();
   handleResize();
   handleCustomWss();

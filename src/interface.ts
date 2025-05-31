@@ -185,6 +185,9 @@ export interface ILoginRecord {
   id?: number;
   uuid?: string;
   user_agent?: string;
+  system?: string;
+  brand?: string;
+  model?: string;
   client_ip?: string;
   client_env?: ClientEnvEnum;
   client_app?: ClientAppEnum;

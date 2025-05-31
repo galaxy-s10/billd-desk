@@ -90,6 +90,9 @@ export const IPC_EVENT = {
   sudoPrompt: 'sudoPrompt',
   runService: 'runService',
   unInstallService: 'unInstallService',
+  eLog: 'eLog',
+  psExecStartup: 'psExecStartup',
+  quit: 'quit',
 
   response_powerSaveBlockerStart: 'response_powerSaveBlockerStart',
   response_closeAllWindow: 'response_closeAllWindow',

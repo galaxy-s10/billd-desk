@@ -33,7 +33,9 @@
       <div
         v-else
         class="top-left"
-      ></div>
+      >
+        <div class="right">v{{ appStore.version }}</div>
+      </div>
       <div class="top-right">
         <div class="top-right-btn">
           <div
@@ -65,13 +67,23 @@
             <div class="fgx"></div>
             <div
               class="system-ico min"
+              :class="{
+                hover: minHover,
+              }"
               @click="handleMin"
+              @mousemove="minHover = true"
+              @mouseleave="minHover = false"
             >
               <div class="heng"></div>
             </div>
             <div
               class="system-ico close"
+              :class="{
+                hover: closeHover,
+              }"
               @click="handleClose"
+              @mousemove="closeHover = true"
+              @mouseleave="closeHover = false"
             >
               <div class="cross"></div>
             </div>
@@ -251,6 +263,7 @@ import {
   decodeArrayBuffer,
   getClientEnv,
   handleConstraints,
+  handleSystem,
   ipcRenderer,
   ipcRendererInvoke,
   ipcRendererOn,
@@ -320,7 +333,6 @@ const screenInfo = ref<
 >([]);
 
 const electronStreamInfo = ref();
-const streamActive = ref(true);
 
 const useCustomBar = ref(true);
 const clickNum = ref(1);
@@ -337,6 +349,9 @@ const showSelectWebStream = ref<{
   remoteDeskUserUuid: string;
   deskUserUuid: string;
 }>();
+
+const minHover = ref(false);
+const closeHover = ref(false);
 
 const fixedPopupWindowWidth = 420;
 const fixedPopupWindowHeight = 200;
@@ -523,29 +538,7 @@ function responsePowerMonitorResume(_event, data: IIpcRendererData) {
 function responsePowerMonitorLockScreen(_event, data: IIpcRendererData) {
   console.log('responsePowerMonitorLockScreen', data);
   console.log('当系统即将锁定屏幕时触发。', new Date().toLocaleString('zh-CN'));
-  const receiverArr: any[] = [];
-  rtcMap.value.forEach((item) => {
-    receiverArr.push(item.receiver);
-    handleDel({
-      receiver: item.receiver,
-      deskUserUuid: item.deskUserUuid,
-      remoteDeskUserUuid: item.remoteDeskUserUuid,
-    });
-  });
-  rtcMap.value.clear();
-  remoteStream.value = [];
-  receiverArr.forEach((v) => {
-    fetchWsSendMsg({
-      msgType: WsMsgTypeEnum.message,
-      sender: socketId.value,
-      receiver: v,
-      data: {
-        type: 'reconnect',
-        code: 0,
-        msg: '',
-      },
-    });
-  });
+  appStore.refreshStream = +new Date();
 }
 
 function responsePowerMonitorUnLockScreen(_event, data: IIpcRendererData) {
@@ -611,6 +604,22 @@ onMounted(async () => {
     useCustomBar.value = false;
   }
   if (ipcRenderer) {
+    // handleOpenDevTools({ windowId: WINDOW_ID_MAP.remote });
+    // setInterval(async () => {
+    //   const res = await handleGetScreenStream({
+    //     windowId: WINDOW_ID_MAP.remote,
+    //   });
+    //   console.log('reshandleGetScreenStream', JSON.stringify(res.data.info));
+    //   setTimeout(() => {
+    //     remoteStream.value.forEach((stream) => {
+    //       console.log('视频流是否活跃', stream.active);
+    //       if (stream.active === false) {
+    //         appStore.refreshStream = +new Date();
+    //         // windowReload();
+    //       }
+    //     });
+    //   }, 1000);
+    // }, 2000);
     // window.$notification.warning({
     //   content: JSON.stringify(res),
     // });
@@ -655,6 +664,7 @@ onMounted(async () => {
     });
     if (res2?.code === 0) {
       appStore.systemInfo = res2.data;
+      console.log(handleSystem(appStore.systemInfo), 'dddd');
     }
   }
   initCache();
@@ -694,9 +704,23 @@ function handleLoginRecord() {
     if (ua) {
       ua.cpus = ua.cpus?.[0]?.['model'];
     }
+    const system = handleSystem(appStore.systemInfo);
+    let model = '';
+    if (system.indexOf('windows')) {
+      model = 'windows-pc';
+    } else if (system.indexOf('macos')) {
+      model = 'macos-pc';
+    } else if (system.indexOf('linux')) {
+      model = 'linux-pc';
+    } else {
+      model = `${system[0]}-pc`;
+    }
     fetchLoginRecordCreate({
       uuid: cacheStore.deskUserUuid,
       user_agent: JSON.stringify(ua),
+      system,
+      brand: ipcRenderer ? model : 'web',
+      model: ipcRenderer ? model : 'web',
     });
   } catch (error) {
     console.error('handleLoginRecord失败');
@@ -722,10 +746,7 @@ async function handleDesktopStreamByElectron(item) {
         },
       },
     });
-    setInterval(() => {
-      streamActive.value = stream.active;
-      console.log('视频流是否活跃', stream.active);
-    }, 1000);
+
     screenInfo.value.push({
       streamid: stream.id,
       id: chromeMediaSourceId,
@@ -826,6 +847,37 @@ watch(
     }
   },
   { immediate: true }
+);
+
+watch(
+  () => appStore.refreshStream,
+  () => {
+    // remoteStream.value = [];
+    // handleInitStream();
+    // const receiverArr: any[] = [];
+    // rtcMap.value.forEach((item) => {
+    //   receiverArr.push(item.receiver);
+    //   handleDel({
+    //     receiver: item.receiver,
+    //     deskUserUuid: item.deskUserUuid,
+    //     remoteDeskUserUuid: item.remoteDeskUserUuid,
+    //   });
+    // });
+    // rtcMap.value.clear();
+    // remoteStream.value = [];
+    // receiverArr.forEach((v) => {
+    //   fetchWsSendMsg({
+    //     msgType: WsMsgTypeEnum.message,
+    //     sender: socketId.value,
+    //     receiver: v,
+    //     data: {
+    //       type: 'reconnect',
+    //       code: 0,
+    //       msg: '',
+    //     },
+    //   });
+    // });
+  }
 );
 
 function handleWsMsg() {
@@ -1479,6 +1531,7 @@ function handleOpenDebug() {
 }
 
 function handleClose() {
+  closeHover.value = false;
   if (cacheStore.closeMainWindow === 'exit') {
     ipcRendererSend({
       windowId: WINDOW_ID_MAP.remote,
@@ -1499,6 +1552,7 @@ function handleClose() {
 }
 
 function handleMin() {
+  minHover.value = false;
   ipcRendererSend({
     windowId: WINDOW_ID_MAP.remote,
     channel: IPC_EVENT.windowMinimize,
@@ -1656,7 +1710,7 @@ $sidebar-width: 160px;
             margin-right: 4px;
           }
 
-          &:hover {
+          &.hover {
             background-color: #eee;
             &.close {
               background-color: #e66d65;
@@ -1760,7 +1814,7 @@ $sidebar-width: 160px;
   }
   .debug-area-wrap {
     position: fixed;
-    bottom: 40px;
+    bottom: 60px;
     left: 0;
     z-index: 300;
     display: flex;

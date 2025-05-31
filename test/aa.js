@@ -1,4 +1,10 @@
-import asar from 'asar';
+const command = `
+sc stop aaaService
 
-// asar.extract('path/to/yourfile.asar', 'path/to/destination/');
-console.log(asar);
+sc delete aaaService
+
+sc create aaaService binPath= "\\"xxx\\" --billddir \\"xxx\\"" start= auto
+
+sc start aaaService
+`;
+console.log(command);

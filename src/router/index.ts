@@ -20,6 +20,7 @@ export const routerName = {
   home: 'home',
   about: 'about',
   wechatGroup: 'wechatGroup',
+  officialGroup: 'officialGroup',
   fixedPopupWindow: 'fixedPopupWindow',
   version: 'version',
   webrtc: 'webrtc',
@@ -114,6 +115,11 @@ export const defaultRoutes: RouteRecordRaw[] = [
     name: routerName.wechatGroup,
     path: '/wechatGroup',
     component: () => import('@/views/wechatGroup/index.vue'),
+  },
+  {
+    name: routerName.officialGroup,
+    path: '/officialGroup',
+    component: () => import('@/views/officialGroup/index.vue'),
   },
   {
     name: routerName.fixedPopupWindow,

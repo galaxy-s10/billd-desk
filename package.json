@@ -1,6 +1,6 @@
 {
   "name": "billd-desk",
-  "version": "0.25.0",
+  "version": "0.28.0",
   "description": "BilldDesk远程桌面控制",
   "keywords": [
     "billd",
@@ -48,10 +48,9 @@
     "release-prod": "npm run release -- --release-as minor",
     "release-version": "npm run release -- --release-as 1.0.0",
     "sync-all-github": "ts-node ./deploy/handleSyncAllGithub.mjs",
-    "sync-all-github-doc": "ts-node ./deploy/handleSyncAllGithubDoc.mjs",
     "sync-codeup": "ts-node ./deploy/handleSyncCodeup.mjs",
-    "sync-github": "ts-node ./deploy/handleSyncGithub.mjs",
-    "sync-pro-doc": "ts-node ./deploy/handleSyncProDoc.mjs"
+    "sync-doc-local": "ts-node ./deploy/handleSyncDocLocal.mjs",
+    "sync-github": "ts-node ./deploy/handleSyncGithub.mjs"
   },
   "config": {},
   "dependencies": {},
