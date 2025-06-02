@@ -142,13 +142,21 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 
 ## 技术栈
 
-- 前端相关：[Vue3](https://vuejs.org) 以及相关技术栈、`Typescript`、`WebRTC`、`WebCodecs`、`Web Workder`、`Web Audio`、`Canvas`
-- 后端相关：[Nodejs](https://nodejs.org) 以及相关技术栈、`Koa2`、`Typescript`、`Sequelize`、`Mysql`、`Redis`、`Socket.io`
-- 桌面客户端相关：[Electron](https://www.electronjs.org)以及相关技术栈、`WebRTC`
-- 移动客户端相关：[Flutter3](https://flutter.dev)以及相关技术栈、`WebRTC`
-- 流媒体服务器相关：[SRS](https://ossrs.net)、 [FFmpeg](https://ffmpeg.org)、[Coturn](https://github.com/coturn/coturn)
+### 总览
+
+- 前端相关：[Vue3](https://vuejs.org) 以及相关技术栈、`WebRTC`
+- 后端相关：[Nodejs](https://nodejs.org) 以及相关技术栈、`Koa2`、`Sequelize`、`Mysql`、`Redis`、`Socket.io`
+- 桌面客户端相关：[Electron](https://www.electronjs.org) 以及相关技术栈、`WebRTC`
+- 移动客户端相关：[Flutter3](https://flutter.dev) 以及相关技术栈、`WebRTC`
 - Docker 相关：[Docker](https://www.docker.com)
 - 部署相关：[阿里云云效](https://devops.aliyun.com)、[billd-deploy](https://github.com/galaxy-s10/billd-deploy)
+
+### 编程语言
+
+- JavaScript/Typescript
+- Dart
+- Kotlin
+- C++
 
 ## 本地启动
 
