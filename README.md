@@ -6,18 +6,23 @@
 
 3. 问题反馈：[https://github.com/galaxy-s10/billd-desk/issues](https://github.com/galaxy-s10/billd-desk/issues)
 
-## 🚀 参与 BilldDesk 开发
+## ⚡️ BilldDeskPro
 
-能量是守恒的。作者自认为不聪明，但执行力 100%，BilldDesk 整个项目都是经过不断的试错得到的结果。要想参与 BilldDesk 开发，必须满足下面条件之一：
+BilldDesk 的超强升级版：`BilldDeskPro` 。稳定性更高、性能更强、代码可读性更好、更新更频繁！
 
-1. 你让我觉得你对 BilldDesk 的开发有实际帮助（1+1=2）。
-2. 你让我觉得你对 BilldDesk 的开发有非常多帮助（1+1>2）。
-3. 你使用钞能力（1+1<2）：[https://desk.hsslive.cn/#/price](https://desk.hsslive.cn/#/price)
+> BilldDeskPro 并不开源，需付费订阅：[https://desk.hsslive.cn/#/price](https://desk.hsslive.cn/#/price)
 
-## ⚠️ 你永远满足不了所有人
+## ⭐️ BilldDesk
 
-1. 每个用户都希望方便自己，下载客户端时，作者总不能在百度网盘、迅雷云盘、夸克网盘，123 云盘等等各大盘都上传一遍。
-2. 目前 BilldDesk 从未发布 1.0 稳定版，而这对于某些开发者来说，他们只会开骂（可以去 issue 查看），这里作者建议骂之前先看下这篇文章：[前端之被包养就不要谈独立人格](https://www.hsslive.cn/article/139)。
+**BilldDesk 目前仍未发布稳定版，不建议开发者用于生产环境！**
+
+BilldDesk 的由来仅仅是作者偶然的一个 idea，然后花了三天时间开发了初版（2024/2/28 第一次提交 Github）。
+
+大多数人关注到 BilldDesk 的都是从第三方的公众号、b 站、小红书、甚至推特给 BilldDesk 宣传了，并非作者本意。
+
+BilldDesk 只有作者一人开发。一开始代码还相对规范，后面发现其实没人参与，便开始将 master 当做 dev 开发（做过开源项目的应该都清楚，自己运行自己的代码简单，但是要让所有人都能运行你的代码，需要做非常多事情。），不再考虑外在因素。因此很多人反馈说代码运行不了，是假开源，作者统一回应：**BilldDesk 是开源项目**，但 BilldDesk 从未发布稳定版，每次提交都可能不兼容旧版本（即破坏性更新），可以尝试切换到其他 commit 运行。
+
+> 在你来之前，我们就是总冠军。 -- _NBA 格林_
 
 ## 功能
 
