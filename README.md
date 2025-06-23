@@ -1,4 +1,4 @@
-## 🌈 BilldDesk 远程桌面控制
+## 🌈 BilldDesk 远程桌面控制（v0.37.0）
 
 1. 在线远程：[https://desk.hsslive.cn](https://desk.hsslive.cn)
 
