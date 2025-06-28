@@ -1,4 +1,21 @@
-## 🌈 BilldDesk 远程桌面控制（v0.37.0）
+<p align="center">
+  <a href="https://desk.hsslive.cn" target="_blank">
+    <img
+      width="200"
+      src="https://github.com/galaxy-s10/billd-desk/blob/main/icon.png"
+    />
+  </a>
+</p>
+
+<h1 align="center">
+  BilldDesk
+</h1>
+
+<p align="center">
+  跨平台远程桌面控制
+</p>
+
+## 🌈 BilldDesk 远程桌面控制（v0.43.0）
 
 1. 在线远程：[https://desk.hsslive.cn](https://desk.hsslive.cn)
 
