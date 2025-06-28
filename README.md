@@ -27,7 +27,7 @@
 
 BilldDesk 的超强升级版：`BilldDeskPro` 。稳定性更高、性能更强、代码可读性更好、更新更频繁！
 
-> [!WARNING] 注意
+> [!WARNING]
 > BilldDeskPro 并不开源，需付费订阅：[https://desk.hsslive.cn/#/price](https://desk.hsslive.cn/#/price)
 
 ## ⭐️ BilldDesk
