@@ -32,7 +32,8 @@ BilldDesk 的超强升级版：`BilldDeskPro` 。稳定性更高、性能更强�
 
 ## ⭐️ BilldDesk
 
-> [!CAUTION] > **BilldDesk 目前仍未发布稳定版，不建议开发者用于生产环境！**
+> [!CAUTION]
+> **BilldDesk 目前仍未发布稳定版，不建议开发者用于生产环境！**
 
 BilldDesk 的由来仅仅是作者偶然的一个 idea，然后花了三天时间开发了初版（2024/2/28 第一次提交 Github）。
 
