@@ -124,31 +124,31 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 
 ### web网页/电脑端控制电脑端
 
-![img](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/readme_img/111.png?raw=true)
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/111.png?raw=true)
 
 ### web网页/电脑端控制安卓端
 
-![img](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/readme_img/222.png?raw=true)
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/222.png?raw=true)
 
 ### web网页/电脑端控制web网页
 
 > 仅观看模式
 
-![img](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/readme_img/333.png?raw=true)
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/333.png?raw=true)
 
 ### web网页移动端
 
 > 首页
 
-![img](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/readme_img/777.png?raw=true)
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/777.png?raw=true)
 
 > 控制页
 
-![img](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/readme_img/888.png?raw=true)
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/888.png?raw=true)
 
 ### 屏幕墙
 
-![img](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/readme_img/444.png?raw=true)
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/444.png?raw=true)
 
 ### 安卓端控制电脑端【TODO】
 
@@ -160,11 +160,11 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 
 ### 文件传输
 
-![img](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/readme_img/666.png?raw=true)
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/666.png?raw=true)
 
 ### 跨平台支持
 
-![img](https://github.com/galaxy-s10/billd-desk/blob/main/src/assets/readme_img/555.png?raw=true)
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/555.png?raw=true)
 
 ## 技术栈
 
