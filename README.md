@@ -15,6 +15,19 @@
   基于Vue3 + WebRTC + Nodejs + Electron搭建的跨平台远程桌面控制
 </p>
 
+<div align="center">
+
+![stars](https://img.shields.io/github/stars/galaxy-s10/billd-desk)
+![forks](https://img.shields.io/github/forks/galaxy-s10/billd-desk)
+
+![version](https://img.shields.io/github/package-json/v/galaxy-s10/billd-desk)
+![License](https://img.shields.io/github/license/galaxy-s10/billd-desk)
+![language](https://img.shields.io/github/languages/top/galaxy-s10/billd-desk)
+![language](https://img.shields.io/github/languages/top/galaxy-s10/billd-desk-server)
+![language](https://img.shields.io/github/languages/top/galaxy-s10/billd-desk-flutter)
+
+</div>
+
 ## ⭐️ BilldDesk
 
 > [!CAUTION]
@@ -38,19 +51,6 @@ BilldDesk存在两个已知问题（权限，控制）在现有架构下，几�
 > BilldDeskPro对普通用户不影响，一直免费。
 >
 > BilldDeskPro主要针对开发者。源码并不开源，需付费订阅：[https://desk.hsslive.cn/#/price](https://desk.hsslive.cn/#/price)
-
-<div align="center">
-
-![stars](https://img.shields.io/github/stars/galaxy-s10/billd-desk)
-![forks](https://img.shields.io/github/forks/galaxy-s10/billd-desk)
-
-![version](https://img.shields.io/github/package-json/v/galaxy-s10/billd-desk)
-![License](https://img.shields.io/github/license/galaxy-s10/billd-desk)
-![language](https://img.shields.io/github/languages/top/galaxy-s10/billd-desk)
-![language](https://img.shields.io/github/languages/top/galaxy-s10/billd-desk-server)
-![language](https://img.shields.io/github/languages/top/galaxy-s10/billd-desk-flutter)
-
-</div>
 
 ## 简介
 
