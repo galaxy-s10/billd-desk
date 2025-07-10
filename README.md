@@ -173,7 +173,7 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 
 ## 本地启动
 
-- [x] billd-desk(pro) 查看 [start-client.md](doc/start-client.md)
+- [x] billd-desk(pro) 查看 [start-client.md](https://github.com/galaxy-s10/billd-desk/blob/main/doc/start-client.md)
 
 ## 接口文档
 
@@ -181,7 +181,7 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 
 ## 性能测试
 
-查看 [benchmarking.md](doc/benchmarking.md)
+查看 [benchmarking.md](https://github.com/galaxy-s10/billd-desk/blob/main/doc/benchmarking.md)
 
 ## 常见问题
 
@@ -205,8 +205,8 @@ billd-desk完全开源（可商用），欢迎部署！
 
 ## 官方交流群
 
-- [交流群（用户）.md](doc/交流群（用户）.md)
-- [交流群（开发）.md](doc/交流群（开发）.md)
+- [交流群（用户）.md](https://github.com/galaxy-s10/billd-desk/blob/main/doc/交流群（用户）.md)
+- [交流群（开发）.md](https://github.com/galaxy-s10/billd-desk/blob/main/doc/交流群（开发）.md)
 
 ## 多平台支持
 
