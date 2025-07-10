@@ -28,12 +28,16 @@ BilldDesk 只有作者一人开发。一开始代码还相对规范，后面发�
 
 ## ⚡️ BilldDeskPro
 
-BilldDesk 的超强升级版：`BilldDeskPro` 。稳定性更高、性能更强、代码可读性更好、更新更频繁！
+BilldDesk存在两个已知问题（权限，控制）在现有架构下，几乎不可修复。
 
-> 在你来之前，我们就是总冠军。 -- _NBA 格林_
+> 为什么不可修复？看我发的b站视频：[https://www.bilibili.com/video/BV1yqN9zsEEd?vd_source=bf386c933a4aff3e8b19a1f003de0015&p=2&spm_id_from=333.788.videopod.sections](https://www.bilibili.com/video/BV1yqN9zsEEd?vd_source=bf386c933a4aff3e8b19a1f003de0015&p=2&spm_id_from=333.788.videopod.sections)，01:35秒开始到20:45秒
+
+`BilldDeskPro` 完全重写了`BilldDesk`，修复了`BilldDesk`的已知问题（权限，控制）。并且稳定性更高、性能更强、代码可读性更好、更新更频繁！
 
 > [!WARNING]
-> BilldDeskPro 并不开源，需付费订阅：[https://desk.hsslive.cn/#/price](https://desk.hsslive.cn/#/price)
+> BilldDeskPro对普通用户不影响，一直免费。
+>
+> BilldDeskPro主要针对开发者。源码并不开源，需付费订阅：[https://desk.hsslive.cn/#/price](https://desk.hsslive.cn/#/price)
 
 <div align="center">
 
