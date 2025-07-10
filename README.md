@@ -116,8 +116,6 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 - [ ] Docker一键部署
 - [x] 支持私有化部署
 
-> 更多功能请查看：[features.md](docs/features.md)
-
 ## 预览
 
 快速体验：[https://desk.hsslive.cn](https://desk.hsslive.cn)
