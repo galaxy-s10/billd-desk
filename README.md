@@ -176,13 +176,7 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 
 ## 本地启动
 
-> https://desk.hsslive.cn/s/qk
-
-- [x] billd-desk(pro) 查看 [start-client.md](docs/start-client.md)
-
-- [x] billd-desk-server(pro) 查看 [start-server.md](docs/start-server.md)
-
-- [x] billd-desk-fultter(pro) 查看 [start-app.md](docs/start-app.md)
+- [x] billd-desk(pro) 查看 [start-client.md](doc/start-client.md)
 
 ## 接口文档
 
@@ -190,11 +184,11 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 
 ## 性能测试
 
-查看 [benchmarking.md](docs/benchmarking.md)
+查看 [benchmarking.md](doc/benchmarking.md)
 
 ## 常见问题
 
-查看 [faq.md](docs/faq.md)
+[https://desk.hsslive.cn/#/faq](https://desk.hsslive.cn/#/faq)
 
 ## 问题反馈
 
@@ -214,8 +208,8 @@ billd-desk完全开源（可商用），欢迎部署！
 
 ## 官方交流群
 
-- [交流群（用户）.md](docs/交流群（用户）.md)
-- [交流群（开发）.md](docs/交流群（开发）.md)
+- [交流群（用户）.md](doc/交流群（用户）.md)
+- [交流群（开发）.md](doc/交流群（开发）.md)
 
 ## 多平台支持
 
