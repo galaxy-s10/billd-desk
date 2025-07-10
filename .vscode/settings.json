@@ -1,0 +1,43 @@
+{
+  // 指定行尾序列为\n（LF）或者\r\n（CRLF）或者auto
+  // "files.eol": "\n",
+
+  // 在保存时格式化
+  "editor.formatOnSave": true,
+
+  // 保存时进行一些操作
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+
+  // "eslint.autoFixOnSave": true, // 废弃，使用editor.codeActionsOnSave替代
+
+  // Path Autocomplete，这个插件能够支持路径补全，默认vsc默认的路径提示可能不会提示一些css或者jpg等资源，用这个插件可以完善vscode的路径提示
+  // 主要作用是你输入@、components、layouts的时候，会有路径提示
+  "path-autocomplete.pathMappings": {
+    "@": "${folder}/src",
+    "components": "${folder}/src/components",
+    "layouts": "${folder}/src/layouts"
+  },
+
+  // 别名路径跳转，这个插件可以完善vscode的跳转
+  "alias-skip.allowedsuffix": [
+    "css",
+    "less",
+    "sass",
+    "scss",
+    "png",
+    "jpg",
+    "jpeg",
+    "webp",
+    "gif",
+    "svg",
+    "js",
+    "jsx",
+    "ts",
+    "tsx",
+    "vue"
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
+}

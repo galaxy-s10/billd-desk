@@ -1,0 +1,6 @@
+node_modules
+pnpm-lock.yaml
+dist
+components.d.ts
+.eslintcache
+.DS_Store

@@ -1,0 +1,18 @@
+{
+  "forceVersion": "0.0.100",
+  "noiceVersion": "0.0.100",
+  "currentVersion": "0.0.100",
+  "mustForceVersion": [
+    "0.0.100",
+    "0.0.101"
+  ],
+  "versionList": [
+    {
+      "version": "0.0.100",
+      "showVersion": "v0.0.100",
+      "download": "https://res.ldmnq.com/xdyun/download/XD-YunInst_v1.0.2.2.exe",
+      "updateContent": "更新内容：<br />1、优化部分系统崩溃问题；<br />2、优化同步操作，批量操作交互体验；",
+      "updateDate": "2024年10月22日11:08:51"
+    }
+  ]
+}

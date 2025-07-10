@@ -1,4 +1,9 @@
-deploy
 node_modules
-package.json
-pnpm-lock.yaml
+dist
+components.d.ts
+auto-imports.d.ts
+.DS_Store
+.eslintcache
+deploy
+electron-release
+electron-dist
