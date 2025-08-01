@@ -65,12 +65,14 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 | 连接限制                  | 无限制，免费   | 80h/月，200次/月，24h/次，超出需要购买专业版（¥24/月） |
 | 画质限制                  | 无限制，免费   | 最高1080p，30帧                                        |
 | 安卓被控                  | 支持，免费     | 不支持，需要购买专业版（¥24/月）或购买插件（¥15/月）   |
+| 自定义设备码              | 支持，免费     | 不支持                                                 |
 | 同时显示多屏              | 支持，免费     | 不支持，需要购买性能版（¥95/月）                       |
 | 屏幕墙                    | 支持，免费     | 不支持，需要购买ToDesk企业版（¥805/年）                |
 | 隐私屏                    | 支持，免费     | 不支持，需要购买专业版（¥24/月）                       |
 | 扩展屏/镜像屏             | 支持，免费     | 不支持，需要购买专业版（¥24/月）                       |
 | 远程时录屏                | 支持，免费     | 不支持                                                 |
 | web网页发起远程控制       | 支持，免费     | 不支持，需要购买ToDesk企业版（¥805/年）                |
+| 后台管理                  | 支持，免费     | 不支持                                                 |
 | 远程控制web网页（仅观看） | 支持，免费     | 不支持                                                 |
 | 同账号多主控同时发起远控  | 支持，免费     | 支持，需要购买插件（¥233/月）                          |
 | 私有化部署/二次开发       | 支持，开源免费 | 不支持，需要ToDesk企业版，定价未知                     |
@@ -175,6 +177,32 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 ### 跨平台支持
 
 ![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/555.png?raw=true)
+
+### [后台] 控制台
+
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/a2.png?raw=true)
+
+### [后台] 黑名单
+
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/a1.png?raw=true)
+
+### [后台] 设备分组
+
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/a3.png?raw=true)
+
+### [后台] 远程管理
+
+- 远程记录
+
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/a4.png?raw=true)
+
+- 在线远程
+
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/a5.png?raw=true)
+
+- 在线设备
+
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/a6.png?raw=true)
 
 ## 技术栈
 
