@@ -12,7 +12,7 @@
 </h1>
 
 <p align="center">
-  基于Vue3 + WebRTC + Nodejs + Electron搭建的跨平台远程桌面控制
+  基于Vue3 + WebRTC + Nodejs + Electron搭建的跨平台远程桌面控制（win、mac、安卓）
 </p>
 
 <div align="center">
@@ -67,6 +67,8 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 | 安卓被控                  | 支持，免费     | 不支持，需要购买专业版（¥24/月）或购买插件（¥15/月）   |
 | 同时显示多屏              | 支持，免费     | 不支持，需要购买性能版（¥95/月）                       |
 | 屏幕墙                    | 支持，免费     | 不支持，需要购买ToDesk企业版（¥805/年）                |
+| 隐私屏                    | 支持，免费     | 不支持，需要购买专业版（¥24/月）                       |
+| 扩展屏/镜像屏             | 支持，免费     | 不支持，需要购买专业版（¥24/月）                       |
 | 远程时录屏                | 支持，免费     | 不支持                                                 |
 | web网页发起远程控制       | 支持，免费     | 不支持，需要购买ToDesk企业版（¥805/年）                |
 | 远程控制web网页（仅观看） | 支持，免费     | 不支持                                                 |
@@ -104,6 +106,7 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 - [ ] 开机自启（BUG）
 - [ ] 锁屏保活（BUG）
 - [x] 屏幕墙
+- [x] 设备分组
 - [x] 支持 macOS 系统
 - [x] 支持 Windows 系统
 - [x] 支持 Linux 系统（未实际测试）
@@ -144,6 +147,18 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 ### 屏幕墙
 
 ![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/444.png?raw=true)
+
+### 设备分组
+
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/999.png?raw=true)
+
+### 隐私屏（敬请期待！）
+
+> TODO 50%
+
+### 扩展屏/镜像屏（敬请期待！）
+
+> TODO 90%
 
 ### 安卓端控制电脑端【TODO】
 
