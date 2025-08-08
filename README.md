@@ -154,13 +154,15 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 
 ![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/999.png?raw=true)
 
-### 隐私屏（敬请期待！）
+### 隐私屏
 
-> TODO 50%
+> 支持自定义隐私屏（图片、文字）
 
-### 扩展屏/镜像屏（敬请期待！）
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/a7.png?raw=true)
 
-> TODO 90%
+### 虚拟屏
+
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/a8.png?raw=true)
 
 ### 安卓端控制电脑端【TODO】
 
