@@ -260,9 +260,10 @@ billd-desk完全开源（可商用），欢迎部署！
 - [x] Web网页（建议使用：[Chrome浏览器](https://www.google.com/intl/zh-CN/chrome/) / [Via浏览器](https://viayoo.com) / `Safari浏览器`）
 - [ ] Windows 7（[再见，Windows 7/8/8.1](https://www.electronjs.org/zh/blog/windows-7-to-8-1-deprecation-notice)）
 - [x] Windows 10、Windows 11
+- [x] Windows Server 2022，其他版本的未实际测试
 - [x] macOS
 - [x] Linux
-- [x] Android 11 至 Android 15，其他安卓版本的未实际测试
+- [x] Android 11 至 Android 15，其他版本的未实际测试
 - [ ] iOS
 
 ## 贡献者
