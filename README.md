@@ -166,6 +166,10 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 
 ![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/a8.png?raw=true)
 
+### 鼠标、键盘仿真
+
+![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/a9.jpg?raw=true)
+
 ### 安卓端控制电脑端【TODO】
 
 ### 安卓端控制安卓端【TODO】
@@ -258,12 +262,12 @@ billd-desk完全开源（可商用），欢迎部署！
 ## 多平台支持
 
 - [x] Web网页（建议使用：[Chrome浏览器](https://www.google.com/intl/zh-CN/chrome/) / [Via浏览器](https://viayoo.com) / `Safari浏览器`）
-- [ ] Windows 7（[再见，Windows 7/8/8.1](https://www.electronjs.org/zh/blog/windows-7-to-8-1-deprecation-notice)）
+- [ ] Windows 7 不支持
 - [x] Windows 10、Windows 11
-- [x] Windows Server 2022，其他版本的未实际测试
+- [x] Windows Server 2022，其他版本未实际测试
 - [x] macOS
 - [x] Linux
-- [x] Android 11 至 Android 15，其他版本的未实际测试
+- [x] Android 11 至 Android 15，其他版本未实际测试
 - [ ] iOS
 
 ## 贡献者
