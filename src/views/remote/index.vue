@@ -251,8 +251,6 @@
       @close="handleClose"
       @confirm="handleConfirm"
     ></PwdModalCpt>
-
-    <InviteInfoCpt ref="inviteInfoCptRef"></InviteInfoCpt>
   </div>
 </template>
 
@@ -304,7 +302,6 @@ import {
   setVideoTrackContentHints,
 } from '@/utils';
 import { WebRTCClass } from '@/utils/network/webRTC';
-import InviteInfoCpt from '@/views/remote/inviteInfo.vue';
 import PwdModalCpt from '@/views/remote/pwdModal.vue';
 
 const route = useRoute();
@@ -324,7 +321,6 @@ const {
 } = useRTCParams();
 const { handleScreen, handleRtcBilldDeskBehavior } = useIpcRendererSend();
 
-const inviteInfoCptRef = ref<InstanceType<typeof InviteInfoCpt>>();
 const currentMaxBitrate = ref(maxBitrate.value[3].value);
 const currentMaxFramerate = ref(maxFramerate.value[4].value);
 const currentResolutionRatio = ref(resolutionRatio.value[3].value);
@@ -611,43 +607,51 @@ function handleInitIpcRendererOn() {
 }
 
 async function initDeskUser() {
-  if (!cacheStore.deskUserUuid || !cacheStore.deskUserPassword) {
-    const res = await fetchDeskUserCreate();
-    if (res.code === 200) {
-      cacheStore.deskUserUuid = res.data.uuid!;
-      cacheStore.deskUserPassword = res.data.password!;
-      originalPassword.value = res.data.password!;
-      roomId.value = cacheStore.deskUserUuid;
+  try {
+    if (!cacheStore.deskUserUuid || !cacheStore.deskUserPassword) {
+      const res = await fetchDeskUserCreate();
+      if (res.code === 200) {
+        cacheStore.deskUserUuid = res.data.uuid!;
+        cacheStore.deskUserPassword = res.data.password!;
+        originalPassword.value = res.data.password!;
+        roomId.value = cacheStore.deskUserUuid;
+      }
+    } else {
+      const res = await fetchDeskUserLogin({
+        uuid: cacheStore.deskUserUuid,
+        password: cacheStore.deskUserPassword,
+      });
+      if (res.code === 200) {
+        originalPassword.value = cacheStore.deskUserPassword;
+        roomId.value = cacheStore.deskUserUuid;
+      }
     }
-  } else {
-    const res = await fetchDeskUserLogin({
-      uuid: cacheStore.deskUserUuid,
-      password: cacheStore.deskUserPassword,
-    });
-    if (res.code === 200) {
-      originalPassword.value = cacheStore.deskUserPassword;
-      roomId.value = cacheStore.deskUserUuid;
-    }
+  } catch (error) {
+    console.log(error);
   }
 }
 
 async function handleUpdatePassword() {
-  cacheStore.deskUserPassword = getRandomString(8);
-  // if (cacheStore.deskUserPassword === originalPassword.value) return;
-  if (
-    cacheStore.deskUserPassword &&
-    cacheStore.deskUserPassword.length > 6 &&
-    cacheStore.deskUserPassword.length < 12
-  ) {
-    await fetchDeskUserUpdateByUuid({
-      uuid: cacheStore.deskUserUuid!,
-      password: originalPassword.value,
-      new_password: cacheStore.deskUserPassword!,
-    });
-    originalPassword.value = cacheStore.deskUserPassword;
-    window.$message.success('更新临时密码成功！');
-  } else {
-    window.$message.warning('临时密码长度要求6-12位！');
+  try {
+    cacheStore.deskUserPassword = getRandomString(8);
+    // if (cacheStore.deskUserPassword === originalPassword.value) return;
+    if (
+      cacheStore.deskUserPassword &&
+      cacheStore.deskUserPassword.length > 6 &&
+      cacheStore.deskUserPassword.length < 12
+    ) {
+      await fetchDeskUserUpdateByUuid({
+        uuid: cacheStore.deskUserUuid!,
+        password: originalPassword.value,
+        new_password: cacheStore.deskUserPassword!,
+      });
+      originalPassword.value = cacheStore.deskUserPassword;
+      window.$message.success('更新临时密码成功！');
+    } else {
+      window.$message.warning('临时密码长度要求6-12位！');
+    }
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -756,7 +760,21 @@ async function handleRTC(receiver) {
 }
 
 function handleCopyRemoteInfo() {
-  inviteInfoCptRef.value?.handleCopyRemoteInfo();
+  const str = `BilldDesk:设备代码:${cacheStore.remoteDeskUserUuid};临时密码:${cacheStore.remoteDeskUserPassword}`;
+  // @ts-ignore
+  textArea.select(); // 选择文本
+  // @ts-ignore
+  textArea.setSelectionRange(0, 99999); // 对于移动设备
+  // 使用剪贴板 API 复制文本
+  navigator.clipboard
+    .writeText(str)
+    .then(() => {
+      window.$message.success('已复制邀请信息！');
+    })
+    .catch((err) => {
+      console.log(err);
+      window.$message.error('复制邀请信息失败！');
+    });
 }
 
 function changeDebugUrl() {

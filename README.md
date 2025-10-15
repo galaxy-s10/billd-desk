@@ -33,24 +33,18 @@
 > [!CAUTION]
 > BilldDesk 目前仍未发布稳定版，不建议开发者用于生产环境！
 
-BilldDesk 的由来仅仅是作者偶然的一个 idea，然后花了三天时间开发了初版（2024/2/28 第一次提交 Github）。
-
-大多数人关注到 BilldDesk 的都是从第三方的公众号、b 站、小红书、甚至推特给 BilldDesk 宣传了，并非作者本意。
-
-BilldDesk 只有作者一人开发。一开始代码还相对规范，后面发现其实没人参与，便开始将 master 当做 dev 开发（做过开源项目的应该都清楚，自己运行自己的代码简单，但是要让所有人都能运行你的代码，需要做非常多事情。），不再考虑外在因素。因此很多人反馈说代码运行不了，是假开源，作者统一回应：**BilldDesk 是开源项目**，但 BilldDesk 从未发布稳定版，每次提交都可能不兼容旧版本（即破坏性更新），可以尝试切换到其他 commit 运行。
-
 ## ⚡️ BilldDesk Pro
 
-BilldDesk存在两个已知问题（权限，控制）在现有架构下，几乎不可修复。
+BilldDesk存在两个已知问题（权限，控制）在现有架构下，几乎不可修复！为什么不可修复？看我发的b站视频：[https://www.bilibili.com/video/BV1yqN9zsEEd?vd_source=bf386c933a4aff3e8b19a1f003de0015&p=2&spm_id_from=333.788.videopod.sections](https://www.bilibili.com/video/BV1yqN9zsEEd?vd_source=bf386c933a4aff3e8b19a1f003de0015&p=2&spm_id_from=333.788.videopod.sections)，01:35秒开始到20:45秒。
 
-> 为什么不可修复？看我发的b站视频：[https://www.bilibili.com/video/BV1yqN9zsEEd?vd_source=bf386c933a4aff3e8b19a1f003de0015&p=2&spm_id_from=333.788.videopod.sections](https://www.bilibili.com/video/BV1yqN9zsEEd?vd_source=bf386c933a4aff3e8b19a1f003de0015&p=2&spm_id_from=333.788.videopod.sections)，01:35秒开始到20:45秒
+`BilldDeskPro` 完全重写了`BilldDesk`，修复了`BilldDesk`的已知问题（权限，控制）。并且稳定性更高、性能更强、代码可读性更好、更新更频繁
 
-`BilldDeskPro` 完全重写了`BilldDesk`，修复了`BilldDesk`的已知问题（权限，控制）。并且稳定性更高、性能更强、代码可读性更好、更新更频繁！
+BilldDeskPro客户端下载：
 
-> [!WARNING]
-> BilldDeskPro对普通用户不影响，一直免费。
->
-> BilldDeskPro主要针对开发者。源码并不开源，需付费订阅：[https://desk.hsslive.cn/#/price](https://desk.hsslive.cn/#/price)
+- github release：[https://github.com/galaxy-s10/billd-desk/releases/tag/v0.76.0](https://github.com/galaxy-s10/billd-desk/releases/tag/v0.76.0)
+- 官网下载：[https://desk.hsslive.cn/#/download](https://desk.hsslive.cn/#/download)
+
+> BilldDeskPro订阅：[https://desk.hsslive.cn/#/price](https://desk.hsslive.cn/#/price)
 
 ## 简介
 
@@ -65,16 +59,16 @@ BilldDesk 远程桌面控制，目前实现了类似 ToDesk、向日葵等远程
 | 连接限制                  | 无限制，免费 | 无限制，免费     | 80h/月，200次/月，24h/次，超出需要购买专业版（¥24/月） |
 | 画质限制                  | 无限制，免费 | 限制1M码率，免费 | 限制1080p，30帧，免费                                  |
 | 安卓被控                  | 不支持       | 支持，免费       | 支持，需要购买专业版（¥24/月）或购买插件（¥15/月）     |
-| 自定义设备码              | 支持，免费   | 支持，但暂不开放 | 不支持                                                 |
-| 同时显示多屏              | 支持，免费   | 支持，免费       | 支持，需要购买性能版（¥95/月）                         |
+| 自定义设备码              | 支持，免费   | 支持，免费       | 不支持                                                 |
+| 设备分组管理              | 支持，免费   | 支持，免费       | 支持，免费                                             |
 | 隐私屏                    | 不支持       | 支持，¥2/月      | 支持，需要购买专业版（¥24/月）                         |
 | 虚拟屏                    | 不支持       | 支持，¥2/月      | 支持，需要购买性能版（¥95/月）                         |
 | 扩展屏                    | 不支持       | 支持，¥2/月      | 支持，需要购买专业版（¥24/月）                         |
-| 远程时录屏                | 不支持       | 支持，但暂不开放 | 不支持                                                 |
-| 屏幕墙                    | 不支持       | 支持，但暂不开放 | 支持，需要购买技术版（¥218/月）                        |
-| 批量群控                  | 不支持       | 支持，但暂不开放 | 不支持                                                 |
+| 远程时录屏                | 不支持       | 支持，免费       | 不支持                                                 |
+| 屏幕墙                    | 不支持       | 支持，￥6/月     | 支持，需要购买技术版（¥218/月）                        |
+| 批量群控                  | 不支持       | 支持，屏幕墙自带 | 不支持                                                 |
 | web网页发起远程控制       | 支持，免费   | 支持，免费       | 支持，需要购买ToDesk企业版（¥805/年）                  |
-| 后台管理                  | 不支持       | 支持，免费       | 支持                                                   |
+| 后台管理                  | 不支持       | 支持，免费       | 支持，免费                                             |
 | 远程控制web网页（仅观看） | 支持，免费   | 支持，免费       | 不支持                                                 |
 | 同账号多主控同时发起远控  | 支持，免费   | 支持，免费       | 支持，需要购买插件（¥233/月）                          |
 | 私有化部署/二次开发       | 支持，免费   | 支持，付费       | 支持，需要ToDesk企业版，定价未知                       |

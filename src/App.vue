@@ -30,7 +30,7 @@ import { ipcRenderer } from '@/utils';
 const appStore = useAppStore();
 const cacheStore = usePiniaCacheStore();
 
-const { handlesetAlwaysOnTop } = useIpcRendererSend();
+const { handlesetAlwaysOnTop, handleOpenDevTools } = useIpcRendererSend();
 const themeOverrides: GlobalThemeOverrides = {
   common: {
     primaryColor: '#ffd700',
@@ -48,26 +48,35 @@ onMounted(() => {
   });
   getClient();
   if (ipcRenderer) {
+    handleOpenDevTools({ windowId: WINDOW_ID_ENUM.remote });
     handleDeskVersionCheck();
   }
 });
 
 async function handleDeskVersionCheck() {
-  const res = await fetchDeskVersionCheck(appStore.version);
-  if (res.code === 200 && res.data) {
-    appStore.updateModalInfo = res.data;
+  try {
+    const res = await fetchDeskVersionCheck(appStore.version);
+    if (res.code === 200 && res.data) {
+      appStore.updateModalInfo = res.data;
+    }
+  } catch (error) {
+    console.log(error);
   }
 }
 
 async function getClient() {
-  let res;
-  if (ipcRenderer) {
-    res = await fetchDeskVersionByVersion(appStore.version);
-  } else {
-    res = await fetchDeskVersionLatest();
-  }
-  if (res.code === 200 && res.data) {
-    appStore.deskVersionInfo = res.data;
+  try {
+    let res;
+    if (ipcRenderer) {
+      res = await fetchDeskVersionByVersion(appStore.version);
+    } else {
+      res = await fetchDeskVersionLatest();
+    }
+    if (res.code === 200 && res.data) {
+      appStore.deskVersionInfo = res.data;
+    }
+  } catch (error) {
+    console.log(error);
   }
 }
 </script>
