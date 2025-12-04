@@ -17,22 +17,17 @@ BilldDesk Pro | [BilldDesk 开源版](./README_OpenSource.md)
   跨平台远程桌面控制，实现了类似 ToDesk/向日葵等远程软件的功能。
 </p>
 
-## BilldDesk Pro免费吗？
-
-- **免费**，你可以直接下载BilldDesk客户端，开始流畅的远程体验。
-- 有付费功能（隐私屏、虚拟屏、屏幕墙、高码率/帧率/画质），如果你经常使用到BilldDesk，推荐你购买任意VIP套餐（包月6元/月、包年4.2元/月）。
-
 ## 功能
 
 - [x] `web网页` 控制 `电脑端`
 - [x] `web网页` 控制 `安卓端`
 - [x] `web网页` 控制 `web网页`（仅观看）
-- [ ] `电脑端` 控制 `电脑端`（开发中，70%）
-- [ ] `电脑端` 控制 `安卓端`（开发中，50%）
-- [ ] `电脑端` 控制 `web网页`（开发中，70%）
-- [ ] `安卓端` 控制 `电脑端`（开发中，50%）
-- [ ] `安卓端` 控制 `安卓端`（开发中，50%）
-- [ ] `安卓端` 控制 `web网页`（开发中，70%）
+- [x] `电脑端` 控制 `电脑端`
+- [ ] `电脑端` 控制 `安卓端`（开发中，70%）
+- [x] `电脑端` 控制 `web网页`（仅观看）
+- [ ] `安卓端` 控制 `电脑端`（开发中，70%）
+- [ ] `安卓端` 控制 `安卓端`（开发中，70%）
+- [x] `安卓端` 控制 `web网页`（仅观看）
 - [x] 多台设备同时远程一台设备
 - [x] 一台设备同时远程多台设备
 - [x] 多屏操作
@@ -41,7 +36,7 @@ BilldDesk Pro | [BilldDesk 开源版](./README_OpenSource.md)
 - [x] 自定义中继服务器
 - [x] 自定义接口（wss、api）
 - [x] 按键映射
-- [x] 剪贴板
+- [x] 剪贴板同步
 - [x] 文件传输
 - [x] 开机自启（无人值守）
 - [x] 锁屏保活
@@ -59,20 +54,21 @@ BilldDesk Pro | [BilldDesk 开源版](./README_OpenSource.md)
 
 ## 跨平台支持
 
-- [x] 支持 Windows 系统
+- [x] Windows 系统
   - [x] Windows 10、Windows 11
   - [x] Windows Server 2022
   - [ ] Windows 7 不支持
   - [ ] 其他版本未实际测试
-- [x] 支持 macOS 系统
+- [x] macOS 系统
   - [x] macOS 15
   - [ ] 其他版本未实际测试
-- [x] 支持 Android端
-  - [x] Android 9 至 Android 15
+- [x] Android系统
+  - [x] Android 8 至 Android 15
+  - [x] Android 6、Android 7，被控时支持观看，暂不支持操作
   - [ ] 其他版本未实际测试
 - [x] Web浏览器（[Chrome](https://www.google.com/intl/zh-CN/chrome/)、[Edge](https://www.microsoft.com/zh-cn/edge/download)、[Firefox](https://www.firefox.com/zh-CN/)、[Via](https://viayoo.com)、[Safari](https://www.apple.com/safari/)）
-- [ ] 支持 iOS端
-- [ ] 支持 Linux 系统
+- [ ] iOS系统
+- [ ] Linux 系统
 
 ## 技术架构
 
@@ -200,6 +196,11 @@ Api：
 - 在线设备
 
 ![img](https://github.com/galaxy-s10/billd-desk/blob/main/readme_img/a6.png?raw=true)
+
+## BilldDesk Pro免费吗？
+
+- **免费**，你可以直接下载BilldDesk客户端，开始流畅的远程体验。
+- 有付费功能（隐私屏、虚拟屏、屏幕墙、高码率/帧率/画质），如果你经常使用到BilldDesk，推荐你购买任意VIP套餐（包月6元/月、包年4.2元/月）。
 
 ## 常见问题
 
