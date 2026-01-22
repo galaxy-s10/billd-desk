@@ -1,4 +1,4 @@
-# 参与billd-live
+# 参与billd-desk
 
 # 贡献者
 
