@@ -17,6 +17,18 @@ BilldDesk Pro | [BilldDesk 开源版](./README_OpenSource.md)
   跨平台远程桌面控制，实现了类似 ToDesk/向日葵等远程软件的功能。
 </p>
 
+## 实测
+
+- [x] 支持2K + 60 Fps
+  - [x] 被控端：系统：Windows 10，显卡：NVIDIA GeForce RTX 3060 Laptop GPU；
+  - [x] 主控端：Chrome浏览器/BilldDesk客户端
+- [x] 支持1080P + 60 Fps
+  - [x] 被控端：系统：Windows 10，显卡：NVIDIA GeForce RTX 2070 Laptop GPU；
+  - [x] 主控端：Chrome浏览器/BilldDesk客户端
+- [x] 支持1080P + 60 Fps
+  - [x] 被控端：系统：Windows 10，显卡：NVIDIA GeForce GTX 1060 6G GPU；
+  - [x] 主控端：Chrome浏览器/BilldDesk客户端
+
 ## 功能
 
 - [x] `web网页` 控制 `电脑端`
