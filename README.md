@@ -20,13 +20,13 @@ BilldDesk Pro | [BilldDesk 开源版](./README_OpenSource.md)
 ## 实测
 
 - [x] 支持2K + 60 Fps
-  - [x] 被控端：系统：Windows 10，显卡：NVIDIA GeForce RTX 3060 Laptop GPU；
+  - [x] 被控端：系统：Windows 10，显卡：NVIDIA GeForce RTX 3060 Laptop
   - [x] 主控端：Chrome浏览器/BilldDesk客户端
 - [x] 支持1080P + 60 Fps
-  - [x] 被控端：系统：Windows 10，显卡：NVIDIA GeForce RTX 2070 Laptop GPU；
+  - [x] 被控端：系统：Windows 10，显卡：NVIDIA GeForce RTX 2070 Laptop
   - [x] 主控端：Chrome浏览器/BilldDesk客户端
 - [x] 支持1080P + 60 Fps
-  - [x] 被控端：系统：Windows 10，显卡：NVIDIA GeForce GTX 1060 6G GPU；
+  - [x] 被控端：系统：Windows 10，显卡：NVIDIA GeForce GTX 1060 6G
   - [x] 主控端：Chrome浏览器/BilldDesk客户端
 
 ## 功能
@@ -123,8 +123,9 @@ BilldDesk Pro | [BilldDesk 开源版](./README_OpenSource.md)
   - [x] macOS 15
   - [ ] 其他版本未实际测试
 - [x] Android系统
-  - [x] Android 8 至 Android 15
-  - [x] Android 6、Android 7，被控时支持观看，暂不支持操作
+  - [x] Android 8 至 Android 16
+  - [x] Android 7，被控时支持观看，暂不支持操作
+  - [ ] ~~Android 6，不再支持安卓6~~
   - [ ] 其他版本未实际测试
 - [x] Web浏览器（[Chrome](https://www.google.com/intl/zh-CN/chrome/)、[Edge](https://www.microsoft.com/zh-cn/edge/download)、[Firefox](https://www.firefox.com/zh-CN/)、[Via](https://viayoo.com)、[Safari](https://www.apple.com/safari/)）
 - [ ] iOS系统
