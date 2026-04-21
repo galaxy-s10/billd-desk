@@ -117,6 +117,7 @@ BilldDesk Pro | [BilldDesk 开源版](./README_OpenSource.md)
 - [x] Windows 系统
   - [x] Windows 10、Windows 11
   - [x] Windows Server 2022
+  - [x] Windows Server 2019
   - [ ] Windows 7 不支持
   - [ ] 其他版本未实际测试
 - [x] macOS 系统
