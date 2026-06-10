@@ -39,4 +39,8 @@ export default nameSpaceWrap('app', {
   cancel: 'Annuler',
   returnHome: "Retour a l'accueil",
   publishTime: 'Publie le',
+  wssPlaceholder: "Saisissez l'URL WSS",
+  axiosPlaceholder: "Saisissez l'URL Axios",
+  coturnPlaceholder: "Saisissez l'URL Coturn",
+  settingSuccess: 'Parametres enregistres',
 });

@@ -39,4 +39,8 @@ export default nameSpaceWrap('app', {
   cancel: 'キャンセル',
   returnHome: 'ホームへ戻る',
   publishTime: '公開日時',
+  wssPlaceholder: 'WSSアドレスを入力',
+  axiosPlaceholder: 'Axiosアドレスを入力',
+  coturnPlaceholder: 'Coturnアドレスを入力',
+  settingSuccess: '設定を保存しました',
 });

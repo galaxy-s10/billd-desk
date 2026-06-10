@@ -39,4 +39,8 @@ export default nameSpaceWrap('app', {
   cancel: '取消',
   returnHome: '返回首页',
   publishTime: '发布时间',
+  wssPlaceholder: '请输入wss地址',
+  axiosPlaceholder: '请输入axios地址',
+  coturnPlaceholder: '请输入coturn地址',
+  settingSuccess: '设置成功！',
 });
