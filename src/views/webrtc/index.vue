@@ -9,7 +9,7 @@
         class="txt"
         @click="showDetail = !showDetail"
       >
-        连接详情
+        {{ t('webrtc.connectionDetails') }}
       </span>
 
       <div
@@ -28,18 +28,18 @@
             <span
               class="item"
               @click="windowReload"
-              >刷新</span
+              >{{ t('app.refresh') }}</span
             >
             <span>，</span>
             <span
               class="item"
               @click="handleOpenDevTools({ windowId })"
-              >控制台</span
+              >{{ t('app.console') }}</span
             >
           </div>
 
           <div>
-            <span>窗口Id：</span>
+            <span>{{ t('remote.windowId') }}：</span>
             <span
               class="link"
               @click="handleCopy(windowId)"
@@ -69,41 +69,41 @@
         <div class="link-config">
           <div class="link-item">
             <n-space>
-              <div class="link-label">模式：</div>
+              <div class="link-label">{{ t('webrtc.mode') }}：</div>
               <n-radio
                 :checked="!isWatchMode"
                 @change="isWatchMode = false"
               >
-                控制模式
+                {{ t('webrtc.controlMode') }}
               </n-radio>
               <n-radio
                 :checked="isWatchMode"
                 @change="isWatchMode = true"
               >
-                观看模式
+                {{ t('webrtc.watchMode') }}
               </n-radio>
             </n-space>
           </div>
           <div class="link-item">
             <n-space>
-              <div class="link-label">鼠标：</div>
+              <div class="link-label">{{ t('webrtc.cursor') }}：</div>
               <n-radio
                 :checked="showCursor"
                 @change="showCursor = true"
               >
-                显示
+                {{ t('webrtc.show') }}
               </n-radio>
               <n-radio
                 :checked="!showCursor"
                 @change="showCursor = false"
               >
-                隐藏
+                {{ t('webrtc.hide') }}
               </n-radio>
             </n-space>
           </div>
           <div class="link-item">
             <n-space>
-              <div class="link-label">码率：</div>
+              <div class="link-label">{{ t('remote.bitrate') }}：</div>
               <n-radio-group v-model:value="currentMaxBitrate">
                 <n-radio
                   v-for="item in maxBitrate"
@@ -117,7 +117,7 @@
           </div>
           <div class="link-item">
             <n-space>
-              <div class="link-label">帧率：</div>
+              <div class="link-label">{{ t('remote.frameRate') }}：</div>
               <n-radio-group v-model:value="currentMaxFramerate">
                 <n-radio
                   v-for="item in maxFramerate"
@@ -131,7 +131,7 @@
           </div>
           <div class="link-item">
             <n-space>
-              <div class="link-label">分辨率：</div>
+              <div class="link-label">{{ t('remote.resolution') }}：</div>
               <n-radio-group v-model:value="currentResolutionRatio">
                 <n-radio
                   v-for="item in resolutionRatio"
@@ -145,7 +145,7 @@
           </div>
           <div class="link-item">
             <n-space>
-              <div class="link-label">视频内容：</div>
+              <div class="link-label">{{ t('remote.videoContent') }}：</div>
               <n-radio-group v-model:value="currentVideoContentHint">
                 <n-radio
                   v-for="item in videoContentHint"
@@ -159,7 +159,7 @@
           </div>
           <div class="link-item">
             <n-space>
-              <div class="link-label">音频内容：</div>
+              <div class="link-label">{{ t('remote.audioContent') }}：</div>
               <n-radio-group v-model:value="currentAudioContentHint">
                 <n-radio
                   v-for="item in audioContentHint"
@@ -173,7 +173,7 @@
           </div>
           <div class="link-item">
             <n-space>
-              <div class="link-label">分辨率：</div>
+              <div class="link-label">{{ t('remote.resolution') }}：</div>
               <div class="item">
                 {{ videoSettings?.width + 'x' + videoSettings?.height }}
               </div>
@@ -181,7 +181,7 @@
           </div>
           <div class="link-item">
             <n-space>
-              <div class="link-label">帧率：</div>
+              <div class="link-label">{{ t('remote.frameRate') }}：</div>
               <div class="item">
                 {{ videoSettings?.frameRate?.toFixed(2) }}
               </div>
@@ -189,7 +189,7 @@
           </div>
           <div class="link-item">
             <n-space>
-              <div class="link-label">延迟：</div>
+              <div class="link-label">{{ t('webrtc.latency') }}：</div>
               <div class="item">
                 {{ rtcRtt }}
               </div>
@@ -197,7 +197,7 @@
           </div>
           <div class="link-item">
             <n-space>
-              <div class="link-label">丢包：</div>
+              <div class="link-label">{{ t('webrtc.packetLoss') }}：</div>
               <div class="item">
                 {{ rtcLoss }}
               </div>
@@ -210,7 +210,7 @@
                 class="item btn"
                 @click="handleClose"
               >
-                关闭连接
+                {{ t('webrtc.closeConnection') }}
               </div>
             </n-space>
           </div>
@@ -233,7 +233,7 @@
       v-if="loading"
       class="loading"
     >
-      正在连接...
+      {{ t('webrtc.connecting') }}
     </div>
   </div>
 </template>
@@ -247,6 +247,7 @@ import {
   windowReload,
 } from 'billd-utils';
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
 import { ENGLISH_LETTER, NUT_KEY_MAP, WINDOW_ID_ENUM } from '@/constant';
@@ -279,6 +280,7 @@ import {
 } from '@/utils';
 
 const route = useRoute();
+const { t } = useI18n();
 const appStore = useAppStore();
 const networkStore = useNetworkStore();
 
@@ -357,25 +359,25 @@ onMounted(() => {
   if (route.query.deskUserUuid !== undefined) {
     deskUserUuid.value = String(route.query.deskUserUuid);
   } else {
-    window.$message.error('设备代码为空');
+    window.$message.error(t('webrtc.missingDeviceCode'));
     return;
   }
   if (route.query.deskUserPassword !== undefined) {
     deskUserPassword.value = String(route.query.deskUserPassword);
   } else {
-    window.$message.error('临时密码为空');
+    window.$message.error(t('webrtc.missingTemporaryPassword'));
     return;
   }
   if (route.query.remoteDeskUserUuid !== undefined) {
     remoteDeskUserUuid.value = String(route.query.remoteDeskUserUuid);
   } else {
-    window.$message.error('远程设备代码为空');
+    window.$message.error(t('webrtc.missingRemoteDeviceCode'));
     return;
   }
   if (route.query.remoteDeskUserPassword !== undefined) {
     remoteDeskUserPassword.value = String(route.query.remoteDeskUserPassword);
   } else {
-    window.$message.error('远程设备密码为空');
+    window.$message.error(t('webrtc.missingRemoteDevicePassword'));
     return;
   }
   if (route.query.roomId !== undefined) {
@@ -868,7 +870,7 @@ watch(
 
 function handleCopy(str) {
   copyToClipBoard(str);
-  window.$message.success('复制成功');
+  window.$message.success(t('remote.copySuccess'));
 }
 
 function handleKeyDown(event: KeyboardEvent) {

@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router';
 
 import { fetchVerifyPkKey } from '@/api/liveRoom';
 import { THEME_COLOR, WEBSOCKET_URL } from '@/constant';
+import { i18n } from '@/hooks/use-i18n';
 import { useRTCParams } from '@/hooks/use-rtcParams';
 import { useTip } from '@/hooks/use-tip';
 import { useWebRtcLive } from '@/hooks/webrtc/live';
@@ -51,6 +52,8 @@ import {
   WebSocketClass,
   prettierReceiveWsMsg,
 } from '@/utils/network/webSocket';
+
+const translate = (key: string) => (i18n.global as any).t(key);
 
 export const useWebsocket = () => {
   const route = useRoute();
@@ -291,7 +294,7 @@ export const useWebsocket = () => {
       });
       const pkurl = `${window.location.origin}${url.href}`;
       useTip({
-        title: '邀请主播加入PK',
+        title: translate('app.inviteAnchorPk'),
         width: '360px',
         hiddenCancel: true,
         content: h('div', [
@@ -304,12 +307,12 @@ export const useWebsocket = () => {
               color: THEME_COLOR,
               onClick: () => {
                 copyToClipBoard(pkurl);
-                window.$message.success('复制成功！');
+                window.$message.success(translate('remote.copySuccess'));
               },
             },
-            () => '复制链接' // 用箭头函数返回性能更好。
+            () => translate('app.copyLink') // 用箭头函数返回性能更好。
           ),
-          h('div', { style: { marginTop: '5px' } }, '注意，有效期：5分钟'),
+          h('div', { style: { marginTop: '5px' } }, translate('app.validForFiveMinutes')),
         ]),
       }).catch(() => {});
     });
@@ -390,7 +393,7 @@ export const useWebsocket = () => {
             });
             if (res.code === 200 && res.data === true) {
               await useTip({
-                content: '是否加入PK？',
+                content: translate('app.joinPkConfirm'),
               });
               const stream = await handleUserMedia({
                 video: true,
@@ -419,7 +422,7 @@ export const useWebsocket = () => {
               });
             } else {
               await useTip({
-                content: '加入PK失败，验证pkKey错误！',
+                content: translate('app.pkKeyVerifyFailed'),
                 hiddenCancel: true,
                 hiddenClose: true,
               });
@@ -459,7 +462,7 @@ export const useWebsocket = () => {
           if (data.receiver === mySocketId.value) {
             console.warn('是发给我的nativeWebRtcOffer');
             await useTip({
-              content: '是否加入会议？',
+              content: translate('app.joinMeetingConfirm'),
             });
             const stream = await handleUserMedia({
               video: true,
@@ -619,19 +622,19 @@ export const useWebsocket = () => {
         //   );
         // }
         if (data.user_id !== userStore.userInfo?.id && data.disable_ok) {
-          window.$message.success('禁言成功！');
+          window.$message.success(translate('app.muteSuccess'));
         }
         if (
           data.user_id !== userStore.userInfo?.id &&
           data.restore_disable_ok
         ) {
-          window.$message.success('解除禁言成功！');
+          window.$message.success(translate('app.unmuteSuccess'));
         }
         if (
           data.user_id === userStore.userInfo?.id &&
           data.restore_disable_ok
         ) {
-          window.$message.success('禁言接触了！');
+          window.$message.success(translate('app.muteExpired'));
           clearTimeout(timerObj.value[data.live_room_id]);
           appStore.disableSpeaking.delete(data.live_room_id);
         }

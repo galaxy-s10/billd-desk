@@ -28,7 +28,7 @@
     "lint:fix": "eslint . --config ./eslint.config.js --cache --fix",
     "preview": "vite preview",
     "release": "standard-version",
-    "test:i18n": "node test/i18n-messages.test.mjs"
+    "test:i18n": "node test/i18n-messages.test.mjs && node test/i18n-hardcoded-ui.test.mjs"
   },
   "config": {
     "commitizen": {
