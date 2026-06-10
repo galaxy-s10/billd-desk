@@ -175,4 +175,5 @@ export const LS_KEY = {
   axiosBaseUrl: 'axiosBaseUrl',
   wssUrl: 'wssUrl',
   coturnUrl: 'coturnUrl',
+  language: 'language',
 };

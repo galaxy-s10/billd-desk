@@ -4,21 +4,21 @@
     <div class="container">
       <template v-if="ipcRenderer">
         <div class="item">
-          <div class="label">界面设置</div>
+          <div class="label">{{ t('app.interfaceSettings') }}</div>
           <div class="value">
             <n-space>
-              <div>主窗口置顶：</div>
+              <div>{{ t('app.mainWindowAlwaysOnTop') }}：</div>
               <n-radio
                 :checked="cacheStore.isAlwaysOnTop"
                 @change="cacheStore.isAlwaysOnTop = true"
               >
-                是
+                {{ t('app.yes') }}
               </n-radio>
               <n-radio
                 :checked="!cacheStore.isAlwaysOnTop"
                 @change="cacheStore.isAlwaysOnTop = false"
               >
-                否
+                {{ t('app.no') }}
               </n-radio>
             </n-space>
           </div>
@@ -27,13 +27,27 @@
       </template>
 
       <div class="item">
-        <div class="label">接口配置</div>
+        <div class="label">{{ t('app.language') }}</div>
+        <div class="value">
+          <n-select
+            v-model:value="currentLocale"
+            class="language-select"
+            :options="localeOptions"
+            size="small"
+            @update:value="handleLocaleChange"
+          ></n-select>
+        </div>
+      </div>
+      <div class="hr"></div>
+
+      <div class="item">
+        <div class="label">{{ t('app.apiConfig') }}</div>
         <div class="value">
           <div class="v-item one">
             <span
-              class="link"
-              @click="handleCopy(getWssUrl() || WEBSOCKET_URL)"
-            >
+            class="link"
+            @click="handleCopy(getWssUrl() || WEBSOCKET_URL)"
+          >
               wss：{{ getWssUrl() || WEBSOCKET_URL }}
             </span>
           </div>
@@ -66,20 +80,20 @@
             class="v-item edit"
             @click="showUrlModalCpt = true"
           >
-            修改
+            {{ t('app.edit') }}
           </div>
         </div>
       </div>
       <div class="hr"></div>
       <div class="item">
-        <div class="label">作者信息</div>
+        <div class="label">{{ t('app.authorInfo') }}</div>
         <div class="value">
           <div class="v-item one">
             <span
               class="link"
               @click="handleCopy(AUTHOR_INFO.wechat)"
             >
-              微信：{{ AUTHOR_INFO.wechat }}
+              {{ t('app.wechat') }}：{{ AUTHOR_INFO.wechat }}
             </span>
           </div>
           <div class="v-item two">
@@ -111,7 +125,7 @@
       </div>
       <div class="hr"></div>
       <div class="item">
-        <div class="label">网页版体验</div>
+        <div class="label">{{ t('app.webExperience') }}</div>
         <div class="value">
           <div class="v-item one">
             <span
@@ -131,7 +145,7 @@
       </div>
       <div class="hr"></div>
       <div class="item">
-        <div class="label">私有化部署</div>
+        <div class="label">{{ t('app.privatizationDeployment') }}</div>
         <div class="value">
           <div class="v-item one">
             <span
@@ -143,7 +157,7 @@
                 })
               "
             >
-              <span>了解详情</span>
+              <span>{{ t('app.learnMore') }}</span>
               <VPIconExternalLink class="icon"></VPIconExternalLink>
             </span>
           </div>
@@ -151,7 +165,7 @@
       </div>
       <div class="hr"></div>
       <div class="item">
-        <div class="label">下载客户端</div>
+        <div class="label">{{ t('app.downloadClient') }}</div>
         <div class="value">
           <div class="v-item one">
             <div class="client-list">
@@ -175,18 +189,23 @@
       </div>
       <div class="hr"></div>
       <div class="item">
-        <div class="label">关于{{ PRODUCT_NAME }}</div>
+        <div class="label">{{ t('app.aboutProduct', { product: PRODUCT_NAME }) }}</div>
         <div class="value">
           <div class="v-item one">
             <span>
-              当前版本：v{{ appStore.version }}（{{ appStore.lastBuildDate }}）
+              {{
+                t('app.currentVersion', {
+                  version: appStore.version,
+                  date: appStore.lastBuildDate,
+                })
+              }}
             </span>
             <span
               v-if="ipcRenderer"
               class="btn"
               @click="handleDeskVersionCheck"
             >
-              检查更新
+              {{ t('app.checkUpdate') }}
             </span>
           </div>
         </div>
@@ -202,6 +221,7 @@
 <script lang="ts" setup>
 import { copyToClipBoard } from 'billd-utils';
 import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import { fetchDeskVersionCheck } from '@/api/deskVersion';
 import {
@@ -214,6 +234,12 @@ import {
   WEBSOCKET_URL,
   WINDOW_ID_ENUM,
 } from '@/constant';
+import {
+  getCurrentLocale,
+  setI18nLocale,
+  SUPPORT_LOCALE_OPTIONS,
+  SupportLocale,
+} from '@/hooks/use-i18n';
 import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
 import { useAppStore } from '@/store/app';
 import { usePiniaCacheStore } from '@/store/cache';
@@ -230,6 +256,9 @@ const appStore = useAppStore();
 const cacheStore = usePiniaCacheStore();
 const showUrlModalCpt = ref(false);
 const { handleOpenExternal, handlesetAlwaysOnTop } = useIpcRendererSend();
+const { t } = useI18n();
+const localeOptions = SUPPORT_LOCALE_OPTIONS;
+const currentLocale = ref<SupportLocale>(getCurrentLocale());
 
 const clientList = ref<
   {
@@ -241,7 +270,12 @@ const clientList = ref<
 
 function handleCopy(str) {
   copyToClipBoard(str);
-  window.$message.success('复制成功！');
+  window.$message.success(t('app.copySuccess'));
+}
+
+function handleLocaleChange(locale: SupportLocale) {
+  setI18nLocale(locale);
+  currentLocale.value = locale;
 }
 
 watch(
@@ -294,7 +328,7 @@ watch(
 
 function jumpToDownload({ windowId, url }) {
   if (!url || url === '') {
-    window.$message.info('敬请期待！');
+    window.$message.info(t('app.comingSoon'));
     return;
   }
   handleOpenExternal({
@@ -308,9 +342,9 @@ async function handleDeskVersionCheck() {
   if (res.code === 200 && res.data) {
     appStore.updateModalInfo = res.data;
     if (appStore.updateModalInfo?.checkUpdate === 2) {
-      window.$message.success('当前不需要更新');
+      window.$message.success(t('app.noUpdateNeeded'));
     } else if (appStore.updateModalInfo?.isUpdate === 2) {
-      window.$message.success('当前是最新版本');
+      window.$message.success(t('app.latestVersion'));
     }
   }
 }
@@ -352,6 +386,9 @@ async function handleDeskVersionCheck() {
         flex: 1;
         color: #666;
         font-size: 14px;
+        .language-select {
+          width: 220px;
+        }
         .v-item {
           margin-bottom: 5px;
 
