@@ -5,14 +5,18 @@
       class="click"
       @click="router.push('/')"
     >
-      点我
+      {{ t('app.notFoundClick') }}
     </span>
-    回首页
+    {{ t('app.backHome') }}
   </div>
 </template>
 
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
+
 import router from '@/router';
+
+const { t } = useI18n();
 </script>
 
 <style lang="scss" scoped>

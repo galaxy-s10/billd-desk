@@ -35,14 +35,16 @@
 
 <script lang="ts">
 import { VNode, defineComponent, ref, render, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
   name: 'tipModal',
   emits: ['ok', 'cancel'],
   setup() {
-    const title = ref('提示');
-    const cancelButtonText = ref('取消');
-    const confirmButtonText = ref('确认');
+    const { t } = useI18n();
+    const title = ref(t('app.tip'));
+    const cancelButtonText = ref(t('app.cancel'));
+    const confirmButtonText = ref(t('app.confirm'));
     const width = ref('320px');
     const content = ref<string | VNode>('');
     const show = ref(false);

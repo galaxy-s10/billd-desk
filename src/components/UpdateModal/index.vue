@@ -3,7 +3,7 @@
     <div class="mask"></div>
     <div class="content">
       <div class="top">
-        <div class="title">版本更新</div>
+        <div class="title">{{ t('app.versionUpdate') }}</div>
         <div
           v-if="appStore.updateModalInfo?.forceUpdate !== 1"
           class="close"
@@ -17,8 +17,8 @@
       ></div>
       <!--eslint-enable-->
       <div class="other">
-        <div>版本号：{{ appStore.updateModalInfo?.show_version }}</div>
-        <div>更新时间：{{ appStore.updateModalInfo?.updateDate }}</div>
+        <div>{{ t('app.versionNumber') }}：{{ appStore.updateModalInfo?.show_version }}</div>
+        <div>{{ t('app.updateTime') }}：{{ appStore.updateModalInfo?.updateDate }}</div>
       </div>
       <div
         class="btn"
@@ -29,18 +29,21 @@
           })
         "
       >
-        立即更新
+        {{ t('app.updateNow') }}
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
+
 import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
 import { WINDOW_ID_ENUM } from '@/pure-constant';
 import { useAppStore } from '@/store/app';
 
 const appStore = useAppStore();
+const { t } = useI18n();
 
 const { handleOpenExternal } = useIpcRendererSend();
 
