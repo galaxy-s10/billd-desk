@@ -1,8 +1,10 @@
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import { MediaTypeEnum } from '@/interface';
 
 export const useRTCParams = () => {
+  const { t } = useI18n();
   const maxBitrate = ref([
     {
       label: '1',
@@ -55,34 +57,34 @@ export const useRTCParams = () => {
     //   disabled: false,
     // },
   ]);
-  const maxFramerate = ref([
+  const maxFramerate = computed(() => [
     {
-      label: '1帧',
+      label: t('remote.frameUnit', { count: 1 }),
       value: 1,
       disabled: false,
     },
     {
-      label: '10帧',
+      label: t('remote.frameUnit', { count: 10 }),
       value: 10,
       disabled: false,
     },
     {
-      label: '20帧',
+      label: t('remote.frameUnit', { count: 20 }),
       value: 20,
       disabled: false,
     },
     {
-      label: '30帧',
+      label: t('remote.frameUnit', { count: 30 }),
       value: 30,
       disabled: false,
     },
     {
-      label: '60帧',
+      label: t('remote.frameUnit', { count: 60 }),
       value: 60,
       disabled: false,
     },
     {
-      label: '120帧',
+      label: t('remote.frameUnit', { count: 120 }),
       value: 120,
       disabled: false,
     },
@@ -119,86 +121,87 @@ export const useRTCParams = () => {
       disabled: false,
     },
   ]);
-  const videoContentHint = ref([
+  const videoContentHint = computed(() => [
     {
-      label: '默认',
+      label: t('remote.default'),
       value: '',
       disabled: false,
     },
     {
-      label: '运动',
+      label: t('remote.motion'),
       value: 'motion',
       disabled: false,
     },
     {
-      label: '文本',
+      label: t('remote.text'),
       value: 'text',
       disabled: false,
     },
     {
-      label: '平衡',
+      label: t('remote.balanced'),
       value: 'detail',
       disabled: false,
     },
   ]);
-  const audioContentHint = ref([
+  const audioContentHint = computed(() => [
     {
-      label: '默认',
+      label: t('remote.default'),
       value: '',
       disabled: false,
     },
     {
-      label: '音乐',
+      label: t('remote.music'),
       value: 'music',
       disabled: false,
     },
     {
-      label: '语言',
+      label: t('remote.speech'),
       value: 'speech',
       disabled: false,
     },
     {
-      label: '语音识别',
+      label: t('remote.speechRecognition'),
       value: 'speech-recognition',
       disabled: false,
     },
   ]);
 
-  const allMediaTypeList: Record<string, { type: MediaTypeEnum; txt: string }> =
-    {
+  const allMediaTypeList = computed<
+    Record<string, { type: MediaTypeEnum; txt: string }>
+  >(() => ({
       [MediaTypeEnum.camera]: {
         type: MediaTypeEnum.camera,
-        txt: '摄像头',
+        txt: t('remote.camera'),
       },
       [MediaTypeEnum.microphone]: {
         type: MediaTypeEnum.microphone,
-        txt: '麦克风',
+        txt: t('remote.microphone'),
       },
       [MediaTypeEnum.screen]: {
         type: MediaTypeEnum.screen,
-        txt: '窗口',
+        txt: t('remote.window'),
       },
       [MediaTypeEnum.txt]: {
         type: MediaTypeEnum.txt,
-        txt: '文字',
+        txt: t('remote.text'),
       },
       [MediaTypeEnum.img]: {
         type: MediaTypeEnum.img,
-        txt: '图片',
+        txt: t('remote.image'),
       },
       [MediaTypeEnum.media]: {
         type: MediaTypeEnum.media,
-        txt: '视频',
+        txt: t('remote.video'),
       },
       [MediaTypeEnum.time]: {
         type: MediaTypeEnum.time,
-        txt: '时间',
+        txt: t('remote.time'),
       },
       [MediaTypeEnum.stopwatch]: {
         type: MediaTypeEnum.stopwatch,
-        txt: '秒表',
+        txt: t('remote.stopwatch'),
       },
-    };
+    }));
 
   return {
     maxBitrate,

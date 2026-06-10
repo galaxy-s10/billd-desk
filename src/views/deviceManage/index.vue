@@ -2,8 +2,10 @@
   <div class="setting-wrap">
     <div class="nav"></div>
     <div class="container">
-      <div class="label">最近连接</div>
-      <div v-if="!cacheStore.linkDeviceList.length">暂无记录</div>
+      <div class="label">{{ t('remote.recentConnections') }}</div>
+      <div v-if="!cacheStore.linkDeviceList.length">
+        {{ t('remote.noRecords') }}
+      </div>
       <div
         v-else
         class="link-device-list"
@@ -27,9 +29,12 @@
 </template>
 
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
+
 import { usePiniaCacheStore } from '@/store/cache';
 
 const cacheStore = usePiniaCacheStore();
+const { t } = useI18n();
 
 function handleDelLinkDeviceList(item) {
   cacheStore.linkDeviceList = cacheStore.linkDeviceList.filter(

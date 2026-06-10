@@ -2,6 +2,7 @@ import app from '@/locales/es/app';
 import common from '@/locales/es/common';
 import dashboard from '@/locales/es/dashboard';
 import live from '@/locales/es/live';
+import remote from '@/locales/es/remote';
 import router from '@/locales/es/router';
 
 export default {
@@ -10,4 +11,5 @@ export default {
   ...dashboard,
   ...router,
   ...live,
+  ...remote,
 };
