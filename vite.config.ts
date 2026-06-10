@@ -78,6 +78,13 @@ export default defineConfig(({ mode }) => {
                 formats: ['cjs'],
                 fileName: () => '[name].cjs',
               },
+              rollupOptions: {
+                output: {
+                  format: 'cjs',
+                  entryFileNames: '[name].cjs',
+                  chunkFileNames: '[name].cjs',
+                },
+              },
             },
           },
         },
