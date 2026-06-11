@@ -169,39 +169,39 @@ export const useRTCParams = () => {
   const allMediaTypeList = computed<
     Record<string, { type: MediaTypeEnum; txt: string }>
   >(() => ({
-      [MediaTypeEnum.camera]: {
-        type: MediaTypeEnum.camera,
-        txt: t('remote.camera'),
-      },
-      [MediaTypeEnum.microphone]: {
-        type: MediaTypeEnum.microphone,
-        txt: t('remote.microphone'),
-      },
-      [MediaTypeEnum.screen]: {
-        type: MediaTypeEnum.screen,
-        txt: t('remote.window'),
-      },
-      [MediaTypeEnum.txt]: {
-        type: MediaTypeEnum.txt,
-        txt: t('remote.text'),
-      },
-      [MediaTypeEnum.img]: {
-        type: MediaTypeEnum.img,
-        txt: t('remote.image'),
-      },
-      [MediaTypeEnum.media]: {
-        type: MediaTypeEnum.media,
-        txt: t('remote.video'),
-      },
-      [MediaTypeEnum.time]: {
-        type: MediaTypeEnum.time,
-        txt: t('remote.time'),
-      },
-      [MediaTypeEnum.stopwatch]: {
-        type: MediaTypeEnum.stopwatch,
-        txt: t('remote.stopwatch'),
-      },
-    }));
+    [MediaTypeEnum.camera]: {
+      type: MediaTypeEnum.camera,
+      txt: t('remote.camera'),
+    },
+    [MediaTypeEnum.microphone]: {
+      type: MediaTypeEnum.microphone,
+      txt: t('remote.microphone'),
+    },
+    [MediaTypeEnum.screen]: {
+      type: MediaTypeEnum.screen,
+      txt: t('remote.window'),
+    },
+    [MediaTypeEnum.txt]: {
+      type: MediaTypeEnum.txt,
+      txt: t('remote.text'),
+    },
+    [MediaTypeEnum.img]: {
+      type: MediaTypeEnum.img,
+      txt: t('remote.image'),
+    },
+    [MediaTypeEnum.media]: {
+      type: MediaTypeEnum.media,
+      txt: t('remote.video'),
+    },
+    [MediaTypeEnum.time]: {
+      type: MediaTypeEnum.time,
+      txt: t('remote.time'),
+    },
+    [MediaTypeEnum.stopwatch]: {
+      type: MediaTypeEnum.stopwatch,
+      txt: t('remote.stopwatch'),
+    },
+  }));
 
   return {
     maxBitrate,

@@ -29,7 +29,8 @@ export function useTip(data: {
   instance.content = data.content;
   instance.hiddenCancel = !!data.hiddenCancel;
   instance.hiddenClose = !!data.hiddenClose;
-  instance.confirmButtonText = data.confirmButtonText || translate('app.confirm');
+  instance.confirmButtonText =
+    data.confirmButtonText || translate('app.confirm');
   instance.cancelButtonText = data.cancelButtonText || translate('app.cancel');
   return new Promise((resolve, reject) => {
     instance.handleOk = () => {

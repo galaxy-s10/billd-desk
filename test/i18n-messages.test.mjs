@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+
 import ts from 'typescript';
 
 const rootDir = path.resolve(import.meta.dirname, '..');
@@ -17,7 +18,11 @@ function readSource(file) {
 }
 
 function getPropertyName(name) {
-  if (ts.isIdentifier(name) || ts.isStringLiteral(name) || ts.isNumericLiteral(name)) {
+  if (
+    ts.isIdentifier(name) ||
+    ts.isStringLiteral(name) ||
+    ts.isNumericLiteral(name)
+  ) {
     return name.text;
   }
   throw new Error(`Unsupported locale key syntax: ${name.getText()}`);
@@ -35,7 +40,10 @@ function extractNamespaceKeys(file) {
       node.expression.text === 'nameSpaceWrap'
     ) {
       const [namespaceArg, messagesArg] = node.arguments;
-      if (!ts.isStringLiteral(namespaceArg) || !ts.isObjectLiteralExpression(messagesArg)) {
+      if (
+        !ts.isStringLiteral(namespaceArg) ||
+        !ts.isObjectLiteralExpression(messagesArg)
+      ) {
         throw new Error(`Invalid nameSpaceWrap usage in ${file}`);
       }
       namespace = namespaceArg.text;
@@ -74,7 +82,9 @@ function getLocaleMessages(locale) {
 }
 
 const localesIndex = fs.readFileSync(path.join(localesDir, 'index.ts'), 'utf8');
-const registeredLocales = [...localesIndex.matchAll(/^\s{2}([a-z]+):/gm)].map((match) => match[1]);
+const registeredLocales = [...localesIndex.matchAll(/^\s{2}([a-z]+):/gm)].map(
+  (match) => match[1]
+);
 
 if (JSON.stringify(registeredLocales) !== JSON.stringify(expectedLocales)) {
   throw new Error(
@@ -99,7 +109,9 @@ expectedLocales.slice(1).forEach((locale) => {
     const expectedKeys = baseline[namespace].sort();
     const actualKeys = messages[namespace].sort();
     if (JSON.stringify(actualKeys) !== JSON.stringify(expectedKeys)) {
-      throw new Error(`${locale}.${namespace} keys differ from ${baselineLocale}.${namespace}`);
+      throw new Error(
+        `${locale}.${namespace} keys differ from ${baselineLocale}.${namespace}`
+      );
     }
   });
 });

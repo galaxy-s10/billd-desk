@@ -3,9 +3,9 @@ import { nameSpaceWrap } from '@/locales/util';
 export default nameSpaceWrap('webrtc', {
   connectionDetails: 'Detalles de conexion',
   mode: 'Modo',
-  controlMode: 'Control',
+  controlMode: 'Modo de control',
   watchMode: 'Vista',
-  cursor: 'Cursor',
+  cursor: 'Puntero',
   show: 'Mostrar',
   hide: 'Ocultar',
   latency: 'Latencia',
@@ -15,5 +15,6 @@ export default nameSpaceWrap('webrtc', {
   missingDeviceCode: 'El codigo del dispositivo esta vacio',
   missingTemporaryPassword: 'La contrasena temporal esta vacia',
   missingRemoteDeviceCode: 'El codigo del dispositivo remoto esta vacio',
-  missingRemoteDevicePassword: 'La contrasena del dispositivo remoto esta vacia',
+  missingRemoteDevicePassword:
+    'La contrasena del dispositivo remoto esta vacia',
 });

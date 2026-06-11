@@ -12,10 +12,7 @@ const files = [
   'src/utils/network/webRTC.ts',
 ];
 
-const allowedSnippets = [
-  '简体中文',
-  '日本語',
-];
+const allowedSnippets = ['简体中文', '日本語'];
 
 function stripComments(source) {
   return source
@@ -36,14 +33,18 @@ function isAllowed(line) {
 }
 
 function isUserFacingTsLine(line) {
-  return /window\.\$message|alert\(|\btitle:\s*['"`]|\bcontent:\s*['"`]|\bh\(|=>\s*['"`]/.test(line);
+  return /window\.\$message|alert\(|\btitle:\s*['"`]|\bcontent:\s*['"`]|\bh\(|=>\s*['"`]/.test(
+    line
+  );
 }
 
 const failures = [];
 
 files.forEach((file) => {
   const absoluteFile = path.join(rootDir, file);
-  const source = stripDebugLines(stripComments(fs.readFileSync(absoluteFile, 'utf8')));
+  const source = stripDebugLines(
+    stripComments(fs.readFileSync(absoluteFile, 'utf8'))
+  );
   source.split(/\r?\n/).forEach((line, index) => {
     const shouldScanLine = file.endsWith('.vue') || isUserFacingTsLine(line);
     if (shouldScanLine && /[\p{Script=Han}]/u.test(line) && !isAllowed(line)) {

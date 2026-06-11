@@ -191,7 +191,9 @@
           :key="key"
           class="item"
         >
-          <span>{{ t('remote.controlledBy', { uuid: item[1].deskUserUuid }) }}</span>
+          <span>{{
+            t('remote.controlledBy', { uuid: item[1].deskUserUuid })
+          }}</span>
           <span
             class="del"
             @click="handleDel(item[1].sender)"

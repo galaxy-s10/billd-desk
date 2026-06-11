@@ -7,8 +7,10 @@ export default nameSpaceWrap('deployment', {
   qqId: 'QQ ID',
   contactRemark: 'Please add a note',
   contactRemarkValue: 'desk private deployment',
-  openSourceNotice: 'Note: this project is open source. Personal users can open GitHub issues instead of adding the author.',
-  businessNotice: 'For commercial cooperation, please review the project first. Consultation is paid (100 CNY/hour).',
+  openSourceNotice:
+    'Note: this project is open source. Personal users can open GitHub issues instead of adding the author.',
+  businessNotice:
+    'For commercial cooperation, please review the project first. Consultation is paid (100 CNY/hour).',
   personalVersion: 'Personal',
   openSourceVersion: 'Open source',
   customVersion: 'Custom',

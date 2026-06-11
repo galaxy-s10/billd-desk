@@ -53,5 +53,6 @@ export default nameSpaceWrap('app', {
   unmuteSuccess: 'ミュートを解除しました',
   muteExpired: 'ミュートが解除されました',
   unsupportedWebSocket: '現在の環境はWebSocketをサポートしていません。',
-  unsupportedRTCPeerConnection: '現在の環境はRTCPeerConnectionをサポートしていません。',
+  unsupportedRTCPeerConnection:
+    '現在の環境はRTCPeerConnectionをサポートしていません。',
 });

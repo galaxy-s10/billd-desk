@@ -28,7 +28,7 @@ export default nameSpaceWrap('app', {
   noUpdateNeeded: 'No se necesita actualizar',
   latestVersion: 'Ya tienes la version mas reciente',
   versionUpdate: 'Actualizacion de version',
-  versionNumber: 'Version',
+  versionNumber: 'Numero de version',
   updateTime: 'Actualizado',
   updateNow: 'Actualizar ahora',
   notFoundClick: 'Haz clic aqui',
@@ -53,5 +53,6 @@ export default nameSpaceWrap('app', {
   unmuteSuccess: 'Silencio cancelado correctamente',
   muteExpired: 'El silencio se ha levantado',
   unsupportedWebSocket: 'WebSocket no es compatible con este entorno.',
-  unsupportedRTCPeerConnection: 'RTCPeerConnection no es compatible con este entorno.',
+  unsupportedRTCPeerConnection:
+    'RTCPeerConnection no es compatible con este entorno.',
 });

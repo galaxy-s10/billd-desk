@@ -7,7 +7,8 @@ export default nameSpaceWrap('deployment', {
   qqId: 'QQ号',
   contactRemark: '添加时请备注',
   contactRemarkValue: 'desk私有化部署',
-  openSourceNotice: '注意：项目开源，个人用户有问题 github 提 Issue 即可，不必添加作者！',
+  openSourceNotice:
+    '注意：项目开源，个人用户有问题 github 提 Issue 即可，不必添加作者！',
   businessNotice: '如有商业合作，请充分了解该项目。咨询需付费（100元/小时）！',
   personalVersion: '个人版',
   openSourceVersion: '开源版',

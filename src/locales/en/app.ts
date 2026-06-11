@@ -53,5 +53,6 @@ export default nameSpaceWrap('app', {
   unmuteSuccess: 'Unmuted successfully',
   muteExpired: 'Mute has been lifted',
   unsupportedWebSocket: 'WebSocket is not supported in this environment.',
-  unsupportedRTCPeerConnection: 'RTCPeerConnection is not supported in this environment.',
+  unsupportedRTCPeerConnection:
+    'RTCPeerConnection is not supported in this environment.',
 });

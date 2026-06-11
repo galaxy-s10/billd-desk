@@ -45,9 +45,9 @@
         <div class="value">
           <div class="v-item one">
             <span
-            class="link"
-            @click="handleCopy(getWssUrl() || WEBSOCKET_URL)"
-          >
+              class="link"
+              @click="handleCopy(getWssUrl() || WEBSOCKET_URL)"
+            >
               wss：{{ getWssUrl() || WEBSOCKET_URL }}
             </span>
           </div>
@@ -189,7 +189,9 @@
       </div>
       <div class="hr"></div>
       <div class="item">
-        <div class="label">{{ t('app.aboutProduct', { product: PRODUCT_NAME }) }}</div>
+        <div class="label">
+          {{ t('app.aboutProduct', { product: PRODUCT_NAME }) }}
+        </div>
         <div class="value">
           <div class="v-item one">
             <span>

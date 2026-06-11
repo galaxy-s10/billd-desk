@@ -28,7 +28,7 @@ export default nameSpaceWrap('app', {
   noUpdateNeeded: 'Aucune mise a jour necessaire',
   latestVersion: 'Vous utilisez la derniere version',
   versionUpdate: 'Mise a jour',
-  versionNumber: 'Version',
+  versionNumber: 'Numero de version',
   updateTime: 'Mis a jour le',
   updateNow: 'Mettre a jour',
   notFoundClick: 'Cliquez ici',
@@ -52,6 +52,8 @@ export default nameSpaceWrap('app', {
   muteSuccess: 'Utilisateur mis en sourdine',
   unmuteSuccess: 'Sourdine levee',
   muteExpired: 'La sourdine a ete levee',
-  unsupportedWebSocket: "WebSocket n'est pas pris en charge dans cet environnement.",
-  unsupportedRTCPeerConnection: "RTCPeerConnection n'est pas pris en charge dans cet environnement.",
+  unsupportedWebSocket:
+    "WebSocket n'est pas pris en charge dans cet environnement.",
+  unsupportedRTCPeerConnection:
+    "RTCPeerConnection n'est pas pris en charge dans cet environnement.",
 });

@@ -13,21 +13,26 @@ console.log(
   '\x1B[0;;34m ' + `读取了: eslint配置文件` + ' \x1B[0m'
 );
 
+const ignoredFiles = [
+  'node_modules/**',
+  'pnpm-lock.yaml',
+  'dist/**',
+  'components.d.ts',
+  'auto-imports.d.ts',
+  'electron-dist/**',
+  'deploy/**',
+  '.DS_Store',
+  '.eslintcache',
+];
+
 export default defineFlatConfig([
+  {
+    ignores: ignoredFiles,
+  },
   {
     ...js.configs.recommended,
     ...importPlugin.flatConfigs.recommended,
-    ignores: [
-      'node_modules',
-      'pnpm-lock.yaml',
-      'dist',
-      'components.d.ts',
-      'auto-imports.d.ts',
-      'electron-dist/**/*',
-      'deploy/**/*',
-      '.DS_Store',
-      '.eslintcache',
-    ],
+    ignores: ignoredFiles,
     languageOptions: {
       globals: {},
     },

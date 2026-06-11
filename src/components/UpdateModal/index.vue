@@ -17,8 +17,14 @@
       ></div>
       <!--eslint-enable-->
       <div class="other">
-        <div>{{ t('app.versionNumber') }}：{{ appStore.updateModalInfo?.show_version }}</div>
-        <div>{{ t('app.updateTime') }}：{{ appStore.updateModalInfo?.updateDate }}</div>
+        <div>
+          {{ t('app.versionNumber') }}：{{
+            appStore.updateModalInfo?.show_version
+          }}
+        </div>
+        <div>
+          {{ t('app.updateTime') }}：{{ appStore.updateModalInfo?.updateDate }}
+        </div>
       </div>
       <div
         class="btn"

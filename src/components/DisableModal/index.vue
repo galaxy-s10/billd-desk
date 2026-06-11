@@ -17,7 +17,9 @@
       ></div>
       <!--eslint-enable-->
       <div class="other">
-        <div>{{ t('app.publishTime') }}：{{ appStore.updateModalInfo?.updateDate }}</div>
+        <div>
+          {{ t('app.publishTime') }}：{{ appStore.updateModalInfo?.updateDate }}
+        </div>
       </div>
       <div
         class="btn"

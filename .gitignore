@@ -7,3 +7,5 @@ auto-imports.d.ts
 deploy
 electron-release
 electron-dist
+.codex-client.log
+.codex-client.err.log

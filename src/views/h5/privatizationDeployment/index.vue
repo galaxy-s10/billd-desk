@@ -81,7 +81,9 @@
         <div>{{ t('deployment.wechatId') }}：{{ AUTHOR_INFO.wechat }}</div>
         <div>{{ t('deployment.qqId') }}：{{ AUTHOR_INFO.qq }}</div>
         <div>
-          {{ t('deployment.contactRemark') }}：<b>{{ t('deployment.contactRemarkValue') }}</b>
+          {{ t('deployment.contactRemark') }}：<b>{{
+            t('deployment.contactRemarkValue')
+          }}</b>
         </div>
         <b style="color: red">
           <span>{{ t('deployment.openSourceNotice') }}</span>
@@ -152,7 +154,10 @@ const detail = computed(() => ({
     ],
   },
   openSource: {
-    slogan: [t('deployment.openSourceSlogan1'), t('deployment.openSourceSlogan2')],
+    slogan: [
+      t('deployment.openSourceSlogan1'),
+      t('deployment.openSourceSlogan2'),
+    ],
     list: [
       {
         color: 'blue',

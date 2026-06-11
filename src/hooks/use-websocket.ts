@@ -312,7 +312,11 @@ export const useWebsocket = () => {
             },
             () => translate('app.copyLink') // 用箭头函数返回性能更好。
           ),
-          h('div', { style: { marginTop: '5px' } }, translate('app.validForFiveMinutes')),
+          h(
+            'div',
+            { style: { marginTop: '5px' } },
+            translate('app.validForFiveMinutes')
+          ),
         ]),
       }).catch(() => {});
     });

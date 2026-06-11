@@ -44,7 +44,7 @@ export default nameSpaceWrap('remote', {
   microphone: 'Microfono',
   window: 'Ventana',
   image: 'Imagen',
-  video: 'Video',
+  video: 'Video remoto',
   time: 'Tiempo',
   stopwatch: 'Cronometro',
 });

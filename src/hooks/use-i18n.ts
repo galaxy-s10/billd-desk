@@ -6,13 +6,14 @@ import { getLanguage, setLanguage } from '@/utils/localStorage/app';
 export const SUPPORT_LOCALES = ['zh', 'en', 'es', 'fr', 'ja'] as const;
 export type SupportLocale = (typeof SUPPORT_LOCALES)[number];
 
-export const SUPPORT_LOCALE_OPTIONS: { label: string; value: SupportLocale }[] = [
-  { label: '简体中文', value: 'zh' },
-  { label: 'English', value: 'en' },
-  { label: 'Español', value: 'es' },
-  { label: 'Français', value: 'fr' },
-  { label: '日本語', value: 'ja' },
-];
+export const SUPPORT_LOCALE_OPTIONS: { label: string; value: SupportLocale }[] =
+  [
+    { label: '简体中文', value: 'zh' },
+    { label: 'English', value: 'en' },
+    { label: 'Español', value: 'es' },
+    { label: 'Français', value: 'fr' },
+    { label: '日本語', value: 'ja' },
+  ];
 
 function isSupportLocale(locale: string): locale is SupportLocale {
   return SUPPORT_LOCALES.includes(locale as SupportLocale);
@@ -20,7 +21,9 @@ function isSupportLocale(locale: string): locale is SupportLocale {
 
 function normalizeLocale(locale = ''): SupportLocale | undefined {
   const lowerLocale = locale.toLowerCase();
-  return SUPPORT_LOCALES.find((item) => lowerLocale === item || lowerLocale.startsWith(`${item}-`));
+  return SUPPORT_LOCALES.find(
+    (item) => lowerLocale === item || lowerLocale.startsWith(`${item}-`)
+  );
 }
 
 export function getInitialLocale(): SupportLocale {
