@@ -54,4 +54,6 @@ export default nameSpaceWrap('app', {
   muteExpired: '禁言解除了！',
   unsupportedWebSocket: '当前环境不支持WebSocket！',
   unsupportedRTCPeerConnection: '当前环境不支持RTCPeerConnection！',
+  copyright: 'Copyright © 2023-2026 {author}. 保留所有权利。',
+  versionPageTitle: '版本说明',
 });

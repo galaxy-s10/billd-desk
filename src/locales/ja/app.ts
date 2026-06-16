@@ -55,4 +55,6 @@ export default nameSpaceWrap('app', {
   unsupportedWebSocket: '現在の環境はWebSocketをサポートしていません。',
   unsupportedRTCPeerConnection:
     '現在の環境はRTCPeerConnectionをサポートしていません。',
+  copyright: 'Copyright © 2023-2026 {author}. All rights reserved.',
+  versionPageTitle: 'リリースノート',
 });

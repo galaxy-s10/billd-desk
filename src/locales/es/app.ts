@@ -55,4 +55,6 @@ export default nameSpaceWrap('app', {
   unsupportedWebSocket: 'WebSocket no es compatible con este entorno.',
   unsupportedRTCPeerConnection:
     'RTCPeerConnection no es compatible con este entorno.',
+  copyright: 'Copyright © 2023-2026 {author}. Todos los derechos reservados.',
+  versionPageTitle: 'Notas de la version',
 });

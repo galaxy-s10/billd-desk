@@ -8,6 +8,7 @@ export const PROJECT_GITHUB = `https://github.com/galaxy-s10/billd-desk-electron
 export const WEB_DESK_URL = `https://desk.hsslive.cn`;
 
 export const AUTHOR_INFO = {
+  name: 'Galaxy-s10',
   github: 'https://github.com/galaxy-s10',
   wechat: 'shuisheng9905',
   qq: '2274751790',

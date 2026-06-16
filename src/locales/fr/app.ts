@@ -56,4 +56,6 @@ export default nameSpaceWrap('app', {
     "WebSocket n'est pas pris en charge dans cet environnement.",
   unsupportedRTCPeerConnection:
     "RTCPeerConnection n'est pas pris en charge dans cet environnement.",
+  copyright: 'Copyright © 2023-2026 {author}. Tous droits reserves.',
+  versionPageTitle: 'Notes de version',
 });
