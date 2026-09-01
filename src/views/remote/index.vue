@@ -2,10 +2,10 @@
   <div class="remote-wrap">
     <div class="container">
       <div class="local-device">
-        <div class="label">此设备</div>
+        <div class="label">{{ t('remote.thisDevice') }}</div>
         <div class="info">
           <div class="info-left">
-            <div class="txt">设备代码</div>
+            <div class="txt">{{ t('remote.deviceCode') }}</div>
             <div class="code-info">
               <div class="code">{{ cacheStore.deskUserUuid }}</div>
               <div
@@ -19,7 +19,7 @@
             </div>
           </div>
           <div class="info-right">
-            <div class="txt">临时密码</div>
+            <div class="txt">{{ t('remote.temporaryPassword') }}</div>
             <div class="code-info">
               <div class="code">
                 {{
@@ -40,7 +40,7 @@
         </div>
       </div>
       <div class="remote-device">
-        <div class="label">远程控制设备</div>
+        <div class="label">{{ t('remote.remoteDevice') }}</div>
         <div class="info">
           <div
             v-on-click-outside="handleClickOutside"
@@ -54,7 +54,7 @@
                 v-model="cacheStore.remoteDeskUserUuid"
                 type="text"
                 class="ipt"
-                :placeholder="'请输入远程设备代码'"
+                :placeholder="t('remote.remoteDevicePlaceholder')"
                 maxlength="8"
               />
               <div
@@ -87,7 +87,7 @@
                   v-if="!cacheStore.linkDeviceList.length"
                   class="null"
                 >
-                  暂无记录
+                  {{ t('remote.noRecords') }}
                 </div>
               </div>
             </div>
@@ -97,7 +97,7 @@
             :class="{ gray: !cacheStore.remoteDeskUserUuid.length, loading }"
             @click="startRemote"
           >
-            <div v-if="!loading">连接</div>
+            <div v-if="!loading">{{ t('remote.connect') }}</div>
             <div
               v-else
               class="loading"
@@ -107,11 +107,11 @@
       </div>
 
       <template v-if="!appStore.remoteDesk.size">
-        <div class="tip">已准备好连接</div>
+        <div class="tip">{{ t('remote.readyToConnect') }}</div>
         <div class="link-config">
           <div class="link-item">
             <n-space>
-              <div class="link-label">码率：</div>
+              <div class="link-label">{{ t('remote.bitrate') }}：</div>
               <n-radio-group v-model:value="currentMaxBitrate">
                 <n-radio
                   v-for="item in maxBitrate"
@@ -125,7 +125,7 @@
           </div>
           <div class="link-item">
             <n-space>
-              <div class="link-label">帧率：</div>
+              <div class="link-label">{{ t('remote.frameRate') }}：</div>
               <n-radio-group v-model:value="currentMaxFramerate">
                 <n-radio
                   v-for="item in maxFramerate"
@@ -139,7 +139,7 @@
           </div>
           <div class="link-item">
             <n-space>
-              <div class="link-label">分辨率：</div>
+              <div class="link-label">{{ t('remote.resolution') }}：</div>
               <n-radio-group v-model:value="currentResolutionRatio">
                 <n-radio
                   v-for="item in resolutionRatio"
@@ -153,7 +153,7 @@
           </div>
           <div class="link-item">
             <n-space>
-              <div class="link-label">视频内容：</div>
+              <div class="link-label">{{ t('remote.videoContent') }}：</div>
               <n-radio-group v-model:value="currentVideoContentHint">
                 <n-radio
                   v-for="item in videoContentHint"
@@ -167,7 +167,7 @@
           </div>
           <div class="link-item">
             <n-space>
-              <div class="link-label">音频内容：</div>
+              <div class="link-label">{{ t('remote.audioContent') }}：</div>
               <n-radio-group v-model:value="currentAudioContentHint">
                 <n-radio
                   v-for="item in audioContentHint"
@@ -191,12 +191,14 @@
           :key="key"
           class="item"
         >
-          <span>正在被{{ item[1].deskUserUuid }}控制</span>
+          <span>{{
+            t('remote.controlledBy', { uuid: item[1].deskUserUuid })
+          }}</span>
           <span
             class="del"
             @click="handleDel(item[1].sender)"
           >
-            断开
+            {{ t('remote.disconnect') }}
           </span>
         </div>
       </div>
@@ -207,7 +209,7 @@
       class="debug-info"
     >
       <div>
-        <span>窗口Id：</span>
+        <span>{{ t('remote.windowId') }}：</span>
         <span
           class="link"
           @click="handleCopy(WINDOW_ID_ENUM.remote)"
@@ -234,12 +236,12 @@
       </div>
 
       <div>
-        <span>调试地址：</span>
+        <span>{{ t('remote.debugUrl') }}：</span>
         <input
           v-model="debugUrl"
           type="text"
         />
-        <button @click="changeDebugUrl">确定</button>
+        <button @click="changeDebugUrl">{{ t('remote.confirm') }}</button>
       </div>
     </div>
 
@@ -258,6 +260,7 @@
 import { vOnClickOutside } from '@vueuse/components';
 import { copyToClipBoard, getRandomString, windowReload } from 'billd-utils';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
 import {
@@ -308,6 +311,7 @@ const route = useRoute();
 const appStore = useAppStore();
 const networkStore = useNetworkStore();
 const cacheStore = usePiniaCacheStore();
+const { t } = useI18n();
 
 const { updateWebRtcRemoteDeskConfig, webRtcRemoteDesk } =
   useWebRtcRemoteDesk();
@@ -646,9 +650,9 @@ async function handleUpdatePassword() {
         new_password: cacheStore.deskUserPassword!,
       });
       originalPassword.value = cacheStore.deskUserPassword;
-      window.$message.success('更新临时密码成功！');
+      window.$message.success(t('remote.updateTempPasswordSuccess'));
     } else {
-      window.$message.warning('临时密码长度要求6-12位！');
+      window.$message.warning(t('remote.tempPasswordLength'));
     }
   } catch (error) {
     console.log(error);
@@ -760,7 +764,7 @@ async function handleRTC(receiver) {
 }
 
 function handleCopyRemoteInfo() {
-  const str = `BilldDesk:设备代码:${cacheStore.remoteDeskUserUuid};临时密码:${cacheStore.remoteDeskUserPassword}`;
+  const str = `BilldDesk:${t('remote.deviceCode')}:${cacheStore.remoteDeskUserUuid};${t('remote.temporaryPassword')}:${cacheStore.remoteDeskUserPassword}`;
   // @ts-ignore
   textArea.select(); // 选择文本
   // @ts-ignore
@@ -769,11 +773,11 @@ function handleCopyRemoteInfo() {
   navigator.clipboard
     .writeText(str)
     .then(() => {
-      window.$message.success('已复制邀请信息！');
+      window.$message.success(t('remote.inviteInfoCopied'));
     })
     .catch((err) => {
       console.log(err);
-      window.$message.error('复制邀请信息失败！');
+      window.$message.error(t('remote.inviteInfoCopyFailed'));
     });
 }
 
@@ -790,7 +794,7 @@ async function handleResetDeskuuid() {
 
 function handleCopy(str) {
   copyToClipBoard(str);
-  window.$message.success('复制成功！');
+  window.$message.success(t('remote.copySuccess'));
 }
 
 function handleClose() {
@@ -879,7 +883,7 @@ async function handleConfirm(pwd: string) {
         }
       } else {
         showPwdModalCpt.value = true;
-        errMsg.value = '密码错误，请重新输入';
+        errMsg.value = t('remote.passwordIncorrect');
       }
     } else {
       window.$message.error(res.message);
@@ -907,11 +911,11 @@ function handleDelLinkDeviceList(item) {
 
 async function startRemote() {
   if (cacheStore.remoteDeskUserUuid === '') {
-    window.$message.warning('请输入远程设备代码！');
+    window.$message.warning(t('remote.enterRemoteDeviceCode'));
     return;
   }
   if (cacheStore.remoteDeskUserUuid === cacheStore.deskUserUuid) {
-    window.$message.warning('不能连接自己！');
+    window.$message.warning(t('remote.cannotConnectSelf'));
     return;
   }
   try {
@@ -930,7 +934,7 @@ async function startRemote() {
           showPwdModalCpt.value = true;
         }
       } else {
-        window.$message.info('该设备不在线');
+        window.$message.info(t('remote.deviceOffline'));
         setTimeout(() => {
           loading.value = false;
         }, 300);

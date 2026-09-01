@@ -3,7 +3,7 @@
     <div class="mask"></div>
     <div class="content">
       <div class="top">
-        <div class="title">提示</div>
+        <div class="title">{{ t('app.tip') }}</div>
         <div></div>
       </div>
       <!-- eslint-disable -->
@@ -17,13 +17,15 @@
       ></div>
       <!--eslint-enable-->
       <div class="other">
-        <div>发布时间：{{ appStore.updateModalInfo?.updateDate }}</div>
+        <div>
+          {{ t('app.publishTime') }}：{{ appStore.updateModalInfo?.updateDate }}
+        </div>
       </div>
       <div
         class="btn"
         @click="handleClose"
       >
-        确定
+        {{ t('app.confirm') }}
       </div>
     </div>
   </div>
@@ -31,6 +33,7 @@
 
 <script lang="ts" setup>
 import { getRandomString } from 'billd-utils';
+import { useI18n } from 'vue-i18n';
 
 import { IPC_EVENT } from '@/event';
 import { WINDOW_ID_ENUM } from '@/pure-constant';
@@ -38,6 +41,7 @@ import { useAppStore } from '@/store/app';
 import { ipcRendererSend } from '@/utils';
 
 const appStore = useAppStore();
+const { t } = useI18n();
 
 function handleClose() {
   ipcRendererSend({

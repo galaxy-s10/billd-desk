@@ -3,7 +3,7 @@
     <div class="mask"></div>
     <div class="content">
       <div class="top">
-        <div class="title">接口配置</div>
+        <div class="title">{{ t('app.apiConfig') }}</div>
         <div
           class="close"
           @click="emits('close')"
@@ -18,7 +18,7 @@
               v-model="wssUrl"
               type="text"
               class="ipt"
-              placeholder="请输入wss地址"
+              :placeholder="t('app.wssPlaceholder')"
             />
           </div>
         </div>
@@ -30,7 +30,7 @@
               v-model="axiosBaseUrl"
               type="text"
               class="ipt"
-              placeholder="请输入axios地址"
+              :placeholder="t('app.axiosPlaceholder')"
             />
           </div>
         </div>
@@ -42,7 +42,7 @@
               v-model="coturnUrl"
               type="text"
               class="ipt"
-              placeholder="请输入coturn地址"
+              :placeholder="t('app.coturnPlaceholder')"
             />
           </div>
         </div>
@@ -52,7 +52,7 @@
         class="btn"
         @click="handleConfirm"
       >
-        确定
+        {{ t('app.confirm') }}
       </div>
     </div>
   </div>
@@ -60,6 +60,7 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import { AXIOS_BASEURL, COTURN_URL, WEBSOCKET_URL } from '@/constant';
 import {
@@ -75,6 +76,7 @@ const wssUrl = ref('');
 const axiosBaseUrl = ref('');
 const coturnUrl = ref('');
 const iptRef = ref<HTMLInputElement>();
+const { t } = useI18n();
 
 const emits = defineEmits(['confirm', 'close']);
 
@@ -88,7 +90,7 @@ function handleConfirm() {
   setAxiosBaseUrl(axiosBaseUrl.value);
   setWssUrl(wssUrl.value);
   setCoturnUrl(coturnUrl.value);
-  window.$message.success('设置成功！');
+  window.$message.success(t('app.settingSuccess'));
 }
 </script>
 

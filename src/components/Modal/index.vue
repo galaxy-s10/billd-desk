@@ -23,7 +23,7 @@
           v-if="!slots.footer"
           class="btn"
         >
-          返回首页
+          {{ t('app.returnHome') }}
         </div>
       </div>
     </div>
@@ -32,8 +32,10 @@
 
 <script lang="ts" setup>
 import { useSlots } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const slots = useSlots();
+const { t } = useI18n();
 const props = withDefaults(
   defineProps<{
     hiddenClose?: Boolean;

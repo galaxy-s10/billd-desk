@@ -1,5 +1,6 @@
 import { Socket, io } from 'socket.io-client';
 
+import { i18n } from '@/hooks/use-i18n';
 import { useNetworkStore } from '@/store/network';
 import { useUserStore } from '@/store/user';
 import {
@@ -7,6 +8,8 @@ import {
   WsConnectStatusEnum,
   WsMsgTypeEnum,
 } from '@/types/websocket';
+
+const translate = (key: string) => (i18n.global as any).t(key);
 
 export function prettierReceiveWsMsg(...arg) {
   console.warn('【websocket】收到消息', ...arg);
@@ -34,7 +37,7 @@ export class WebSocketClass {
 
   constructor(data: { roomId: string; url: string; isAnchor: boolean }) {
     if (!window.WebSocket) {
-      alert('当前环境不支持WebSocket！');
+      alert(translate('app.unsupportedWebSocket'));
       return;
     }
     console.warn('开始new WebSocketClass', data);

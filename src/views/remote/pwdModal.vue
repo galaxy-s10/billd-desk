@@ -3,13 +3,13 @@
     <div class="mask"></div>
     <div class="content">
       <div class="top">
-        <div class="title">连接密码</div>
+        <div class="title">{{ t('remote.connectionPassword') }}</div>
         <div
           class="close"
           @click="emits('close')"
         ></div>
       </div>
-      <div class="uuid">设备代码：{{ uuid }}</div>
+      <div class="uuid">{{ t('remote.deviceCode') }}：{{ uuid }}</div>
       <div class="err-msg">{{ errMsg }}</div>
       <div class="ipt-wrap">
         <input
@@ -18,7 +18,7 @@
           :type="hidePwd ? 'password' : 'text'"
           class="ipt"
           maxlength="12"
-          placeholder="请输入连接密码"
+          :placeholder="t('remote.enterConnectionPassword')"
         />
         <div
           class="ico eye"
@@ -30,7 +30,7 @@
         class="btn"
         @click="handleConfirm"
       >
-        确定
+        {{ t('remote.confirm') }}
       </div>
     </div>
   </div>
@@ -38,10 +38,12 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const hidePwd = ref(true);
 const password = ref('');
 const iptRef = ref<HTMLInputElement>();
+const { t } = useI18n();
 
 const props = withDefaults(
   defineProps<{
@@ -71,7 +73,7 @@ function handleConfirm() {
   ) {
     emits('confirm', password.value);
   } else {
-    window.$message.warning('密码长度要求6-12位！');
+    window.$message.warning(t('remote.passwordLength'));
   }
 }
 </script>

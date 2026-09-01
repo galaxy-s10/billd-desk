@@ -66,27 +66,29 @@
   <n-modal v-model:show="showContach">
     <n-card
       style="width: 500px"
-      title="联系作者"
+      :title="t('deployment.contactAuthor')"
       role="dialog"
       closable
       @close="showContach = false"
     >
       <div>
-        <div>微信二维码：</div>
+        <div>{{ t('deployment.wechatQrCode') }}：</div>
         <img
           src="@/assets/img/my-wechat.png"
           alt=""
           style="width: 250px"
         />
-        <div>微信号：{{ AUTHOR_INFO.wechat }}</div>
-        <div>qq号：{{ AUTHOR_INFO.qq }}</div>
-        <div>添加时请备注：<b>desk私有化部署</b></div>
+        <div>{{ t('deployment.wechatId') }}：{{ AUTHOR_INFO.wechat }}</div>
+        <div>{{ t('deployment.qqId') }}：{{ AUTHOR_INFO.qq }}</div>
+        <div>
+          {{ t('deployment.contactRemark') }}：<b>{{
+            t('deployment.contactRemarkValue')
+          }}</b>
+        </div>
         <b style="color: red">
-          <span>
-            注意：项目开源，个人用户有问题github提Issue即可，不必添加作者！
-          </span>
+          <span>{{ t('deployment.openSourceNotice') }}</span>
           <br />
-          <i>如有商业合作，请充分了解该项目。咨询需付费（100元/小时）！</i>
+          <i>{{ t('deployment.businessNotice') }}</i>
         </b>
       </div>
     </n-card>
@@ -95,40 +97,42 @@
 
 <script lang="ts" setup>
 import { openToTarget } from 'billd-utils';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
 import { AUTHOR_INFO, COMMON_URL, WEB_DESK_URL } from '@/constant';
 
 const router = useRouter();
+const { t } = useI18n();
 const showContach = ref(false);
 const currentTab = ref<'personal' | 'openSource' | 'customized' | string>(
   'openSource'
 );
 
-const tab = ref([
+const tab = computed(() => [
   {
     id: 'personal',
-    txt: '个人版',
+    txt: t('deployment.personalVersion'),
   },
   {
     id: 'openSource',
-    txt: '开源版',
+    txt: t('deployment.openSourceVersion'),
   },
   {
     id: 'customized',
-    txt: '定制版',
+    txt: t('deployment.customVersion'),
   },
 ]);
 
-const detail = ref({
+const detail = computed(() => ({
   personal: {
-    slogan: ['欢迎使用BilldDesk~'],
+    slogan: [t('deployment.personalSlogan')],
     list: [
       {
         color: 'blue',
         name: 'VIP',
-        desc: '适用于个人用户简单体验',
+        desc: t('deployment.personalDesc'),
         price: {
           left: '￥',
           center: '0',
@@ -138,24 +142,27 @@ const detail = ref({
         feat: [
           {
             status: 'done',
-            txt: '一对一远程控制',
+            txt: t('deployment.oneToOneRemoteControl'),
           },
         ],
         btn: {
           type: 'link',
           link: WEB_DESK_URL,
-          txt: '免费体验',
+          txt: t('deployment.freeTrial'),
         },
       },
     ],
   },
   openSource: {
-    slogan: ['BilldDesk开源至今，累计收获200k+ star', '值得信赖，欢迎部署~'],
+    slogan: [
+      t('deployment.openSourceSlogan1'),
+      t('deployment.openSourceSlogan2'),
+    ],
     list: [
       {
         color: 'blue',
         name: 'Github',
-        desc: '适用于个人学习/测试用途',
+        desc: t('deployment.openSourceDesc'),
         price: {
           left: '￥',
           center: '0',
@@ -165,171 +172,171 @@ const detail = ref({
         feat: [
           {
             status: 'done',
-            txt: '源码开源，自行部署',
+            txt: t('deployment.sourceOpenDeploy'),
           },
           {
             status: 'done',
-            txt: '前台（Web）',
+            txt: t('deployment.frontendWeb'),
           },
           {
             status: 'todo',
-            txt: '后台（Web）',
+            txt: t('deployment.adminWeb'),
           },
           {
             status: 'todo',
-            txt: '后端（Node.js）',
+            txt: t('deployment.backendNode'),
           },
           {
             status: 'todo',
-            txt: '移动端（Flutter）',
+            txt: t('deployment.mobileFlutter'),
           },
           {
             status: 'todo',
-            txt: '客户端（Electron）',
+            txt: t('deployment.clientElectron'),
           },
         ],
         btn: {
           type: 'link',
           link: 'https://github.com/billd-project/desk',
-          txt: '立即部署',
+          txt: t('deployment.deployNow'),
         },
       },
       {
         color: 'green',
-        name: '私有化部署',
-        desc: '适用于个人/企业自建远程桌面',
+        name: t('deployment.privateDeployment'),
+        desc: t('deployment.privateDesc'),
         price: {
           left: '￥',
           center: '6000',
-          right: '起',
+          right: t('deployment.from'),
         },
-        tip: '涵盖Github全部/部分功能',
+        tip: t('deployment.githubFeatures'),
         feat: [
           {
             status: 'done',
-            txt: '一次部署，永久使用',
+            txt: t('deployment.permanentUse'),
           },
           {
             status: 'done',
-            txt: '无门槛，全程专人负责部署',
+            txt: t('deployment.turnkeyDeployment'),
           },
           {
             status: 'done',
-            txt: '本地服务器部署',
+            txt: t('deployment.localServerDeployment'),
           },
           {
             status: 'done',
-            txt: '快速上线',
+            txt: t('deployment.quickLaunch'),
           },
         ],
         btn: {
           type: 'showContact',
           link: '',
-          txt: '立即咨询',
+          txt: t('deployment.consultNow'),
         },
       },
     ],
   },
   customized: {
-    slogan: ['BilldDesk支持定制化', '适合二开，定制个性化功能~'],
+    slogan: [t('deployment.customSlogan1'), t('deployment.customSlogan2')],
     list: [
       {
         color: 'blue',
-        name: '在线咨询',
-        desc: '咨询任何问题服务',
+        name: t('deployment.onlineConsult'),
+        desc: t('deployment.onlineConsultDesc'),
         price: {
           left: '￥',
           center: '100',
-          right: '元/小时',
+          right: t('deployment.yuanPerHour'),
         },
         tip: '',
         feat: [
           {
             status: 'done',
-            txt: '一对一解答',
+            txt: t('deployment.oneToOneAnswer'),
           },
         ],
         btn: {
           type: 'showContact',
           link: '',
-          txt: '立即咨询',
+          txt: t('deployment.consultNow'),
         },
       },
       {
         color: 'green',
-        name: '付费课程',
-        desc: '适用于前端/音视频小白',
+        name: t('deployment.paidCourse'),
+        desc: t('deployment.paidCourseDesc'),
         price: {
           left: '￥',
           center: '399',
-          right: '元',
+          right: t('deployment.yuan'),
         },
         tip: '',
         feat: [
           {
             status: 'done',
-            txt: '一对一解答（4小时）',
+            txt: t('deployment.oneToOneAnswer4Hours'),
           },
           {
             status: 'done',
-            txt: '视频讲解',
+            txt: t('deployment.videoExplanation'),
           },
           {
             status: 'done',
-            txt: '单独的代码仓库',
+            txt: t('deployment.privateRepo'),
           },
           {
             status: 'done',
-            txt: `BilldDesk付费课微信群`,
+            txt: t('deployment.paidCourseGroup'),
           },
         ],
         btn: {
           type: 'link',
           link: COMMON_URL.payCoursesArticle,
-          txt: '了解详情',
+          txt: t('deployment.learnMore'),
         },
       },
       {
         color: 'orange',
-        name: '私有化部署',
-        desc: '适用于个人/企业自建远程桌面',
+        name: t('deployment.privateDeployment'),
+        desc: t('deployment.privateDesc'),
         price: {
           left: '￥',
           center: '8000',
-          right: '起',
+          right: t('deployment.from'),
         },
         tip: '',
         feat: [
           {
             status: 'done',
-            txt: '一次部署，永久使用',
+            txt: t('deployment.permanentUse'),
           },
           {
             status: 'done',
-            txt: '无门槛，全程专人负责部署',
+            txt: t('deployment.turnkeyDeployment'),
           },
           {
             status: 'done',
-            txt: '本地服务器部署',
+            txt: t('deployment.localServerDeployment'),
           },
           {
             status: 'done',
-            txt: '快速上线',
+            txt: t('deployment.quickLaunch'),
           },
           {
             status: 'done',
-            txt: '定制化功能',
+            txt: t('deployment.customFeature'),
           },
         ],
         btn: {
           type: 'showContact',
           link: '',
-          txt: '立即咨询',
+          txt: t('deployment.consultNow'),
         },
       },
     ],
   },
-});
+}));
 
 function handleClick(item) {
   if (item.type === 'link') {

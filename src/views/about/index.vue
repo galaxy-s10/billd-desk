@@ -4,20 +4,30 @@
     <div class="item name">{{ PRODUCT_NAME }}</div>
     <div class="item version">v{{ appStore.version }}</div>
     <div class="copyright">
-      Copyright © 2023-2024
-      <span
-        class="link"
-        @click="handleClick()"
-        >Galaxy-s10</span
-      >. All rights reserved.
+      <i18n-t
+        keypath="app.copyright"
+        tag="span"
+      >
+        <template #author>
+          <span
+            class="link"
+            @click="handleClick()"
+            >{{ AUTHOR_INFO.name }}</span
+          >
+        </template>
+      </i18n-t>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
+
 import { AUTHOR_INFO, PRODUCT_NAME, WINDOW_ID_ENUM } from '@/constant';
 import { useIpcRendererSend } from '@/hooks/use-ipcRendererSend';
 import { useAppStore } from '@/store/app';
+
+const { t } = useI18n();
 
 const { handleOpenExternal } = useIpcRendererSend();
 const appStore = useAppStore();

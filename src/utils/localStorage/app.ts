@@ -30,3 +30,10 @@ export const setCoturnUrl = (val: string) => {
 export const clearCoturnUrl = () => {
   return cache.clearStorage(LS_KEY.coturnUrl);
 };
+
+export const getLanguage = () => {
+  return cache.getStorage<string>(LS_KEY.language);
+};
+export const setLanguage = (val: string) => {
+  return cache.setStorage(LS_KEY.language, val);
+};

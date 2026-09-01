@@ -6,8 +6,8 @@
       class="invite-info"
     >
 BilldDesk:
-设备代码:{{ cacheStore.deskUserUuid }}
-临时密码:{{ cacheStore.deskUserPassword }}
+{{ t('remote.deviceCode') }}:{{ cacheStore.deskUserUuid }}
+{{ t('remote.temporaryPassword') }}:{{ cacheStore.deskUserPassword }}
     </textarea>
     <!--eslint-enable-->
   </div>
@@ -15,10 +15,12 @@ BilldDesk:
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import { usePiniaCacheStore } from '@/store/cache';
 
 const cacheStore = usePiniaCacheStore();
+const { t } = useI18n();
 
 const inviteInfo = ref<HTMLTextAreaElement>();
 
@@ -37,11 +39,11 @@ function handleCopyRemoteInfo() {
   navigator.clipboard
     .writeText(str)
     .then(() => {
-      window.$message.success('已复制邀请信息！');
+      window.$message.success(t('remote.inviteInfoCopied'));
     })
     .catch((err) => {
       console.log(err);
-      window.$message.error('复制邀请信息失败！');
+      window.$message.error(t('remote.inviteInfoCopyFailed'));
     });
 }
 </script>

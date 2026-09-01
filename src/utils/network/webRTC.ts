@@ -1,12 +1,15 @@
 import { getRandomString } from 'billd-utils';
 
 import { COTURN_URL } from '@/constant';
+import { i18n } from '@/hooks/use-i18n';
 import { LiveLineEnum, MediaTypeEnum } from '@/interface';
 import { AppRootState, useAppStore } from '@/store/app';
 import { useNetworkStore } from '@/store/network';
 import { WsCandidateType, WsMsgTypeEnum } from '@/types/websocket';
 
 import { getCoturnUrl } from '../localStorage/app';
+
+const translate = (key: string) => (i18n.global as any).t(key);
 
 export class WebRTCClass {
   roomId = '';
@@ -532,7 +535,7 @@ export class WebRTCClass {
   createPeerConnection = () => {
     if (!window.RTCPeerConnection) {
       console.error('当前环境不支持RTCPeerConnection！');
-      alert('当前环境不支持RTCPeerConnection！');
+      alert(translate('app.unsupportedRTCPeerConnection'));
       return;
     }
     if (!this.peerConnection) {

@@ -39,21 +39,21 @@
           :class="{ active: route.name === routerName.remote }"
           @click="router.push({ name: routerName.remote })"
         >
-          远程控制
+          {{ t('app.remoteControl') }}
         </div>
         <div
           class="item"
           :class="{ active: route.name === routerName.deviceManage }"
           @click="router.push({ name: routerName.deviceManage })"
         >
-          设备列表
+          {{ t('app.deviceList') }}
         </div>
         <div
           class="item"
           :class="{ active: route.name === routerName.setting }"
           @click="router.push({ name: routerName.setting })"
         >
-          高级设置
+          {{ t('app.advancedSettings') }}
         </div>
       </div>
     </div>
@@ -72,13 +72,13 @@
         class="item"
         @click="windowReload"
       >
-        刷新
+        {{ t('app.refresh') }}
       </div>
       <div
         class="item"
         @click="handleOpenDevTools({ windowId: WINDOW_ID_ENUM.remote })"
       >
-        控制台
+        {{ t('app.console') }}
       </div>
     </div>
     <UpdateModal
@@ -103,6 +103,7 @@
 <script lang="ts" setup>
 import { getRandomString, windowReload } from 'billd-utils';
 import { onMounted, reactive, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
 import { WINDOW_ID_ENUM } from '@/constant';
@@ -121,6 +122,7 @@ import {
 const appStore = useAppStore();
 const router = useRouter();
 const route = useRoute();
+const { t } = useI18n();
 
 const { handleOpenDevTools } = useIpcRendererSend();
 

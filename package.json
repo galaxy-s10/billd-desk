@@ -27,7 +27,9 @@
     "lint": "eslint . --config ./eslint.config.js --cache",
     "lint:fix": "eslint . --config ./eslint.config.js --cache --fix",
     "preview": "vite preview",
-    "release": "standard-version"
+    "release": "standard-version",
+    "test:i18n": "node test/i18n-messages.test.mjs && node test/i18n-hardcoded-ui.test.mjs && node test/i18n-non-english-translations.test.mjs",
+    "test:i18n:client": "node test/i18n-client-switch.test.mjs"
   },
   "config": {
     "commitizen": {
@@ -99,7 +101,8 @@
     "vite-plugin-eslint2": "^5.0.3",
     "vite-plugin-html": "^3.2.2",
     "vue-eslint-parser": "^9.4.3",
-    "vue-tsc": "^2.1.10"
+    "vue-tsc": "^2.1.10",
+    "ws": "8.17.1"
   },
   "productName": "BilldDesk"
 }

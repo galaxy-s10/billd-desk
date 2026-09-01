@@ -1,10 +1,13 @@
 import axios, { Axios, AxiosRequestConfig } from 'axios';
 
 import { AXIOS_BASEURL } from '@/constant';
+import { i18n } from '@/hooks/use-i18n';
 import { useUserStore } from '@/store/user';
 import { getToken } from '@/utils/localStorage/user';
 
 import { getAxiosBaseUrl } from './localStorage/app';
+
+const translate = (key: string) => (i18n.global as any).t(key);
 
 export interface MyAxiosPromise<T = any>
   extends Promise<{
@@ -53,7 +56,7 @@ class MyAxios {
         console.log('响应拦截到错误', error);
         if (error.message.indexOf('timeout') !== -1) {
           console.error(error.message);
-          window.$message.error('请求超时，请重试');
+          window.$message.error(translate('app.requestTimeout'));
           return;
         }
         const statusCode = error.response.status as number;
