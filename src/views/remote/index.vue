@@ -760,11 +760,7 @@ async function handleRTC(receiver) {
 }
 
 function handleCopyRemoteInfo() {
-  const str = `BilldDesk:设备代码:${cacheStore.remoteDeskUserUuid};临时密码:${cacheStore.remoteDeskUserPassword}`;
-  // @ts-ignore
-  textArea.select(); // 选择文本
-  // @ts-ignore
-  textArea.setSelectionRange(0, 99999); // 对于移动设备
+  const str = `BilldDesk:设备代码:${cacheStore.deskUserUuid};临时密码:${cacheStore.deskUserPassword}`;
   // 使用剪贴板 API 复制文本
   navigator.clipboard
     .writeText(str)
