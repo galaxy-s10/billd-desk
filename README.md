@@ -47,9 +47,9 @@ BilldDesk Pro | [BilldDesk 开源版](./README_OpenSource.md)
   - [x] 开启/关闭编码硬件加速
   - [x] 开启/关闭解码硬件加速
   - [x] 开启/关闭零拷贝
-  - [x] NVIDIA显卡（H264/H265/AV1），显卡驱动需要570.0+版本
+  - [x] NVIDIA显卡（H264/H265/AV1），显卡要求十代以上、显卡驱动需要570.0+版本
   - [x] AMD显卡（H264/H265/AV1）
-  - [x] Intel集显
+  - [x] Intel集显（H264/H265/AV1）
 - [x] 主流编解码协议
   - [x] H264/H265
   - [x] AV1
@@ -107,7 +107,7 @@ BilldDesk Pro | [BilldDesk 开源版](./README_OpenSource.md)
   - [x] 自定义隐私屏图片
   - [x] 自定义隐私屏文字
 - [x] 虚拟屏
-- [x] 扩展屏
+  - [x] 无屏幕也可远程
 - [x] 设备分组
 - [x] 后台管理
 - [x] 私有化部署
