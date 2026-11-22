@@ -50,10 +50,20 @@ BilldDesk Pro | [BilldDesk 开源版](./README_OpenSource.md)
   - [x] NVIDIA显卡（H264/H265/AV1），显卡要求十代以上、显卡驱动需要570.0+版本
   - [x] AMD显卡（H264/H265/AV1）
   - [x] Intel集显（H264/H265/AV1）
+  - [x] Apple VideoToolbox（H264）
 - [x] 主流编解码协议
   - [x] H264/H265
   - [x] AV1
   - [x] VP8/VP9
+- [x] 隐私屏（Windows、macOS）
+  - [x] 自定义隐私屏图片
+  - [x] 自定义隐私屏文字
+- [x] 虚拟屏
+  - [ ] Windows，借助[parsec-vdd](https://github.com/nomi-san/parsec-vdd)
+  - [ ] macOS，借助[Crisp](https://github.com/didriksg/Crisp)/[BetterDisplay](https://github.com/waydabber/BetterDisplay)
+- [x] 虚拟声卡
+  - [x] Windows，借助[VB-CABLE](https://vb-audio.com/Cable/index.htm)
+  - [x] macOS，借助[BlackHole](https://github.com/ExistentialAudio/BlackHole)
 - [x] 驱动级键鼠（避免游戏风控）
 - [x] 鼠标模式
   - [x] 使用主控端鼠标
@@ -84,8 +94,8 @@ BilldDesk Pro | [BilldDesk 开源版](./README_OpenSource.md)
 - [x] 远程更新客户端版本（Windows）
 - [x] 系统托盘
 - [x] 开机自启（无人值守）
-- [x] 进程保活（windows）
-- [x] 在线更新/主控端远程更新被控端（windows）
+- [x] 进程保活（Windows）
+- [x] 在线更新/主控端远程更新被控端（Windows）
 - [x] 帧率模式
   - [x] 根据画面变化，智能降帧率，优化带宽占用
 - [x] 网络模式
@@ -103,11 +113,6 @@ BilldDesk Pro | [BilldDesk 开源版](./README_OpenSource.md)
   - [x] 注销
   - [x] 锁定
 - [x] 批量群控
-- [x] 隐私屏
-  - [x] 自定义隐私屏图片
-  - [x] 自定义隐私屏文字
-- [x] 虚拟屏
-  - [x] 无屏幕也可远程
 - [x] 设备分组
 - [x] 后台管理
 - [x] 私有化部署
